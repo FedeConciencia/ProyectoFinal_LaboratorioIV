@@ -70,7 +70,7 @@ CREATE TABLE `articulo_manufacturado` (
   PRIMARY KEY (`idArticulo`),
   KEY `idRubro_fk1_idx` (`idRubro`),
   CONSTRAINT `idRubro_fk1` FOREIGN KEY (`idRubro`) REFERENCES `rubro_general` (`idRubro`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,6 +79,7 @@ CREATE TABLE `articulo_manufacturado` (
 
 LOCK TABLES `articulo_manufacturado` WRITE;
 /*!40000 ALTER TABLE `articulo_manufacturado` DISABLE KEYS */;
+INSERT INTO `articulo_manufacturado` VALUES (1,50,'Hamburguesa',600,'imagen.jpg','2020-10-05','1990-01-01','activo',1);
 /*!40000 ALTER TABLE `articulo_manufacturado` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +132,7 @@ CREATE TABLE `cliente` (
   `estado` varchar(45) DEFAULT 'activo',
   PRIMARY KEY (`idCliente`),
   UNIQUE KEY `dni_UNIQUE` (`dni`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,6 +141,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
+INSERT INTO `cliente` VALUES (2,'Laura','Raumundi','633535353','2020-10-11','2612622522','laura@yahoo.com','2021-05-14','2021-05-26','inactivo');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +163,7 @@ CREATE TABLE `detalle_factura` (
   KEY `idArticuloManf_fk2_idx` (`idArticulo`),
   CONSTRAINT `idArticuloManf_fk2` FOREIGN KEY (`idArticulo`) REFERENCES `articulo_manufacturado` (`idArticulo`),
   CONSTRAINT `idFactura_fk1` FOREIGN KEY (`idFactura`) REFERENCES `factura` (`idFactura`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,6 +172,7 @@ CREATE TABLE `detalle_factura` (
 
 LOCK TABLES `detalle_factura` WRITE;
 /*!40000 ALTER TABLE `detalle_factura` DISABLE KEYS */;
+INSERT INTO `detalle_factura` VALUES (1,6,100,1,1);
 /*!40000 ALTER TABLE `detalle_factura` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -191,7 +194,7 @@ CREATE TABLE `detalle_pedido` (
   KEY `idArticulo_fk5_idx` (`idArtManufacturado`),
   CONSTRAINT `idArticulo_fk5` FOREIGN KEY (`idArtManufacturado`) REFERENCES `articulo_manufacturado` (`idArticulo`),
   CONSTRAINT `idPedido_fk5` FOREIGN KEY (`idPedido`) REFERENCES `pedido` (`idPedido`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,6 +203,7 @@ CREATE TABLE `detalle_pedido` (
 
 LOCK TABLES `detalle_pedido` WRITE;
 /*!40000 ALTER TABLE `detalle_pedido` DISABLE KEYS */;
+INSERT INTO `detalle_pedido` VALUES (2,6,100,1,1);
 /*!40000 ALTER TABLE `detalle_pedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,7 +226,7 @@ CREATE TABLE `domicilio` (
   PRIMARY KEY (`idDomicilio`),
   KEY `idCliente_fk2_idx` (`idCliente`),
   CONSTRAINT `idCliente_fk2` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -231,6 +235,7 @@ CREATE TABLE `domicilio` (
 
 LOCK TABLES `domicilio` WRITE;
 /*!40000 ALTER TABLE `domicilio` DISABLE KEYS */;
+INSERT INTO `domicilio` VALUES (1,'27 de Mayo','621','Guaymallen','2021-05-14','2021-05-26','inactivo',2);
 /*!40000 ALTER TABLE `domicilio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -254,7 +259,7 @@ CREATE TABLE `factura` (
   PRIMARY KEY (`idFactura`),
   KEY `idPedido_fk3_idx` (`idPedido`),
   CONSTRAINT `idPedido_fk3` FOREIGN KEY (`idPedido`) REFERENCES `pedido` (`idPedido`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -263,6 +268,7 @@ CREATE TABLE `factura` (
 
 LOCK TABLES `factura` WRITE;
 /*!40000 ALTER TABLE `factura` DISABLE KEYS */;
+INSERT INTO `factura` VALUES (1,'221',25,'contado',320,'2021-05-14','2021-05-26','inactivo',1);
 /*!40000 ALTER TABLE `factura` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,7 +293,7 @@ CREATE TABLE `mercadopago` (
   UNIQUE KEY `codigo_UNIQUE` (`codigo`),
   KEY `idPedido_fk2_idx` (`idPedido`),
   CONSTRAINT `idPedido_fk2` FOREIGN KEY (`idPedido`) REFERENCES `pedido` (`idPedido`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -296,6 +302,7 @@ CREATE TABLE `mercadopago` (
 
 LOCK TABLES `mercadopago` WRITE;
 /*!40000 ALTER TABLE `mercadopago` DISABLE KEYS */;
+INSERT INTO `mercadopago` VALUES (1,'242112','2021-05-14','2021-05-14','2021-05-26','tajeta','344444322','inactivo',1);
 /*!40000 ALTER TABLE `mercadopago` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -309,7 +316,7 @@ DROP TABLE IF EXISTS `pedido`;
 CREATE TABLE `pedido` (
   `idPedido` int NOT NULL AUTO_INCREMENT,
   `codigo` varchar(45) NOT NULL,
-  `horaEstimadaFin` date NOT NULL,
+  `horaEstimadaFin` time NOT NULL,
   `tipoEnvio` int NOT NULL,
   `total` double NOT NULL,
   `fechaAlta` date NOT NULL,
@@ -322,7 +329,7 @@ CREATE TABLE `pedido` (
   KEY `idDomicilio_fk1_idx` (`idDomicilio`),
   CONSTRAINT `idCliente_fk3` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`),
   CONSTRAINT `idDomicilio_fk1` FOREIGN KEY (`idDomicilio`) REFERENCES `domicilio` (`idDomicilio`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -331,6 +338,7 @@ CREATE TABLE `pedido` (
 
 LOCK TABLES `pedido` WRITE;
 /*!40000 ALTER TABLE `pedido` DISABLE KEYS */;
+INSERT INTO `pedido` VALUES (1,'28222','10:10:59',3,222,'2021-05-14','2021-05-26','inactivo',2,1);
 /*!40000 ALTER TABLE `pedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -374,7 +382,7 @@ CREATE TABLE `rubro_general` (
   `fechaBaja` date DEFAULT '0000-00-00',
   `estado` varchar(45) NOT NULL DEFAULT 'activo',
   PRIMARY KEY (`idRubro`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -383,6 +391,7 @@ CREATE TABLE `rubro_general` (
 
 LOCK TABLES `rubro_general` WRITE;
 /*!40000 ALTER TABLE `rubro_general` DISABLE KEYS */;
+INSERT INTO `rubro_general` VALUES (1,'Queso','2020-10-05','1990-01-01','activo');
 /*!40000 ALTER TABLE `rubro_general` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -406,7 +415,7 @@ CREATE TABLE `usuario` (
   UNIQUE KEY `usuario_UNIQUE` (`usuario`),
   KEY `idCliente_fk1_idx` (`idCliente`),
   CONSTRAINT `idCliente_fk1` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -415,6 +424,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
+INSERT INTO `usuario` VALUES (2,'lauraMza','laura123','Cliente','2021-05-14','2021-05-26','inactivo',2);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -427,4 +437,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-11 10:05:18
+-- Dump completed on 2021-05-27 12:11:18

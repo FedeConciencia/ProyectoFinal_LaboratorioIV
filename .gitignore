@@ -1,2 +1,5 @@
 /ProyectoFinal/ProyectoFinal/ProyectoFinalLaboIV/nbproject/private/
 /ProyectoFinal/ProyectoFinal/ProyectoFinalLaboIV/build/
+
+# Dependencias front end
+/node_modules

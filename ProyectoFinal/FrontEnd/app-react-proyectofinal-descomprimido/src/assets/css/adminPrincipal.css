@@ -1,0 +1,29 @@
+.body{
+
+    margin:auto;
+    text-align: center;
+
+
+}
+
+
+
+.titulo{
+
+    color:black;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: x-large;
+    font-weight: bold;
+
+
+}
+
+.botones{
+
+    width: 350px;
+    height: 70px;
+    text-align: center;
+    margin: auto;
+
+}
+

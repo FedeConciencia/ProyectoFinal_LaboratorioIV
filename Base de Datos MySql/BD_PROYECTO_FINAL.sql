@@ -102,7 +102,7 @@ CREATE TABLE `articulo_manufacturado_detalle` (
   KEY `idArticuloInsumo_fk1_idx` (`idArticuloInsumo`),
   CONSTRAINT `idArticuloInsumo_fk1` FOREIGN KEY (`idArticuloInsumo`) REFERENCES `articulo_insumo` (`idArticulo`),
   CONSTRAINT `idArticuloManuf_fk1` FOREIGN KEY (`idArticuloManufacturado`) REFERENCES `articulo_manufacturado` (`idArticulo`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,7 +111,7 @@ CREATE TABLE `articulo_manufacturado_detalle` (
 
 LOCK TABLES `articulo_manufacturado_detalle` WRITE;
 /*!40000 ALTER TABLE `articulo_manufacturado_detalle` DISABLE KEYS */;
-INSERT INTO `articulo_manufacturado_detalle` VALUES (1,7,'kilo',2,1);
+INSERT INTO `articulo_manufacturado_detalle` VALUES (1,7,'kilo',2,1),(2,10,'gramo',5,2);
 /*!40000 ALTER TABLE `articulo_manufacturado_detalle` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,7 +135,7 @@ CREATE TABLE `cliente` (
   `estado` varchar(45) DEFAULT 'activo',
   PRIMARY KEY (`idCliente`),
   UNIQUE KEY `dni_UNIQUE` (`dni`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,7 +144,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (2,'Laura','Raumundi','63353535','2020-10-11','2612622522','laura@yahoo.com','2021-05-14','1900-01-01','activo'),(11,'Marta','Argumedo','4113047','2010-02-01','48484848','alumnosutn424@gmail.com','1900-02-01','2021-05-16','inactivo'),(12,'Federico','Sabatini','31029200','2011-01-01','564646464','alumnosutn424@gmail.com','2011-01-01','1900-01-01','activo'),(13,'Lucas','Argumedo','4323344','2010-01-01','533455445','alumnosutn424@gmail.com','2010-01-01','2021-06-18','inactivo'),(14,'Simon','Sabatini','31029020','2014-01-01','64646464','alumnosutn424@gmail.com','2021-05-16','2021-05-16','inactivo'),(20,'Marcela','Gutierrez','32123123','2011-01-01','4252525','alumnosutn424@gmail.com','2021-06-17','2021-07-05','inactivo'),(21,'Diana','Gutierrez','34423422','1984-05-03','35355333','natalia@gmail.com','2021-06-18','1900-01-01','activo'),(23,'Marta','Argumedo','31029221','2010-01-01','4454545453','alumnosutn424@gmail.com','2021-06-18','1900-01-01','activo'),(24,'Mariana','Marietti','63353533','1984-02-01','425252521','alumnos782@gmail.com','2021-07-05','1900-01-01','activo');
+INSERT INTO `cliente` VALUES (2,'Laura','Raumundi','63353535','2020-10-11','2612622522','laura@yahoo.com','2021-05-14','1900-01-01','activo'),(11,'Marta','Argumedo','4113047','2010-02-01','48484848','alumnosutn424@gmail.com','1900-02-01','2021-05-16','inactivo'),(12,'Federico','Sabatini','31029200','2011-01-01','564646464','alumnosutn424@gmail.com','2011-01-01','1900-01-01','activo'),(13,'Lucas','Argumedo','4323344','2010-01-01','533455445','alumnosutn424@gmail.com','2010-01-01','2021-06-18','inactivo'),(14,'Simon','Sabatini','31029020','2014-01-01','64646464','alumnosutn424@gmail.com','2021-05-16','2021-05-16','inactivo'),(20,'Marcela','Gutierrez','32123123','2011-01-01','4252525','alumnosutn424@gmail.com','2021-06-17','2021-07-05','inactivo'),(21,'Diana','Gutierrez','34423422','1984-05-03','35355333','natalia@gmail.com','2021-06-18','1900-01-01','activo'),(23,'Marta','Argumedo','31029221','2010-01-01','4454545453','alumnosutn424@gmail.com','2021-06-18','1900-01-01','activo'),(24,'Mariana','Marietti','63353533','1984-02-01','425252521','alumnos782@gmail.com','2021-07-05','1900-01-01','activo'),(30,'Josefa','Diutti','30928321','1990-02-01','425252521','alumnos782@gmail.com','2021-08-16','1900-01-01','activo'),(34,'Maria','Casale','30671932','1991-02-08','2615627819','casale@hotmail.com','2021-08-16','1900-01-01','activo'),(35,'Juan ','Ortiz','39209207','1990-01-01','2618282826','ortiz@gmail.com','2021-08-18','1900-01-01','activo');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -258,7 +258,7 @@ CREATE TABLE `domicilio` (
   PRIMARY KEY (`idDomicilio`),
   KEY `idCliente_fk2_idx` (`idCliente`),
   CONSTRAINT `idCliente_fk2` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -267,7 +267,7 @@ CREATE TABLE `domicilio` (
 
 LOCK TABLES `domicilio` WRITE;
 /*!40000 ALTER TABLE `domicilio` DISABLE KEYS */;
-INSERT INTO `domicilio` VALUES (1,'27 de Mayo','621','Guaymallen','2021-05-14','2021-06-16','inactivo',2),(25,'Martinez','32','Godoy Cruz','2021-06-16','2021-06-18','inactivo',11),(26,'Zapallar','222','Guaymallen','2021-06-21','2021-06-17','inactivo',14),(27,'Mitre','24','Capital','2021-06-18','1900-01-01','activo',2),(28,'Jorge A Calle','21','Godoy Cruz','2021-07-05','1900-01-01','activo',2),(29,'Martinez','2473','Capital','2021-07-05','1900-01-01','inactivo',12);
+INSERT INTO `domicilio` VALUES (1,'27 de Mayo','621','Guaymallen','2021-05-14','2021-06-16','inactivo',2),(25,'Martinez','32','Godoy Cruz','2021-06-16','2021-06-18','inactivo',11),(26,'Zapallar','222','Guaymallen','2021-06-21','2021-06-17','inactivo',14),(27,'Mitre','24','Capital','2021-06-18','1900-01-01','activo',2),(28,'Jorge A Calle','21','Godoy Cruz','2021-07-05','1900-01-01','activo',2),(29,'Martinez','2473','Capital','2021-07-05','1900-01-01','inactivo',12),(34,'Martin Rodriguez','2321','Guaymallen','2021-08-16','1900-01-01','activo',34),(35,'Salamanca','1423','Guaymallen','2021-08-18','1900-01-01','activo',35);
 /*!40000 ALTER TABLE `domicilio` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -449,7 +449,7 @@ CREATE TABLE `usuario` (
   UNIQUE KEY `usuario_UNIQUE` (`usuario`),
   KEY `idCliente_fk1_idx` (`idCliente`),
   CONSTRAINT `idCliente_fk1` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -458,7 +458,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (2,'lauraMzaSoc','laura1234','cliente','2021-06-17','2021-06-17','inactivo',2),(3,'fedeMza','fede123','Cliente','2021-05-14','1900-01-01','activo',12),(6,'MzaDiana','diana12345','administrativo','2021-07-06','1900-01-01','activo',21);
+INSERT INTO `usuario` VALUES (2,'lauraMzaSoc','laura1234','cliente','2021-06-17','2021-06-17','inactivo',2),(3,'alumnosutn424@gmail.com','admin123','cliente','2021-05-14','1900-01-01','activo',12),(6,'MzaDiana','diana12345','administrativo','2021-07-06','1900-01-01','activo',21),(16,'casale@hotmail.com','hoLftR+QR0r3+kxmmfaMKg==','cliente','2021-08-16','1900-01-01','activo',34),(17,'brunetti@hotmail.com','az1AoxRoH4M/R+iba3Fz5w==','cliente','2021-08-16','1900-01-01','activo',2),(18,'ortiz@gmail.com','8A8InA9EDmek6oaSR3rrig==','cliente','2021-08-18','1900-01-01','activo',35);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -471,4 +471,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-07-19 12:36:57
+-- Dump completed on 2021-08-18 10:30:38

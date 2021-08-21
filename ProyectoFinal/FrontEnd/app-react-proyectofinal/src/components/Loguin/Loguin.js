@@ -1,5 +1,5 @@
-import React, { useState, Fragment } from "react";
-import Navigation from "../Navigation";
+import React, { useState, Fragment, useContext, useEffect } from "react";
+import {useHistory} from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -11,6 +11,7 @@ import Alert from "react-bootstrap/Alert";
 import '../../assets/css/loguin.css';
 import moment from 'moment';
 import GoogleLogin from 'react-google-login';
+import { ContextoUsuario } from "../ContextoUsuario";
 
 //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
 //Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
@@ -19,6 +20,7 @@ import GoogleLogin from 'react-google-login';
 const Loguin = (props) => {
 
 
+    const history = useHistory();
     //Usamos el useForm (npm install react-hook-form) para la validacion del formulario y pasamos los defaultValue para pintar los input:
     //SetValue sumamente importante para actualizar los valores obtenidos en el metodo obtenerOne y pintar los input
 
@@ -32,10 +34,12 @@ const Loguin = (props) => {
 
     const [datos, setDatos] = useState({
 
-        usuario:'',
-        contrasena:'',
+        usuario: null,
+        contrasena: null,
         
     })
+
+    const {usuario, setUsuario} = useContext(ContextoUsuario);
 
 
     //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
@@ -70,8 +74,11 @@ const Loguin = (props) => {
 
     //Creamos la funcion de respuesta del loguin de google:
     const responseGoogle = (response) => {
-        console.log(response);
-    
+        console.log("Respuesta google: ",response);
+        const nombre = response["Ts"]["Ne"];
+        const tokenId = response["tokenId"];
+        const usuarioActual = { nombre, tokenId };
+        actualizarEstado(usuarioActual);
     }
 
 
@@ -91,6 +98,7 @@ const Loguin = (props) => {
             let validarUsuario = false;
             let validarCliente = false;
             let id = "";
+            let rol = "";
 
             //Encriptar la contraseña ingresada para verificar si coincide con la contraseña encriptada de la BD:
 
@@ -106,6 +114,7 @@ const Loguin = (props) => {
 
                     validarUsuario = true;
                     id = listaUsuario[i].idCliente;
+                    rol = listaUsuario[i].rol;
                     break;
 
                 }
@@ -113,6 +122,7 @@ const Loguin = (props) => {
             }
 
             alert(id);
+            alert(rol);
 
             //Verificamos con el idCliente asociado al usuario ingresado, si este esta "ACTIVO":
 
@@ -134,20 +144,28 @@ const Loguin = (props) => {
             }
 
 
-            if((validarCliente === true) && (validarUsuario === true)){
+            if((validarCliente === true) && (validarUsuario === true) && ((rol).toLowerCase() === "administrador")){
+               
+                //Direccionamos a la pagina admin principal:
+                const usuarioActual = {usuario, contrasena, rol};
+                setUsuario(usuarioActual);
+                actualizarEstado(usuarioActual);
+                
+
+            }else if((validarCliente === true) && (validarUsuario === true)){
 
                 document.getElementById("mensaje").innerHTML  = "LOGUIN CORRECTO.";
                 document.getElementById("mensaje").style.color = "green";
                 //Despues implementar la accion de loguin valido
-
+                const usuarioActual = {usuario, contrasena, rol};
+                setUsuario(usuarioActual);
+                actualizarEstado(usuarioActual);
             }else{
 
                 //En caso de loguin invalido se muestra mensaje de ERROR personalizado:
                 document.getElementById("mensaje").innerHTML = "USUARIO O CONTRASEÑA INCORRECTO.";
                 document.getElementById("mensaje").style.color = "red";
-
             }
-
         
 
         }catch(error){
@@ -157,12 +175,21 @@ const Loguin = (props) => {
 
     }
 
+    function actualizarEstado(usuarioActual) {
+        localStorage.setItem('usuario', JSON.stringify(usuarioActual));
+        if(usuarioActual["rol"] === "administrador"){
+            history.push("/adminPrincipal");
+        }
+        else{
+            history.push("/");
+        }
+        window.location.reload();
+    }
+
 
     return (
 
         <Fragment>
-
-            <Navigation></Navigation>
 
             <br></br>
             <br></br>

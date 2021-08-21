@@ -1,0 +1,17 @@
+.navbar-parent {
+    padding: 0 2rem;
+}
+
+.search-box {
+    display: flex;
+    flex-direction: row;
+    padding-left: 10rem;
+}
+
+.box {
+    min-width: 20rem;
+}
+
+.log-btn {
+    margin-left: 10rem;
+}

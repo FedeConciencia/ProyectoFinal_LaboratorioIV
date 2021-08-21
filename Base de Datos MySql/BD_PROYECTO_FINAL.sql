@@ -38,7 +38,7 @@ CREATE TABLE `articulo_insumo` (
   PRIMARY KEY (`idArticulo`),
   KEY `idRubro_fk2_idx` (`idRubro`),
   CONSTRAINT `idRubro_fk2` FOREIGN KEY (`idRubro`) REFERENCES `rubro_articulo` (`idRubro`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +47,7 @@ CREATE TABLE `articulo_insumo` (
 
 LOCK TABLES `articulo_insumo` WRITE;
 /*!40000 ALTER TABLE `articulo_insumo` DISABLE KEYS */;
-INSERT INTO `articulo_insumo` VALUES (1,'lenguado',15.5,33.5,35,5,'Kilos','Es insumo','2021-10-10','2021-07-17','inactivo',1),(2,'merluza',100.5,200.5,10.5,2.5,'gramos','esInsumo','2021-07-19','1900-01-01','activo',1);
+INSERT INTO `articulo_insumo` VALUES (1,'lechuga',20,50,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(2,'tomate perita ',20,50,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(3,'tomate redondo',20,50,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(4,'papas',30,60,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(5,'zanahoria',50,80,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(6,'zapallo',30,60,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(7,'camote',30,60,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(8,'espinaca',40,80,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(9,'guisantes',30,60,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(10,'brocoli',30,50,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(11,'cebolla',40,80,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(12,'pimiento verde',30,50,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(13,'pimiento rojo',30,60,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(14,'ajo',30,60,10000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',1),(15,'queso mantecoso',80,120,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',2),(16,'queso cheddar',100,120,15000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',2),(17,'queso rayado',80,110,10000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',2),(18,'queso muzzarella',100,130,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',2),(19,'queso provolone',100,130,20000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',2),(20,'entrana',100,150,30000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',3),(21,'asado carnicero',180,210,30000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',3),(22,'lomo liso',180,210,30000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',3),(23,'carne molida',100,150,30000,5000,'gramo','esInsumo','2021-08-19','1900-01-01','activo',3),(24,'aceite girasol',100,130,15000,3000,'mililitro','esInsumo','2021-08-20','1900-01-01','activo',4),(25,'aceite oliva',150,180,15000,3000,'mililitro','esInsumo','2021-08-20','1900-01-01','activo',4),(26,'azucar rubia',100,150,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',5),(27,'azucar negra',100,150,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',5),(28,'azucar mascabo',130,170,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',5),(29,'pan frances',130,150,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',6),(30,'pan arabe',150,180,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',6),(31,'pan casero',140,160,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',6),(32,'facturas',180,200,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',6),(33,'tortitas',100,150,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',6),(34,'masitas',200,250,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',6),(35,'frijoles',100,130,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',7),(36,'garbanzos',100,130,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',7),(37,'arvejas',120,140,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',7),(38,'lentejas',150,180,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',7),(39,'tomates',150,180,15000,5000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',8),(40,'duraznos',120,160,15000,5000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',8),(41,'aceitunas',150,190,15000,5000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',8),(42,'berenjenas escabeche',150,190,15000,5000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',8),(43,'hongos',150,180,15000,5000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',8),(44,'hummus',150,180,15000,5000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',8),(45,'mayonesa',150,180,15000,3000.01,'gramo','esInsumo','2021-08-20','1900-01-01','activo',9),(46,'oregano',130,150,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',9),(47,'pimienta blanca',140,180,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',9),(48,'pimienta negra',140,180,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',9),(49,'azafran',150,180,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',9),(50,'comino',150,180,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',9),(51,'pimenton',150,180,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',9),(52,'canela',150,180,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',9),(53,'aji',130,150,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',9),(54,'ketchup',150,180,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',9),(55,'salsa golf',130,150,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',9),(56,'mostaza',150,180,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',9),(57,'salmon',200,250,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',10),(58,'merluza',180,200,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',10),(59,'lenguado',180,210,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',10),(60,'gatuzzo',150,180,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',10),(61,'trucha',150,180,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',10),(62,'mejillones',200,230,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',11),(63,'camarones',200,240,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',11),(64,'langostinos',230,250,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',11),(65,'machas',230,260,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',11),(66,'tentaculos calamar',230,260,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',11),(67,'hielo molido',100,150,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',12),(68,'hielo cubo',130,150,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',12),(69,'naranjas',80,100,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',13),(70,'manzanas',70,100,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',13),(71,'duraznos',100,120,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',13),(72,'anana',130,150,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',13),(73,'peras',80,100,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',13),(74,'kiwi',150,180,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',13),(75,'cerezas',130,150,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',13),(76,'frutillas',150,180,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',13),(77,'chocolate',100,130,20000,5000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',14),(78,'vainilla',130,150,20000,5000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',14),(79,'frutilla',130,150,20000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',14),(80,'crema del cielo',130,150,20000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',14),(81,'bombon suizo',100,130,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',14),(82,'bombon escoces',100,130,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',14),(83,'dulce de leche colonial',150,180,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',15),(84,'dulce de leche tradicional',130,150,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',15),(85,'dulce de leche respostero',130,150,10000,2999.99,'gramo','esInsumo','2021-08-20','1900-01-01','activo',15),(86,'leche entera',100,130,15000,3000,'mililitro','esInsumo','2021-08-20','1900-01-01','activo',16),(87,'leche descremada',100,130,15000,5000,'mililitro','esInsumo','2021-08-20','1900-01-01','activo',16),(88,'manteca',120,150,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',16),(89,'margarina',130,150,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',16),(90,'crema de leche',150,180,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',16),(91,'queso barra',120,150,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',17),(92,'jamon cocido',100,130,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',17),(93,'jamon crudo',150,180,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',17),(94,'salame',130,150,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',17),(95,'mortadela',100,130,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',17),(96,'coca cola 2.25',200,250,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(97,'coca cola 1.5',120,150,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(98,'coca cola 500',60,80,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(99,'seven up 2.25',200,250,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(100,'seven up 1.5',130,150,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(101,'seven up 500',60,80,300,49.99,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(102,'pepsi 2.25',200,250,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(103,'pepsi 1.5',120,150,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(104,'pepsi 500',60,80,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(105,'fanta 2.25',200,250,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(106,'fanta 1.5',120,150,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(107,'fanta 500',60,80,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(108,'paso de los toros 2.5',200,250,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(109,'paso de los toros 1.5',120,150,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(110,'paso de los toros 500',60,80,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',18),(111,'cerveza negra 1.0',200,250,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',19),(112,'cerveza negra 500',100,130,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',19),(113,'cerveza rubia 1.0',200,250,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',19),(114,'cerveza rubia 500',100,130,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',19),(115,'vino malbec 750',250,300,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',20),(116,'vino malbec 185',150,200,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',20),(117,'agua mineral sin gas 1.0',100,150,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',21),(118,'agua mineral sin gas 500',50,80,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',21),(119,'agua mineral con gas 1.0',100,150,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',21),(120,'agua mineral con gas 500',50,80,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',21),(121,'prepizzas caseras',50,80,300,50,'unidad','esInsumo','2021-08-20','1900-01-01','activo',6),(122,'anchoas',100,150,5000,1000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',10),(123,'rabas',150,200,10000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',11),(124,'arroz',100,150,15000,3000,'gramo','esInsumo','2021-08-20','1900-01-01','activo',7);
 /*!40000 ALTER TABLE `articulo_insumo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -71,7 +71,7 @@ CREATE TABLE `articulo_manufacturado` (
   PRIMARY KEY (`idArticulo`),
   KEY `idRubro_fk1_idx` (`idRubro`),
   CONSTRAINT `idRubro_fk1` FOREIGN KEY (`idRubro`) REFERENCES `rubro_general` (`idRubro`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,7 +80,7 @@ CREATE TABLE `articulo_manufacturado` (
 
 LOCK TABLES `articulo_manufacturado` WRITE;
 /*!40000 ALTER TABLE `articulo_manufacturado` DISABLE KEYS */;
-INSERT INTO `articulo_manufacturado` VALUES (2,50,'Hamburguesa',600,'imagen.jpg','2020-10-05','1990-01-01','activo',1),(5,29,'yogurt',300.5,'yogurt.jpg','2021-07-15','1900-01-01','activo',4);
+INSERT INTO `articulo_manufacturado` VALUES (1,30,'hamburguesa',300,'hamburguesa.jpg','2021-08-19','1900-01-01','activo',1),(2,40,'lomo',350,'lomo.jpg','2021-08-19','1900-01-01','activo',1),(3,35,'pizza muzzarella',500,'pizzaMuzza.jpg','2021-08-19','1900-01-01','activo',1),(4,35,'pizza fugazza',550,'pizzaFugazza.jpg','2021-08-19','1900-01-01','activo',1),(5,35,'pizza especial',600,'pizzaEspecial.jpg','2021-08-19','1900-01-01','activo',1),(6,35,'pizza anchoas',650,'pizzaAnchoas.jpg','2021-08-19','1900-01-01','activo',1),(7,20,'papas fritas',200,'papasFritas.jpg','2021-08-19','1900-01-01','activo',1),(8,30,'rabas',300,'rabas.jpg','2021-08-19','1900-01-01','activo',1),(9,30,'milanesa con pure',400,'milanesaPure.jpg','2021-08-19','1900-01-01','activo',1),(10,30,'milanesa con papas fritas',400,'milanesaFritas.jpg','2021-08-19','1900-01-01','activo',1),(11,40,'merluza con pure',500,'merluzaPure.jpg','2021-08-19','1900-01-01','activo',1),(12,40,'arroz con mariscos',500,'arrozMariscos.jpg','2021-08-19','1900-01-01','activo',1),(13,20,'sandwich',300,'sandwich.jpg','2021-08-19','1900-01-01','activo',1),(14,10,'coca cola 2.25',250,'cocaGrande.jpg','2021-08-19','1900-01-01','activo',2),(15,10,'coca cola 1.5',150,'cocaMediana.jpg','2021-08-19','1900-01-01','activo',2),(16,10,'coca cola 500',80,'cocaLata.jpg','2021-08-19','1900-01-01','activo',2),(17,10,'seven up 2.25',250,'sevenGrande.jpg','2021-08-19','1900-01-01','activo',2),(18,10,'seven up 1.5',150,'sevenMediana.jpg','2021-08-19','1900-01-01','activo',2),(19,10,'seven up 500',80,'sevenLata.jpg','2021-08-19','1900-01-01','activo',2),(20,10,'pepsi 2.25',250,'pepsiGrande.jpg','2021-08-19','1900-01-01','activo',2),(21,10,'pepsi 1.5',150,'pepsiMediana.jpg','2021-08-19','1900-01-01','activo',2),(22,10,'pepsi 500',80,'pepsiLata.jpg','2021-08-19','1900-01-01','activo',2),(23,10,'fanta 2.25',250,'fantaGrande.jpg','2021-08-19','1900-01-01','activo',2),(24,10,'fanta 1.5',150,'fantaMediana.jpg','2021-08-19','1900-01-01','activo',2),(25,10,'fanta 500',80,'fantaLata.jpg','2021-08-19','1900-01-01','activo',2),(26,10,'paso de los toros 2.25',250,'pasoGrande.jpg','2021-08-19','1900-01-01','activo',2),(27,10,'paso de los toros 1.5',150,'pasoMediana.jpg','2021-08-19','1900-01-01','activo',2),(28,10,'paso de los toros 500',80,'pasoLata.jpg','2021-08-19','1900-01-01','activo',2),(29,10,'agua mineral sin gas 1.0',150,'aguaMediana.jpg','2021-08-19','1900-01-01','activo',2),(30,10,'agua mineral sin gas 500',80,'aguaChica.jpg','2021-08-19','1900-01-01','activo',2),(31,10,'agua mineral con gas 1.0',150,'aguaGasMediana.jpg','2021-08-19','1900-01-01','activo',2),(32,10,'agua mineral con gas 500',80,'aguaGasChica.jpg','2021-08-19','1900-01-01','activo',2),(33,10,'vino malbec 750',300,'vinoGrande.jpg','2021-08-19','1900-01-01','activo',2),(34,10,'vino malbec 185',200,'vinoChico.jpg','2021-08-19','1900-01-01','activo',2),(35,10,'cerveza negra 1.0',250,'cervezaNegraGrande.jpg','2021-08-19','1900-01-01','activo',2),(36,10,'cerveza negra 500',130,'cervezaNegraLata.jpg','2021-08-19','1900-01-01','activo',2),(37,10,'cerveza rubia 1.0',250,'cervezaRubiaGrande.jpg','2021-08-19','1900-01-01','activo',2),(38,10,'cerveza rubia 500',130,'cervezaRubiaLata.jpg','2021-08-19','1900-01-01','activo',2),(39,20,'helado bombon suizo',150,'heladoSuizo.jpg','2021-08-19','1900-01-01','activo',3),(40,20,'helado bombon escoces',150,'heladoEscoces.jpg','2021-08-19','1900-01-01','activo',3),(41,20,'ensalada de fruta',150,'ensaladaFruta.jpg','2021-08-19','1900-01-01','activo',3),(42,20,'durazno con crema',150,'duraznoCrema.jpg','2021-08-19','1900-01-01','activo',3);
 /*!40000 ALTER TABLE `articulo_manufacturado` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -102,7 +102,7 @@ CREATE TABLE `articulo_manufacturado_detalle` (
   KEY `idArticuloInsumo_fk1_idx` (`idArticuloInsumo`),
   CONSTRAINT `idArticuloInsumo_fk1` FOREIGN KEY (`idArticuloInsumo`) REFERENCES `articulo_insumo` (`idArticulo`),
   CONSTRAINT `idArticuloManuf_fk1` FOREIGN KEY (`idArticuloManufacturado`) REFERENCES `articulo_manufacturado` (`idArticulo`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -111,7 +111,7 @@ CREATE TABLE `articulo_manufacturado_detalle` (
 
 LOCK TABLES `articulo_manufacturado_detalle` WRITE;
 /*!40000 ALTER TABLE `articulo_manufacturado_detalle` DISABLE KEYS */;
-INSERT INTO `articulo_manufacturado_detalle` VALUES (1,7,'kilo',2,1),(2,10,'gramo',5,2);
+INSERT INTO `articulo_manufacturado_detalle` VALUES (1,200,'gramo',1,23),(2,200,'gramo',1,30),(3,100,'gramo',1,3),(4,100,'gramo',1,1),(5,25,'gramo',1,45),(6,25,'gramo',1,56),(7,100,'gramo',2,1),(8,100,'gramo',2,3),(9,100,'gramo',2,16),(10,200,'gramo',2,22),(11,200,'gramo',2,29),(12,25,'gramo',2,45),(13,25,'gramo',2,56),(14,1,'unidad',3,121),(15,100,'gramo',3,39),(16,200,'gramo',3,18),(17,1,'unidad',4,121),(18,100,'gramo',4,39),(19,200,'gramo',4,18),(20,200,'gramo',4,11),(21,1,'unidad',5,121),(22,100,'gramo',5,39),(23,200,'gramo',5,18),(24,100,'gramo',5,92),(25,1,'unidad',6,121),(26,100,'gramo',6,39),(27,200,'gramo',6,18),(28,100,'gramo',6,122),(29,400,'gramo',7,4),(30,400,'gramo',8,123),(31,400,'gramo',9,22),(32,300,'gramo',9,4),(33,400,'gramo',10,22),(34,300,'gramo',10,4),(35,400,'gramo',11,58),(36,300,'gramo',11,4),(37,400,'gramo',12,124),(38,100,'gramo',12,62),(39,100,'gramo',12,65),(40,300,'gramo',13,31),(41,150,'gramo',13,91),(42,150,'gramo',13,92),(43,1,'unidad',14,96),(44,1,'unidad',15,97),(45,1,'unidad',16,98),(46,1,'unidad',17,99),(47,1,'unidad',18,100),(48,1,'unidad',19,101),(49,1,'unidad',20,102),(50,1,'unidad',21,103),(51,1,'unidad',22,104),(52,1,'unidad',23,105),(53,1,'unidad',24,106),(54,1,'unidad',25,107),(55,1,'unidad',26,108),(56,1,'unidad',27,109),(57,1,'unidad',28,110),(58,1,'unidad',29,117),(59,1,'unidad',30,118),(60,1,'unidad',31,119),(61,1,'unidad',32,120),(62,1,'unidad',33,115),(63,1,'unidad',34,116),(64,1,'unidad',35,111),(65,1,'unidad',36,112),(66,1,'unidad',37,113),(67,1,'unidad',38,114),(68,1,'unidad',39,81),(69,1,'unidad',40,82),(70,150,'gramo',41,69),(71,150,'gramo',41,70),(72,150,'gramo',41,71),(73,150,'gramo',41,72),(74,150,'gramo',41,73),(75,150,'gramo',41,74),(76,150,'gramo',41,75),(77,150,'gramo',41,76),(78,300,'gramo',42,40),(79,300,'gramo',42,90);
 /*!40000 ALTER TABLE `articulo_manufacturado_detalle` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -164,7 +164,7 @@ CREATE TABLE `configuracion` (
   `fechaBaja` date DEFAULT '0000-00-00',
   `estado` varchar(45) DEFAULT 'activo',
   PRIMARY KEY (`idConfiguracion`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -195,7 +195,7 @@ CREATE TABLE `detalle_factura` (
   KEY `idArticuloManf_fk2_idx` (`idArticulo`),
   CONSTRAINT `idArticuloManf_fk2` FOREIGN KEY (`idArticulo`) REFERENCES `articulo_manufacturado` (`idArticulo`),
   CONSTRAINT `idFactura_fk1` FOREIGN KEY (`idFactura`) REFERENCES `factura` (`idFactura`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -204,7 +204,6 @@ CREATE TABLE `detalle_factura` (
 
 LOCK TABLES `detalle_factura` WRITE;
 /*!40000 ALTER TABLE `detalle_factura` DISABLE KEYS */;
-INSERT INTO `detalle_factura` VALUES (4,1,500,1,2),(6,4,400.5,6,2);
 /*!40000 ALTER TABLE `detalle_factura` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,7 +225,7 @@ CREATE TABLE `detalle_pedido` (
   KEY `idArticulo_fk5_idx` (`idArtManufacturado`),
   CONSTRAINT `idArticulo_fk5` FOREIGN KEY (`idArtManufacturado`) REFERENCES `articulo_manufacturado` (`idArticulo`),
   CONSTRAINT `idPedido_fk5` FOREIGN KEY (`idPedido`) REFERENCES `pedido` (`idPedido`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,7 +234,6 @@ CREATE TABLE `detalle_pedido` (
 
 LOCK TABLES `detalle_pedido` WRITE;
 /*!40000 ALTER TABLE `detalle_pedido` DISABLE KEYS */;
-INSERT INTO `detalle_pedido` VALUES (5,3,600.45,1,2);
 /*!40000 ALTER TABLE `detalle_pedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -291,7 +289,7 @@ CREATE TABLE `factura` (
   PRIMARY KEY (`idFactura`),
   KEY `idPedido_fk3_idx` (`idPedido`),
   CONSTRAINT `idPedido_fk3` FOREIGN KEY (`idPedido`) REFERENCES `pedido` (`idPedido`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -300,7 +298,6 @@ CREATE TABLE `factura` (
 
 LOCK TABLES `factura` WRITE;
 /*!40000 ALTER TABLE `factura` DISABLE KEYS */;
-INSERT INTO `factura` VALUES (1,'221',25,'contado',320,'2021-05-14','2021-05-26','inactivo',1),(5,'3452',25,'contado',500.5,'2021-01-01','1900-01-01','activo',1),(6,'3453',25,'contado',300.4,'2021-07-07','1900-01-01','activo',1);
 /*!40000 ALTER TABLE `factura` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -325,7 +322,7 @@ CREATE TABLE `mercadopago` (
   UNIQUE KEY `codigo_UNIQUE` (`codigo`),
   KEY `idPedido_fk2_idx` (`idPedido`),
   CONSTRAINT `idPedido_fk2` FOREIGN KEY (`idPedido`) REFERENCES `pedido` (`idPedido`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -334,7 +331,6 @@ CREATE TABLE `mercadopago` (
 
 LOCK TABLES `mercadopago` WRITE;
 /*!40000 ALTER TABLE `mercadopago` DISABLE KEYS */;
-INSERT INTO `mercadopago` VALUES (1,'2341','2021-05-14','2021-05-14','2021-07-07','tajeta','5463636372839940','inactivo',1),(4,'2367','2021-07-07','2021-07-07','1900-01-01','tajeta','5434233213212432','activo',1);
 /*!40000 ALTER TABLE `mercadopago` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -362,7 +358,7 @@ CREATE TABLE `pedido` (
   KEY `idDomicilio_fk1_idx` (`idDomicilio`),
   CONSTRAINT `idCliente_fk3` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`),
   CONSTRAINT `idDomicilio_fk1` FOREIGN KEY (`idDomicilio`) REFERENCES `domicilio` (`idDomicilio`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -371,7 +367,6 @@ CREATE TABLE `pedido` (
 
 LOCK TABLES `pedido` WRITE;
 /*!40000 ALTER TABLE `pedido` DISABLE KEYS */;
-INSERT INTO `pedido` VALUES (1,'28222','10:12:00',3,222,'2021-05-14','1900-01-01','activo',2,1),(2,'23332','11:11:11',2,3000,'2021-06-17','2021-06-17','inactivo',14,25),(4,'45322','23:21:29',2,5000,'2021-06-17','2021-06-17','inactivo',2,25),(5,'1212','12:12:00',2,333.23,'2021-06-18','2021-07-06','inactivo',12,27);
 /*!40000 ALTER TABLE `pedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -389,7 +384,7 @@ CREATE TABLE `rubro_articulo` (
   `fechaBaja` date DEFAULT '0000-00-00',
   `estado` varchar(45) DEFAULT 'activo',
   PRIMARY KEY (`idRubro`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -398,7 +393,7 @@ CREATE TABLE `rubro_articulo` (
 
 LOCK TABLES `rubro_articulo` WRITE;
 /*!40000 ALTER TABLE `rubro_articulo` DISABLE KEYS */;
-INSERT INTO `rubro_articulo` VALUES (1,'pescados','2021-07-13','1900-01-01','activo');
+INSERT INTO `rubro_articulo` VALUES (1,'verduras','2021-08-19','1900-01-01','activo'),(2,'quesos','2021-08-19','1900-01-01','activo'),(3,'carnes','2021-08-19','1900-01-01','activo'),(4,'aceites','2021-08-19','1900-01-01','activo'),(5,'azucar','2021-08-19','1900-01-01','activo'),(6,'panificacion','2021-08-19','1900-01-01','activo'),(7,'legumbres','2021-08-19','1900-01-01','activo'),(8,'conservas','2021-08-19','1900-01-01','activo'),(9,'condimentos','2021-08-19','1900-01-01','activo'),(10,'pescados','2021-08-19','1900-01-01','activo'),(11,'mariscos','2021-08-19','1900-01-01','activo'),(12,'hielo','2021-08-19','1900-01-01','activo'),(13,'frutas','2021-08-19','1900-01-01','activo'),(14,'helados','2021-08-19','1900-01-01','activo'),(15,'dulce de leches','2021-08-19','1900-01-01','activo'),(16,'lacteos','2021-08-19','1900-01-01','activo'),(17,'fiambres','2021-08-19','1900-01-01','activo'),(18,'gaseosas','2021-08-19','1900-01-01','activo'),(19,'cerveza','2021-08-19','1900-01-01','activo'),(20,'vinos','2021-08-19','1900-01-01','activo'),(21,'aguas','2021-08-19','1900-01-01','activo');
 /*!40000 ALTER TABLE `rubro_articulo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -416,7 +411,7 @@ CREATE TABLE `rubro_general` (
   `fechaBaja` date DEFAULT '0000-00-00',
   `estado` varchar(45) NOT NULL DEFAULT 'activo',
   PRIMARY KEY (`idRubro`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -425,7 +420,7 @@ CREATE TABLE `rubro_general` (
 
 LOCK TABLES `rubro_general` WRITE;
 /*!40000 ALTER TABLE `rubro_general` DISABLE KEYS */;
-INSERT INTO `rubro_general` VALUES (1,'bebidas','2020-02-13','2021-07-09','inactivo'),(4,'postres','2021-07-09','1900-01-01','activo');
+INSERT INTO `rubro_general` VALUES (1,'comidas','2021-08-19','1900-01-01','activo'),(2,'bebidas','2021-08-19','1900-01-01','activo'),(3,'postres','2021-08-19','1900-01-01','activo');
 /*!40000 ALTER TABLE `rubro_general` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -458,7 +453,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (2,'lauraMzaSoc','laura1234','cliente','2021-06-17','2021-06-17','inactivo',2),(3,'alumnosutn424@gmail.com','admin123','cliente','2021-05-14','1900-01-01','activo',12),(6,'MzaDiana','diana12345','administrativo','2021-07-06','1900-01-01','activo',21),(16,'casale@hotmail.com','hoLftR+QR0r3+kxmmfaMKg==','cliente','2021-08-16','1900-01-01','activo',34),(17,'brunetti@hotmail.com','az1AoxRoH4M/R+iba3Fz5w==','cliente','2021-08-16','1900-01-01','activo',2),(18,'ortiz@gmail.com','8A8InA9EDmek6oaSR3rrig==','cliente','2021-08-18','1900-01-01','activo',35);
+INSERT INTO `usuario` VALUES (2,'lauraMzaSoc','laura1234','cliente','2021-06-17','2021-06-17','inactivo',2),(3,'alumnosutn424@gmail.com','admin123','cliente','2021-05-14','1900-01-01','activo',12),(6,'MzaDiana','diana12345','administrativo','2021-07-06','1900-01-01','activo',21),(16,'casale@hotmail.com','hoLftR+QR0r3+kxmmfaMKg==','administrador','2021-08-16','1900-01-01','activo',34),(17,'brunetti@hotmail.com','az1AoxRoH4M/R+iba3Fz5w==','cliente','2021-08-16','1900-01-01','activo',2),(18,'ortiz@gmail.com','8A8InA9EDmek6oaSR3rrig==','cliente','2021-08-18','1900-01-01','activo',35);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -471,4 +466,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-08-18 10:30:38
+-- Dump completed on 2021-08-20 18:31:10

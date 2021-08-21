@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import './assets/css/App.css';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route} from 'react-router-dom';
 import Home from './components/Home';
 import Contacto from './components/Contacto';
 import AdminPrincipal from './components/AdminPrincipal';
@@ -76,20 +76,26 @@ import EliminarArtManDetalle from './components/AdminArtManDetalle/EliminarArtMa
 import EliminarLogicArtManDetalle from './components/AdminArtManDetalle/EliminarLogicArtManDetalle';
 import Loguin from './components/Loguin/Loguin';
 import RegistroCliente from './components/RegistroCliente/RegistroCliente';
+import { ContextoUsuario } from './components/ContextoUsuario';
+import Navigation from './components/Navigation';
 
 
-
-class App extends Component{
-    
+export default function App(){
   
-  render(){
+  // Hook que contiene el estado actual de sesion
+  const [usuario, setUsuario] = useState(
+      localStorage.getItem('usuario') === "null" ? null : JSON.parse(localStorage.getItem('usuario'))
+    );
     
-    return(
+  return(
 
-      //Declaramos las Rutas con las diferentes paginas que tenemos:
+    //Declaramos las Rutas con las diferentes paginas que tenemos:
 
-      <Switch>
+    <Switch>
 
+      <ContextoUsuario.Provider value={{usuario, setUsuario}}>
+
+        <Navigation />
         {/* Rutas de Componentes-Vistas Home-Contacto-AdminPrincipal-Loguin-RegistroCliente: */}
 
         <Route exact path="/" component={Home} ></Route>
@@ -131,9 +137,9 @@ class App extends Component{
         <Route path="/eliminarPedido/:id" component={EliminarPedido} ></Route>
         <Route path="/eliminarLogicPedido/:id" component={EliminarLogicPedido} ></Route>
 
-         {/* Rutas de Componentes-Vistas AdminMercadoPago CRUD: */}
+        {/* Rutas de Componentes-Vistas AdminMercadoPago CRUD: */}
 
-         <Route path="/adminMercadoPago" component={FormMercadoPago} ></Route>
+        <Route path="/adminMercadoPago" component={FormMercadoPago} ></Route>
         <Route path="/registrarMercadoPago" component={RegistrarMercadoPago} ></Route>
         <Route path="/actualizarMercadoPago/:id" component={ActualizarMercadoPago} ></Route>
         <Route path="/eliminarMercadoPago/:id" component={EliminarMercadoPago} ></Route>
@@ -163,7 +169,7 @@ class App extends Component{
         <Route path="/eliminarDetallePedido/:id" component={EliminarDetallePedido} ></Route>
         <Route path="/eliminarLogicDetallePedido/:id" component={EliminarLogicDetallePedido} ></Route>
 
-         {/* Rutas de Componentes-Vistas AdminConfiguracion CRUD: */}
+        {/* Rutas de Componentes-Vistas AdminConfiguracion CRUD: */}
 
         <Route path="/adminConfiguracion" component={FormConfiguracion} ></Route>
         <Route path="/registrarConfiguracion" component={RegistrarConfiguracion} ></Route>
@@ -211,12 +217,10 @@ class App extends Component{
         <Route path="/eliminarArtManDetalle/:id" component={EliminarArtManDetalle} ></Route>
         <Route path="/eliminarLogicArtManDetalle/:id" component={EliminarLogicArtManDetalle} ></Route>
 
+      </ContextoUsuario.Provider>
 
-      </Switch>
-    ) 
-  }
+    </Switch>
+  ) 
 }
-
-export default App;
 
 

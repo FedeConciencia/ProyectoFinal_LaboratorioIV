@@ -57,7 +57,7 @@ const FormCliente = (props) => {
     return (
 
       <Fragment>
-          <Navigation></Navigation>
+          
           
             <div className="center">
 

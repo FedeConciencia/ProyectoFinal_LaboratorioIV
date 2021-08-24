@@ -179,7 +179,7 @@ const RegistrarFactura = () => {
   
     <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

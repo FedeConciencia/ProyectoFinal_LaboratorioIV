@@ -238,7 +238,7 @@ const ActualizarCliente = (props) => {
 
         <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

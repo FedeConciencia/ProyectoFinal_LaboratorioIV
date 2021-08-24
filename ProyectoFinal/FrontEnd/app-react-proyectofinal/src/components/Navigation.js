@@ -40,7 +40,7 @@ export default function Navigation() {
       <Navbar bg="primary" variant="dark" className="navbar-parent">
         <Navbar.Brand href="/">INICIO</Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="/home">HOME</Nav.Link>
+          <Nav.Link href="/productos">PRODUCTOS</Nav.Link>
           <Nav.Link href="/contacto">CONTACTO</Nav.Link>
           <VerificarRolUsuario />
           

@@ -294,7 +294,7 @@ const RegistroCliente = (props) => {
    
      <Fragment>
  
-         <Navigation></Navigation>
+         
 
          <br></br>
         

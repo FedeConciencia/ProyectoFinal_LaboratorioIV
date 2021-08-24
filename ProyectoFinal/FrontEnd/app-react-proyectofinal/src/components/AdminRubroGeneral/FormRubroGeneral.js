@@ -58,7 +58,7 @@ const FormRubroGeneral = (props) => {
     return (
 
       <Fragment>
-          <Navigation></Navigation>
+          
           
             <div className="center">
 

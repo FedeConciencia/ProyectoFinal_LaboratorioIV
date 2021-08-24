@@ -1,4 +1,4 @@
-.body{
+.bodyContacto{
 
     margin:auto;
     text-align: center;
@@ -36,9 +36,9 @@
 
 }
 
-.imagen{
+.imagenFrame{
 
-    margin:left;
+    margin:center;
 
 
 }
@@ -47,6 +47,7 @@
 
     width: 1120px;
     height: 500px;
+    margin: center;
 
 
 

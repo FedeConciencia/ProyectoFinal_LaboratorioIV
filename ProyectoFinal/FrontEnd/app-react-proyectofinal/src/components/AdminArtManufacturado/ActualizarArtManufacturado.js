@@ -232,7 +232,7 @@ const ActualizarArtManufacturado = (props) => {
 
         <Fragment>
 
-        <Navigation></Navigation>
+       
        
 
         <Container>

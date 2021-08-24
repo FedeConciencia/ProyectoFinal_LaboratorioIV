@@ -243,7 +243,7 @@ const ActualizarArtManDetalle = (props) => {
 
         <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

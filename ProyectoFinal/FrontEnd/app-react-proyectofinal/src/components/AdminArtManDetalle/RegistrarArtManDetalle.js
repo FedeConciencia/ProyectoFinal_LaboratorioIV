@@ -179,7 +179,7 @@ const RegistrarArtManDetalle = () => {
   
     <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

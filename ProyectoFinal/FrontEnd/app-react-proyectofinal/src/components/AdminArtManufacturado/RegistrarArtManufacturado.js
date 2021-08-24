@@ -139,7 +139,7 @@ const RegistrarArtManufacturado = () => {
   
     <Fragment>
 
-        <Navigation></Navigation>
+       
        
 
         <Container>

@@ -181,7 +181,7 @@ const RegistrarMercadoPago = () => {
   
     <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

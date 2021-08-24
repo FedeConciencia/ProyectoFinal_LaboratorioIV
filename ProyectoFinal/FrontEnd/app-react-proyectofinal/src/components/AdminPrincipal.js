@@ -14,7 +14,7 @@ class AdminPrincipal extends Component {
 
     return (
       <Fragment>
-        <Navigation></Navigation>
+        
 
         <Container>
 

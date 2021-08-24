@@ -57,7 +57,7 @@ const FormArtManufacturado = (props) => {
     return (
 
       <Fragment>
-          <Navigation></Navigation>
+          
           
             <div className="center">
 

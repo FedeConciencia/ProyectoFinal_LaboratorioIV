@@ -179,8 +179,7 @@ const RegistrarDetalleFactura = () => {
   
     <Fragment>
 
-        <Navigation></Navigation>
-       
+        
 
         <Container>
 

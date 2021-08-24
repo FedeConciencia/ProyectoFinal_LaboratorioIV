@@ -279,7 +279,7 @@ const ActualizarMercadoPago = (props) => {
 
         <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

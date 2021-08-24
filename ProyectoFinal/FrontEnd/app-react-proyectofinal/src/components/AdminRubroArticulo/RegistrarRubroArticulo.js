@@ -89,7 +89,7 @@ const RegistrarRubroArticulo = () => {
   
     <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

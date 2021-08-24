@@ -179,7 +179,7 @@ const RegistrarDetallePedido = () => {
   
     <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

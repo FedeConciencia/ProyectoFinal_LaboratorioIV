@@ -179,7 +179,7 @@ const ActualizarRubroGeneral = (props) => {
 
         <Fragment>
 
-        <Navigation></Navigation>
+       
        
 
         <Container>

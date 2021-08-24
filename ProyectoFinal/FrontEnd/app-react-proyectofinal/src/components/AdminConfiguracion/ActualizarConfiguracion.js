@@ -183,7 +183,7 @@ const ActualizarConfiguracion = (props) => {
 
         <Fragment>
 
-        <Navigation></Navigation>
+       
        
 
         <Container>

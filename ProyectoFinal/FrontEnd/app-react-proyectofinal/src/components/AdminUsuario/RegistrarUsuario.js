@@ -226,7 +226,7 @@ const RegistrarUsuario = () => {
   
     <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

@@ -57,7 +57,7 @@ const FormDetalleFactura = (props) => {
     return (
 
       <Fragment>
-          <Navigation></Navigation>
+          
           
             <div className="center">
 

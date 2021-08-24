@@ -15,6 +15,23 @@ public class Principal {
     
     public static void main(String[] args) {
         
+        /*
+        
+        //TESTEO AUX_INGREDIENTES:
+        
+        ControladorAuxIngredientes controlador = new ControladorAuxIngredientes();
+        
+        List<AuxIngredientes> lista = controlador.buscarIngredientes(1L);
+        
+        for(AuxIngredientes item: lista){
+            
+            System.out.println(item.toString());
+            System.out.println();
+            
+        }
+        
+        */
+        
      
         //TESTEO CLIENTE:
         

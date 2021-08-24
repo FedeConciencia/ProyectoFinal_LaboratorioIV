@@ -322,7 +322,7 @@ const ActualizarPedido = (props) => {
 
         <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

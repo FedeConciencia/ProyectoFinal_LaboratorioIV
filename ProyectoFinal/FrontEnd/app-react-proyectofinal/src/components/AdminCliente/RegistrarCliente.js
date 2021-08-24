@@ -138,7 +138,7 @@ const RegistrarCliente = () => {
   
     <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

@@ -89,7 +89,7 @@ const RegistrarRubroGeneral = () => {
   
     <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

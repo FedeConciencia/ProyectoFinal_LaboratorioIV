@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert'
 import img from '../assets/images/logo.png'
+import Button from 'react-bootstrap/Button';
 import { ContextoUsuario } from './ContextoUsuario';
 
 
@@ -53,7 +54,7 @@ export default function Home(){
 
                                 <hr />
                                 <p className="mb-0">
-                                    Lo invitamos a que acceda a ver nuestros productos: 
+                                    Lo invitamos a que acceda a ver nuestros <Button href={`/productos`} variant="link">PRODUCTOS</Button>
                                 </p>
                             </Alert>
 

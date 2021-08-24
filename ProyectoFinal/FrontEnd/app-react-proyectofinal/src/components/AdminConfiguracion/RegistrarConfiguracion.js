@@ -95,7 +95,7 @@ const RegistrarConfiguracion = () => {
   
     <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

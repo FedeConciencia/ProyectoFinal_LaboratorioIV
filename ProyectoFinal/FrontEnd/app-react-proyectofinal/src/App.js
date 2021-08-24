@@ -76,6 +76,8 @@ import EliminarArtManDetalle from './components/AdminArtManDetalle/EliminarArtMa
 import EliminarLogicArtManDetalle from './components/AdminArtManDetalle/EliminarLogicArtManDetalle';
 import Loguin from './components/Loguin/Loguin';
 import RegistroCliente from './components/RegistroCliente/RegistroCliente';
+import Productos from './components/Productos/Productos';
+import DetallePlato from './components/DetallePlato/DetallePlato';
 import { ContextoUsuario } from './components/ContextoUsuario';
 import Navigation from './components/Navigation';
 
@@ -104,6 +106,9 @@ export default function App(){
         <Route path="/adminPrincipal" component={AdminPrincipal} ></Route>
         <Route path="/loguin" component={Loguin} ></Route>
         <Route path="/registroCliente" component={RegistroCliente} ></Route>
+        <Route path="/productos" component={Productos} ></Route>
+        <Route path="/detallePlato/:id" component={DetallePlato} ></Route>
+        
 
         {/* Rutas de Componentes-Vistas AdminCliente CRUD: */}
 

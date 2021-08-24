@@ -262,7 +262,7 @@ const ActualizarArtInsumo = (props) => {
 
         <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

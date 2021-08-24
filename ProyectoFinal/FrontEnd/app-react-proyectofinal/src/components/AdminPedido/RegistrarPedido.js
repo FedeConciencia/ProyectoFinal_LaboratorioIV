@@ -222,7 +222,7 @@ const RegistrarPedido = () => {
   
     <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

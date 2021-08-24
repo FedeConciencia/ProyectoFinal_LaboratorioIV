@@ -1,0 +1,72 @@
+.imagen{
+
+    text-align: center;
+    align-items: center;
+    width: 300px;
+    height: 300px;
+    
+   
+}
+
+.tarjeta{
+
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+}
+
+.texto{
+
+    text-align: center;
+    align-items: center;
+    margin:auto;
+}
+
+.center{
+
+
+    text-align: center;
+    align-items: center;
+    margin:auto
+    
+
+}
+
+.imagen{
+
+    text-align: center;
+    align-items: center;
+    margin:auto
+
+}
+
+
+.titulo{
+
+    font-weight: bold;
+
+}
+
+.prec{
+
+    font-weight: bold;
+    font-size: x-large;
+    text-align: center;
+    align-items: center;
+    margin:auto
+
+}
+
+.costo{
+
+    color: orange;
+
+}
+
+.costoGratis{
+
+    color: green;
+
+}

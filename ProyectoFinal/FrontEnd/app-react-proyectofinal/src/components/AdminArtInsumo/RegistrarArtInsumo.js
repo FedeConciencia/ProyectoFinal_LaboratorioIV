@@ -167,7 +167,7 @@ const RegistrarArtInsumo = () => {
   
     <Fragment>
 
-        <Navigation></Navigation>
+        
        
 
         <Container>

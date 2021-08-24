@@ -36,7 +36,7 @@ public class ArticuloInsumoServlet extends HttpServlet {
        //Modificando el response.setContentType y agregando charset=UTF-8 soluciona problema de caracteres como ñ en react:
         //https://blog.continuum.cl/generar-una-respuesta-json-desde-java-en-utf-8-e68392ae4587
         
-        response.setContentType("application/json;charset=UTF-8");
+        response.setContentType("application/x-json;charset=UTF-8");
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
@@ -135,7 +135,8 @@ public class ArticuloInsumoServlet extends HttpServlet {
                     
                 }
             }
-                    
+            
+            
             out.write(respuestaServer);
         }catch(Exception ex){
             ex.printStackTrace();

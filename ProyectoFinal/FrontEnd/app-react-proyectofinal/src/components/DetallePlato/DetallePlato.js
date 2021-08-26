@@ -10,14 +10,23 @@ import {useForm} from 'react-hook-form';
 import Alert from "react-bootstrap/Alert";
 import '../../assets/css/detallePlato.css';
 import moment from 'moment';
+import { ContextoUsuario } from "../ContextoUsuario";
+import ModalPopUp from "./ModalPopUp";
 
 const DetallePlato = (props) => {
 
+    const {usuario} = useContext(ContextoUsuario);
+
+    const [modalPopUp, setModalPopUp] = useState(false);
 
     const [datos, setDatos] = useState([])
 
     const [ingredientes, setIngredientes] = useState([])
 
+    useEffect(() => {
+        console.log("modalPopUp: ", modalPopUp)
+        setModalPopUp(usuario === null)
+    }, [modalPopUp, usuario])
 
    //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
    //los corchetes permite que nuestro userEffect se ejecute una sola vez
@@ -90,13 +99,21 @@ const DetallePlato = (props) => {
     <li key={i}>{ ingrediente.denominacionArtInsumo } / {ingrediente.cantidad} / {ingrediente.unidadMedida}</li>
     )})
 
-    
+    const handleModalPopUp = () => {
+        console.log(usuario === null)
+        if(usuario !== null){
+            alert("Producto agregado a carrito!!")
+            window.location.href = "/productos"
+        }
+    }
 
 
     return (
 
         <Fragment>
 
+            
+            <ModalPopUp usuario={usuario === null} />
             <br></br>
 
             <span>{ console.log(JSON.stringify(ingredientes)) }</span>
@@ -187,7 +204,7 @@ const DetallePlato = (props) => {
                         
                         <br></br>
                         <br></br>
-                        <Button type="button" variant="success" size="lg">AGREGAR CARRITO</Button>&nbsp;&nbsp;
+                        <Button type="button" onClick={handleModalPopUp} variant="success" size="lg">AGREGAR CARRITO</Button>&nbsp;&nbsp;
                         <Button type="button" href={`/productos`} variant="danger" size="lg">RETURN</Button>
                         <br></br>
                         <br></br>

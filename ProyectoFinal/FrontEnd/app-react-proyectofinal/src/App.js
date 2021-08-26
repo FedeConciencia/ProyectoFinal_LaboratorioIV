@@ -88,7 +88,7 @@ export default function App(){
   const [usuario, setUsuario] = useState(
       localStorage.getItem('usuario') === "null" ? null : JSON.parse(localStorage.getItem('usuario'))
     );
-    
+  
   return(
 
     //Declaramos las Rutas con las diferentes paginas que tenemos:

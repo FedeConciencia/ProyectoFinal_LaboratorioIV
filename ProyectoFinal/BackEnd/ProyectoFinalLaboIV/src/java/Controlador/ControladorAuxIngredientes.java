@@ -28,7 +28,7 @@ public class ControladorAuxIngredientes {
 
             ps = conexion.prepareStatement("SELECT manuf.denominacion AS NombreArt, manuf.precioVenta AS PrecioVenta, manuf.tiempoEstimado AS Tiempo\n" +
                                             ", manfDet.cantidad AS Cantidad, manfDet.unidadMedida AS UnidadMedida, insumo.denominacion AS NombreInsum\n" +
-                                            "FROM articulo_manufacturado AS manuf INNER JOIN articulo_manufacturado_detalle AS manfDet\n" +
+                                            ", insumo.stockActual AS stockActual, insumo.stockMinimo AS stockMinimo FROM articulo_manufacturado AS manuf INNER JOIN articulo_manufacturado_detalle AS manfDet\n" +
                                             "ON manuf.idArticulo = manfDet.idArticuloManufacturado INNER JOIN articulo_insumo AS insumo\n" +
                                             "ON manfDet.idArticuloInsumo = insumo.idArticulo WHERE manuf.idArticulo = ? GROUP BY insumo.denominacion;");
 
@@ -44,9 +44,11 @@ public class ControladorAuxIngredientes {
                 double cantidad = rs.getDouble(4);
                 String unidadMedida = rs.getString(5);
                 String denominacionArtInsumo = rs.getString(6);
+                double stockActual = rs.getDouble(7);
+                double stockMinimo = rs.getDouble(8);
                 
 
-                auxIngredientes = new AuxIngredientes(denominacionArtManuf, precioVenta, tiempoEstimado, cantidad, unidadMedida, denominacionArtInsumo);
+                auxIngredientes = new AuxIngredientes(denominacionArtManuf, precioVenta, tiempoEstimado, cantidad, unidadMedida, denominacionArtInsumo, stockActual, stockMinimo);
 
                 listaIngredientes.add(auxIngredientes);
                 

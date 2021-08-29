@@ -82,6 +82,7 @@ import { ContextoUsuario } from './components/ContextoUsuario';
 import Navigation from './components/Navigation';
 
 
+
 export default function App(){
   
   // Hook que contiene el estado actual de sesion
@@ -109,6 +110,7 @@ export default function App(){
         <Route path="/productos" component={Productos} ></Route>
         <Route path="/detallePlato/:id" component={DetallePlato} ></Route>
         
+
 
         {/* Rutas de Componentes-Vistas AdminCliente CRUD: */}
 

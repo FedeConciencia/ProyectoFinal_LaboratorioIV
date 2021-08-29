@@ -12,6 +12,11 @@ import '../../assets/css/detallePlato.css';
 import moment from 'moment';
 import { ContextoUsuario } from "../ContextoUsuario";
 import ModalPopUp from "./ModalPopUp";
+import ModalFaltante from "./ModalFaltante.js";
+import ModalHorario from "./ModalHorario.js"
+import ModalCarrito from "./ModalCarrito.js";
+
+
 
 const DetallePlato = (props) => {
 
@@ -19,27 +24,39 @@ const DetallePlato = (props) => {
 
     const [modalPopUp, setModalPopUp] = useState(false);
 
+    //Creo el estado de la variable modalFaltante:
+    const [modalFaltante, setModalFaltante] = useState();
+
+    //Creo el estado de la variable modalHorario:
+    const [modalHorario, setModalHorario] = useState();
+
+    //Creo el estado de la variable modalCarrito:
+    const [modalCarrito, setModalCarrito] = useState();
+
     const [datos, setDatos] = useState([])
 
     const [ingredientes, setIngredientes] = useState([])
 
     useEffect(() => {
         console.log("modalPopUp: ", modalPopUp)
+        console.log("modalFaltante: ", modalFaltante)
+        console.log("modalHorario: ", modalHorario)
+        console.log("modalCarrito: ", modalCarrito)
         setModalPopUp(usuario === null)
-    }, [modalPopUp, usuario])
+    }, [modalCarrito, modalHorario, modalFaltante, modalPopUp, usuario])
+
+    //Redireccion de la Pagina:
+    let history = useHistory();
+
 
    //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
    //los corchetes permite que nuestro userEffect se ejecute una sola vez
    useEffect(() => {
 
-
-
         //Se ejecuta el metodo obtener One al cargar la pagina
         getDatos();
-       
-
-
-
+        
+        
     }, [])
 
 
@@ -99,11 +116,183 @@ const DetallePlato = (props) => {
     <li key={i}>{ ingrediente.denominacionArtInsumo } / {ingrediente.cantidad} / {ingrediente.unidadMedida}</li>
     )})
 
-    const handleModalPopUp = () => {
+
+    //Metodo que verifica el estock de los insumos que componen el artManufacturado:
+    const verificarStock = () => {
+
+        let validar = false;
+
+        for(let i = 0; i < ingredientes.length; i++){
+
+
+            if(ingredientes[i].stockActual < ingredientes[i].cantidad){
+
+                console.log("INGRESO=> ");
+
+                //Variable que valida, si la validacion es faltante de stock devuelve true para pasar al modal y activar const show:
+                validar = true;
+
+            }
+
+        }
+
+        console.log("VARIABLE VALIDAR VALOR => " + validar);
+        return validar;
+
+    }
+
+
+    //Metodo que verifica que el horario Local y dia correspondan a los horarios del local:
+    const verificarHorario = () => {
+
+        //Recibimos el dia Actual por moment():
+        let diaActual = moment().format('dddd');
+        //let horarioActual = moment().format('hh:mm');
+
+        //Variable que valida, si la validacion es fuera de horario devuelve true para pasar al modal y activar const show:
+        let validar = true;
+
+        //Ingresos de Testeo Manual de dia y horario:
+        // => let diaActual = "saturday";
+        
+        
+
+
+        //Obtengo el horario actual a traves de moment() y lo paso a Date para comparar:
+        let recibTime = new Date();
+        recibTime.setHours(moment().format('hh'),moment().format('mm'),0);
+        // => recibTime.setHours(12,0,0);
+        
+        //Obtenemos los horarios correctos de la semana Lunes a Viernes:
+        let starTimeWeek = new Date();
+        starTimeWeek.setHours(12,0,0); 
+        let endTimeWeek = new Date();
+        endTimeWeek.setHours(20,0,0); 
+
+        //Obtenemos los horarios correctos de la semana Sabados a Domingos:
+        let starTimeWeekend = new Date();
+        starTimeWeekend.setHours(11,0,0); 
+        let endTimeWeekend = new Date();
+        endTimeWeekend.setHours(15,0,0); 
+        
+        console.log(diaActual);
+        //console.log(horarioActual);
+        console.log(recibTime);
+        
+        if(diaActual === "monday" || diaActual === "tuesday" || diaActual === "wednesday" || diaActual === "thursday" || diaActual === "Friday"){
+
+            console.log("INGRESO VALIDAR DIA WEEK");
+
+            if((starTimeWeek <= recibTime) && (recibTime <= endTimeWeek)){
+
+                console.log("INGRESO VALIDAR HORA WEEK");
+
+                validar = false;
+
+                console.log(validar);
+
+
+            }
+
+
+        }else if(diaActual === "saturday" || diaActual === "sunday"){
+
+            console.log("INGRESO VALIDAR DIA WEEKEND");
+
+            if((starTimeWeek <= recibTime) && (recibTime <= endTimeWeek)){
+
+                console.log("INGRESO VALIDAR HORA WEEKEND");
+
+                validar = false;
+
+                console.log(validar);
+
+            }
+
+
+
+        }
+
+        
+        return validar;
+
+    }
+
+
+    //Metodo que se ejecuta con el evento OnClick Boton carrito:
+    const handleEvents = () => {
+
         console.log(usuario === null)
-        if(usuario !== null){
-            alert("Producto agregado a carrito!!")
-            window.location.href = "/productos"
+
+        //Guardo en la variable el valor devuelto true/false por el metodo:
+        let validarStock = verificarStock();
+
+        //Guardo en la variable el valor devuelto true/false por el metodo:
+        let validarHorario = verificarHorario();
+
+        console.log("VARIABLE VALIDAR STOCK HANDLE => " + validarStock);
+        console.log("VARIABLE VALIDAR HORARIO HANDLE => " + validarHorario);
+
+
+        //Condicional si el usuario logueado, validarStock es false (sin faltante), validarHorario es false (dentro de Horario):
+        if(usuario !== null && validarStock === false && validarHorario === false){
+
+            //Guardo en una constante el componente modalCarrito y paso el props:
+            const modalCar = () => {
+                return (
+                  
+                    //Al componente ModalFaltante le asigamos propiedades que luego son accedidas por el componente para mostrar.
+                  <ModalCarrito
+                    compra={true}
+                  ></ModalCarrito>
+                );
+              }
+
+            //Guardo la constante en el estado:  
+            setModalCarrito(modalCar);  
+            
+       
+        //Condicional si el usuario logueado, validarStock es false (sin faltante), validarHorario es true (fuera de Horario):
+        }else if(usuario !== null && validarHorario === true){
+
+
+            //Guardo en una constante el componente modalHorario y paso el props:
+            const modalHor = () => {
+                return (
+                  
+                    //Al componente ModalFaltante le asigamos propiedades que luego son accedidas por el componente para mostrar.
+                  <ModalHorario
+                    horario={validarHorario}
+                  ></ModalHorario>
+                );
+              }
+
+            //Guardo la constante en el estado:  
+            setModalHorario(modalHor);  
+
+            console.log("VARIABLE VALIDAR MODAL_HORARIO => " + modalHorario);
+
+
+        //Condicional si el usuario logueado y validar es true (con faltante):
+        }else if(usuario !== null && validarStock === true){
+
+            
+            //Guardo en una constante el componente modalFaltante y paso el props:
+            const modalFal = () => {
+                return (
+                  
+                  //Al componente ModalFaltante le asigamos propiedades que luego son accedidas por el componente para mostrar.
+                  <ModalFaltante
+                    validar={validarStock}
+                  ></ModalFaltante>
+                );
+              }
+
+            //Guardo la constante en el estado:  
+            setModalFaltante(modalFal);  
+
+            console.log("VARIABLE VALIDAR MODAL_FALTANTE => " + modalFaltante);
+    
         }
     }
 
@@ -114,6 +303,13 @@ const DetallePlato = (props) => {
 
             
             <ModalPopUp usuario={usuario === null} />
+            
+            { modalFaltante }
+
+            { modalHorario }
+
+            { modalCarrito }
+            
             <br></br>
 
             <span>{ console.log(JSON.stringify(ingredientes)) }</span>
@@ -204,7 +400,7 @@ const DetallePlato = (props) => {
                         
                         <br></br>
                         <br></br>
-                        <Button type="button" onClick={handleModalPopUp} variant="success" size="lg">AGREGAR CARRITO</Button>&nbsp;&nbsp;
+                        <Button type="button" onClick={handleEvents} variant="success" size="lg">AGREGAR CARRITO</Button>&nbsp;&nbsp;
                         <Button type="button" href={`/productos`} variant="danger" size="lg">RETURN</Button>
                         <br></br>
                         <br></br>

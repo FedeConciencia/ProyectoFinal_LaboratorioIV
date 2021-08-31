@@ -153,15 +153,13 @@ const DetallePlato = (props) => {
         let validar = true;
 
         //Ingresos de Testeo Manual de dia y horario:
-        // => let diaActual = "saturday";
+        //let diaActual = "saturday";
         
         
-
-
         //Obtengo el horario actual a traves de moment() y lo paso a Date para comparar:
         let recibTime = new Date();
         recibTime.setHours(moment().format('hh'),moment().format('mm'),0);
-        // => recibTime.setHours(12,0,0);
+        //recibTime.setHours(12,0,0);
         
         //Obtenemos los horarios correctos de la semana Lunes a Viernes:
         let starTimeWeek = new Date();

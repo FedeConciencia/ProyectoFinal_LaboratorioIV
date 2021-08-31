@@ -75,7 +75,8 @@ const Loguin = (props) => {
     //Creamos la funcion de respuesta del loguin de google:
     const responseGoogle = (response) => {
         console.log("Respuesta google: ",response);
-        const nombre = response["Ts"]["Ne"];
+        //Tener en cuenta que estas variables pueden ser modificadas por google:
+        const nombre = response["Ws"]["Qe"]; 
         const tokenId = response["tokenId"];
         const usuarioActual = { nombre, tokenId };
         actualizarEstado(usuarioActual);

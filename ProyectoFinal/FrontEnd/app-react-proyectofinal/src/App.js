@@ -80,6 +80,7 @@ import Productos from './components/Productos/Productos';
 import DetallePlato from './components/DetallePlato/DetallePlato';
 import { ContextoUsuario } from './components/ContextoUsuario';
 import Navigation from './components/Navigation';
+import Carrito from './components/Carrito/Carrito';
 
 
 
@@ -109,6 +110,7 @@ export default function App(){
         <Route path="/registroCliente" component={RegistroCliente} ></Route>
         <Route path="/productos" component={Productos} ></Route>
         <Route path="/detallePlato/:id" component={DetallePlato} ></Route>
+        <Route exact path="/carrito" component={Carrito} />
         
 
 

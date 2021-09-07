@@ -15,6 +15,7 @@ import ModalPopUp from "./ModalPopUp";
 import ModalFaltante from "./ModalFaltante.js";
 import ModalHorario from "./ModalHorario.js"
 import ModalCarrito from "./ModalCarrito.js";
+import PlatoAux from "../Carrito/PlatoAux";
 
 
 
@@ -81,6 +82,36 @@ const DetallePlato = (props) => {
             //Guardamos el dato encontrado array un solo elemento, en la variable de estado:
             setDatos(plato);
 
+            let array = new Array();
+            if(localStorage.getItem("productos") === null || localStorage.getItem("productos") === "[]"){
+                console.log("Array nulo")
+                let nuevoPlato = new PlatoAux(plato)
+                console.log("nuevoPlato: ", nuevoPlato)
+                array.push(nuevoPlato)
+            }
+            else{
+                console.log("Array con contenido")
+                console.log(JSON.parse(localStorage.getItem("productos")))
+                array = JSON.parse(localStorage.getItem("productos"));
+
+                let validar = true;
+                for(let i=0; i<array.length; i++){
+                    if(array[i].idArticulo === plato.idArticulo){
+                        array[i].cantidad = array[i].cantidad + 1;
+                        console.log("nuevoPlato: ", array[i])
+                        validar = false;
+                        break;
+                    }
+                }
+                if(validar) {
+                    let nuevoPlato = new PlatoAux(plato)
+                    array.push(nuevoPlato)
+                }
+            }
+
+            // Guardamos en memoria local
+            localStorage.setItem("productos", JSON.stringify(array));
+
             alert(JSON.stringify(datos));
 
             
@@ -146,20 +177,20 @@ const DetallePlato = (props) => {
     const verificarHorario = () => {
 
         //Recibimos el dia Actual por moment():
-        let diaActual = moment().format('dddd');
+        // let diaActual = moment().format('dddd');
         //let horarioActual = moment().format('hh:mm');
 
         //Variable que valida, si la validacion es fuera de horario devuelve true para pasar al modal y activar const show:
         let validar = true;
 
         //Ingresos de Testeo Manual de dia y horario:
-        //let diaActual = "saturday";
+        let diaActual = "monday";
         
         
         //Obtengo el horario actual a traves de moment() y lo paso a Date para comparar:
         let recibTime = new Date();
-        recibTime.setHours(moment().format('hh'),moment().format('mm'),0);
-        //recibTime.setHours(12,0,0);
+        // recibTime.setHours(moment().format('hh'),moment().format('mm'),0);
+        recibTime.setHours(12,0,0);
         
         //Obtenemos los horarios correctos de la semana Lunes a Viernes:
         let starTimeWeek = new Date();
@@ -243,6 +274,7 @@ const DetallePlato = (props) => {
                   <ModalCarrito
                     compra={true}
                   ></ModalCarrito>
+
                 );
               }
 

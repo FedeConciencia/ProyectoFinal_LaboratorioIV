@@ -42,6 +42,7 @@ export default function Navigation() {
         <Nav className="mr-auto">
           <Nav.Link href="/productos">PRODUCTOS</Nav.Link>
           <Nav.Link href="/contacto">CONTACTO</Nav.Link>
+          <Nav.Link href="/carrito">CARRITO</Nav.Link>
           <VerificarRolUsuario />
           
           <Form inline className="search-box">

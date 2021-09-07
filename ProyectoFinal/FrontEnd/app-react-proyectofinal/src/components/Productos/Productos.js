@@ -46,7 +46,7 @@ const Productos = (props) => {
 
             const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtManufacturadoServlet?action=listar");
             const resJson = await response.json();
-            alert(JSON.stringify(resJson));
+            // alert(JSON.stringify(resJson));
 
             //Obtener con funcion filter los datos separados por Rubro General =>
             //Function Filter() obtenemos el objeto del .Json, devuelve array de un elemento:

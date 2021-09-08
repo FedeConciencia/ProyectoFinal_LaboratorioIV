@@ -82,46 +82,13 @@ const DetallePlato = (props) => {
             //Guardamos el dato encontrado array un solo elemento, en la variable de estado:
             setDatos(plato);
 
-            let array = new Array();
-            if(localStorage.getItem("productos") === null || localStorage.getItem("productos") === "[]"){
-                console.log("Array nulo")
-                let nuevoPlato = new PlatoAux(plato)
-                console.log("nuevoPlato: ", nuevoPlato)
-                array.push(nuevoPlato)
-            }
-            else{
-                console.log("Array con contenido")
-                console.log(JSON.parse(localStorage.getItem("productos")))
-                array = JSON.parse(localStorage.getItem("productos"));
 
-                let validar = true;
-                for(let i=0; i<array.length; i++){
-                    if(array[i].idArticulo === plato.idArticulo){
-                        array[i].cantidad = array[i].cantidad + 1;
-                        console.log("nuevoPlato: ", array[i])
-                        validar = false;
-                        break;
-                    }
-                }
-                if(validar) {
-                    let nuevoPlato = new PlatoAux(plato)
-                    array.push(nuevoPlato)
-                }
-            }
-
-            // Guardamos en memoria local
-            localStorage.setItem("productos", JSON.stringify(array));
-
-            alert(JSON.stringify(datos));
-
-            
             const responseIngre = await fetch("http://localhost:8080/ProyectoFinalLaboIV/AuxIngredientesServlet?action=listar&idArticulo="+id); 
             const resJsonIngre = await responseIngre.json();
 
             //Paso los datos obtenidos de la consulta INNER JOIN a la BD:
             setIngredientes(resJsonIngre);
 
-            
 
 
         }catch(error){
@@ -162,6 +129,7 @@ const DetallePlato = (props) => {
 
                 //Variable que valida, si la validacion es faltante de stock devuelve true para pasar al modal y activar const show:
                 validar = true;
+                break;
 
             }
 
@@ -176,8 +144,8 @@ const DetallePlato = (props) => {
     //Metodo que verifica que el horario Local y dia correspondan a los horarios del local:
     const verificarHorario = () => {
 
-        //Recibimos el dia Actual por moment():
-        // let diaActual = moment().format('dddd');
+        //Recibimos el dia Actual por moment() activar este para funcionamiento correcto:
+        //let diaActual = moment().format('dddd');
         //let horarioActual = moment().format('hh:mm');
 
         //Variable que valida, si la validacion es fuera de horario devuelve true para pasar al modal y activar const show:
@@ -266,11 +234,53 @@ const DetallePlato = (props) => {
         //Condicional si el usuario logueado, validarStock es false (sin faltante), validarHorario es false (dentro de Horario):
         if(usuario !== null && validarStock === false && validarHorario === false){
 
+            //Creamos la logica para guardar los art.Manufacturados seleccionados en el LocalStorage =>
+
+            let array = new Array();
+
+            //Si el localStorage productos no existe o esta vacio:
+            
+            if(localStorage.getItem("productos") === null || localStorage.getItem("productos") === "[]"){
+                console.log("Array nulo")
+                let nuevoPlato = new PlatoAux(datos)
+                console.log("nuevoPlato: ", nuevoPlato)
+                array.push(nuevoPlato)
+            }
+            else{
+                //Si el localStorage productos existe y tiene elementos:
+                console.log("Array con contenido")
+                console.log(JSON.parse(localStorage.getItem("productos")))
+                array = JSON.parse(localStorage.getItem("productos"));
+
+                //Variable bandera:
+                let validar = true;
+
+                for(let i=0; i<array.length; i++){
+                    if(array[i].idArticulo === datos.idArticulo){
+                        array[i].cantidad = array[i].cantidad + 1;
+                        console.log("nuevoPlato: ", array[i])
+                        validar = false;
+                        break;
+                    }
+                }
+
+                //Si validar es true el producto no estaba cargado en el localStorage:
+                if(validar) {
+                    let nuevoPlato = new PlatoAux(datos)
+                    array.push(nuevoPlato)
+                }
+            }
+
+            // Guardamos en memoria local el array =>
+            localStorage.setItem("productos", JSON.stringify(array));
+
+            alert(JSON.stringify(datos));
+
             //Guardo en una constante el componente modalCarrito y paso el props:
             const modalCar = () => {
                 return (
                   
-                    //Al componente ModalFaltante le asigamos propiedades que luego son accedidas por el componente para mostrar.
+                    //Al componente ModalCarrito le asigamos propiedades que luego son accedidas por el componente para mostrar.
                   <ModalCarrito
                     compra={true}
                   ></ModalCarrito>
@@ -280,6 +290,8 @@ const DetallePlato = (props) => {
 
             //Guardo la constante en el estado:  
             setModalCarrito(modalCar);  
+
+            
             
        
         //Condicional si el usuario logueado, validarStock es false (sin faltante), validarHorario es true (fuera de Horario):

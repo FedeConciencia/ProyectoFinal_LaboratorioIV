@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table'
 import '../../assets/css/carrito.css';
 import Alert from "react-bootstrap/Alert";
+import ModalCarritoVacio from './ModalCarritoVacio';
 
 const Carrito = (props) => {
 
@@ -12,9 +13,13 @@ const Carrito = (props) => {
     //Estado que permite forzar una actualizacion con useEffect:
     const [recargar, setRecargar] = useState(false)
 
+    // Hook modal carrito vacio
+    const [modalCarrito, setModalCarrito] = useState()
+
     useEffect(() => {
         //Guardamos en el estado datos los valores obtenidos del localStorage productos:
         setDatos(JSON.parse(localStorage.getItem("productos")))
+        activarModal()
         obtenerCantidadesTotales()
         //Fuerza la actualizacion del componente:
         setRecargar(false)
@@ -69,10 +74,16 @@ const Carrito = (props) => {
         array = JSON.parse(localStorage.getItem("productos"));
         let sumaCantidad = 0;
         let sumaMonto = 0;
-        for (let i = 0; i < array.length; i++) {
-            sumaCantidad += array[i].cantidad;
-            sumaMonto += array[i].precioVenta * array[i].cantidad; 
+        
+        if(array) {
+            for (let i = 0; i < array.length; i++) {
+                sumaCantidad += array[i].cantidad;
+                sumaMonto += array[i].precioVenta * array[i].cantidad; 
 
+            }
+        }
+        else {
+            array = [];
         }
 
         console.log(array)
@@ -88,12 +99,38 @@ const Carrito = (props) => {
 
     }
 
+    function validarCarritoVacio() {
+        let array = JSON.parse(localStorage.getItem("productos"));
+        if(array)
+            return datos === null || array.length === 0
+        else
+            return true
+    }
+
+    function activarModal() {
+        console.log("Entro a activar modal")
+        //Guardo en una constante el componente modalFaltante y paso el props:
+        const modalCarrito = () => {
+
+            return (
+                
+                //Al componente ModalFaltante le asigamos propiedades que luego son accedidas por el componente para mostrar.
+                <ModalCarritoVacio
+                validar={validarCarritoVacio}
+                ></ModalCarritoVacio>
+            );
+        }
+        console.log("Salgo de activar modal", validarCarritoVacio())
+        //Guardo la constante en el estado:  
+        setModalCarrito(modalCarrito)
+    }
 
 
     return(
         <Fragment>
           
-          
+            {modalCarrito}
+
             <div className="center">
 
             <br></br>
@@ -122,7 +159,7 @@ const Carrito = (props) => {
                     <tbody>
 
                         
-                        {datos.map((articulo, i)=> (
+                        {datos !== null ? datos.map((articulo, i)=> (
                         
                         <tr id={articulo.idArticulo} key={i}>
 
@@ -137,7 +174,9 @@ const Carrito = (props) => {
                             
                         </tr>
 
-                        )) }
+                        )) : (
+                            <></>
+                        )}
                         <tr>
                             <td>Total</td>
                             <td></td>

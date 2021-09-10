@@ -16,6 +16,9 @@ const Carrito = (props) => {
     // Hook modal carrito vacio
     const [modalCarrito, setModalCarrito] = useState()
 
+    // Hook cantidad total
+    let sumaCantidad = 0
+
     useEffect(() => {
         //Guardamos en el estado datos los valores obtenidos del localStorage productos:
         setDatos(JSON.parse(localStorage.getItem("productos")))
@@ -27,27 +30,57 @@ const Carrito = (props) => {
 
     //Metodo para incrementar cantidad desde el evento boton:
 
-    const sumar = (id, event) => {
-        console.log(datos[id].cantidad)
+    const sumar = (indice, event) => {
+        console.log(datos[indice].cantidad)
         console.log(event)
-        datos[id].cantidad++;
-        console.log(datos[id].cantidad)
-        localStorage.setItem("productos", JSON.stringify(datos))
+        if(hayIngredientes(datos[indice].idArticulo)){
+            datos[indice].cantidad++;
+            console.log(datos[indice].cantidad)
+            localStorage.setItem("productos", JSON.stringify(datos))
+        }
+        else {
+            document.querySelector("#mensaje").innerHTML = "No hay suficientes ingredientes."
+        }
         //Fuerza la actualizacion del componente:
         setRecargar(true)
     }
 
+    const hayIngredientes = async (id) => {
+        try {
+            const responseIngre = await fetch("http://localhost:8080/ProyectoFinalLaboIV/AuxIngredientesServlet?action=listar&idArticulo="+id); 
+            const resJsonIngre = await responseIngre.json();
+            console.log(resJsonIngre)
+            let cantidadAux = 0
+
+            for (let i = 0; i < resJsonIngre.length; i++) {
+                cantidadAux = (sumaCantidad * resJsonIngre[i].cantidad)
+                console.log("cantidadAux", cantidadAux)
+                console.log("sumaCantidad", sumaCantidad)
+                console.log("resJsonIngre[i].cantidad", resJsonIngre[i].cantidad)
+                if(cantidadAux > resJsonIngre[i].stockActual){
+                    return false;
+                }
+                
+            }
+
+            return true;
+        }
+        catch(error){
+            console.log(error)
+        }
+    }
+
     //Metodo para decrementar cantidad desde el evento boton:
 
-    const restar = (id, event) => {
-        console.log(datos[id].cantidad)
+    const restar = (indice, event) => {
+        console.log(datos[indice].cantidad)
         console.log(event)
-        datos[id].cantidad--;
-        console.log(datos[id].cantidad)
+        datos[indice].cantidad--;
+        console.log(datos[indice].cantidad)
 
         //Si cantidad es 0 elimina el producto con el indice y actualiza el localStorage:
-        if(datos[id].cantidad === 0){
-            datos.splice(id, 1)
+        if(datos[indice].cantidad === 0){
+            datos.splice(indice, 1)
         }
 
         localStorage.setItem("productos", JSON.stringify(datos))
@@ -72,13 +105,13 @@ const Carrito = (props) => {
         
         let array = new Array();
         array = JSON.parse(localStorage.getItem("productos"));
-        let sumaCantidad = 0;
+        sumaCantidad = 0;
         let sumaMonto = 0;
         
         if(array) {
             for (let i = 0; i < array.length; i++) {
                 sumaCantidad += array[i].cantidad;
-                sumaMonto += array[i].precioVenta * array[i].cantidad; 
+                sumaMonto += array[i].precioVenta * array[i].cantidad;
 
             }
         }
@@ -191,7 +224,7 @@ const Carrito = (props) => {
                     
                 </Table>
 
-                <br></br>
+                <h3 id="mensaje"></h3>
 
                 <Button href={`/`} className="boton" variant="success" size="lg">CONFIRMAR</Button>&nbsp;&nbsp;&nbsp;
                 

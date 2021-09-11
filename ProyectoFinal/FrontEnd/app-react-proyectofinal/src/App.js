@@ -81,7 +81,7 @@ import DetallePlato from './components/DetallePlato/DetallePlato';
 import { ContextoUsuario } from './components/ContextoUsuario';
 import Navigation from './components/Navigation';
 import Carrito from './components/Carrito/Carrito';
-
+import MetodoPago from './components/MetodoPago/MetodoPago';
 
 
 export default function App(){
@@ -111,6 +111,7 @@ export default function App(){
         <Route path="/productos" component={Productos} ></Route>
         <Route path="/detallePlato/:id" component={DetallePlato} ></Route>
         <Route exact path="/carrito" component={Carrito} />
+        <Route exact path="/metodoPago" component={MetodoPago} />
         
 
 

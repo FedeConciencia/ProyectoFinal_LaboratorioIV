@@ -10,6 +10,8 @@ import Col from "react-bootstrap/Col";
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import axios from "axios";
+import moment from 'moment';
 
 
 const MetodoPago = (props) => {
@@ -22,12 +24,9 @@ const MetodoPago = (props) => {
 
     const [datos, setDatos] = useState({
 
-        codigo:'',
-        horaEstimadaFin:'',
-        tipoEnvio:'',
-        total:'',
-        idCliente:'',
-        idDomicilio:'',
+        boton1: false,
+        boton2: false,
+        selectPago: '',
 
     })
 
@@ -50,14 +49,88 @@ const MetodoPago = (props) => {
         const enviarDatos = (datos, event) => {
 
                 
-            alert(JSON.stringify(datos))
+            alert(JSON.stringify(datos));
 
-            
+            getDatos();
 
             //Limpio todos los input
-            event.target.reset()
+            event.target.reset();
 
             
+        }
+
+        //Metodo para ejecutar con el evento onSubmit:
+
+        const getDatos = (datos) => {
+
+            let array = new Array();
+            array = JSON.parse(localStorage.getItem("productos"));
+
+            axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
+                params: {
+        
+                    action:'insertar',
+                    codigo: datos.codigo,
+                    horaEstimadaFin: datos.horaEstimadaFin,
+                    tipoEnvio: datos.tipoEnvio,
+                    total: datos.total,
+                    idCliente: datos.idCliente,
+                    idDomicilio: datos.idDomicilio,
+                    fechaAlta: moment().format('YYYY-MM-DD'), 
+                    fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
+                    estado: "activo"
+        
+                    //fechaAlta, fechaBaja, estado se crean x defecto:
+        
+        
+                }
+              })
+            .then(response => {
+        
+                console.log(JSON.stringify(response))
+                
+        
+            })
+            .catch(error =>{
+                console.log("Error");
+                console.log(error);
+            })
+        
+        
+        }
+
+        //Metodo para ejecutar el evento onclik boton1:
+
+        const eventoUno = (datos) => {
+
+            const set = {
+
+                boton1:true,
+                boton2:false,
+
+            }
+
+            setDatos(set)
+            console.log("boton1 =>", datos.boton1)
+            console.log("boton2 =>", datos.boton2)
+
+        }
+
+        //Metodo para ejecutar el evento onclik boton2:
+
+        const eventoDos = (datos) => {
+
+            const set = {
+
+                boton1:false,
+                boton2:true,
+
+            }
+
+            setDatos(set)
+            console.log("boton1 =>", datos.boton1)
+            console.log("boton2 =>", datos.boton2)
+
         }
 
 
@@ -72,7 +145,7 @@ const MetodoPago = (props) => {
 
             <Alert variant="success" className="bodyDetalle"> 
 
-            <Form onSubmit={handleSubmit()}>
+            <Form onSubmit={handleSubmit(enviarDatos)}>
 
             <br></br>
             <br></br>
@@ -94,13 +167,25 @@ const MetodoPago = (props) => {
                 <Col>
                 
                     <ButtonGroup>
-                        <Button>Domicilio</Button>
-                        <Button>Retiro en Local</Button>
+                        <Button name="boton1" onClick={eventoUno} onChange={handleInputChange}>Domicilio</Button>
+                        <Button name="boton2" onClick={eventoDos} onChange={handleInputChange}>Retiro en Local</Button>
 
-                        <DropdownButton as={ButtonGroup} title="Metodo Pago" id="bg-nested-dropdown">
-                            <Dropdown.Item eventKey="1">Pago Efectivo</Dropdown.Item>
-                            <Dropdown.Item eventKey="2">MercadoPago</Dropdown.Item>
+                        {datos.boton2 === true &&  datos.boton1 === false ?
+
+                        <DropdownButton as={ButtonGroup} title="Metodo Pago" id="bg-nested-dropdown" name="selectPago" onChange={handleInputChange}>
+                            <Dropdown.Item eventKey="1" value="PagoEfectivo">Pago Efectivo</Dropdown.Item>
+                            <Dropdown.Item eventKey="2" value="MercadoPago">MercadoPago</Dropdown.Item>
                         </DropdownButton>
+
+                        : 
+
+                        <DropdownButton as={ButtonGroup} title="Metodo Pago" id="bg-nested-dropdown" name="selectPago" onChange={handleInputChange}>
+                        <Dropdown.Item eventKey="2" value="MercadoPago">MercadoPago</Dropdown.Item>
+                        </DropdownButton>
+                        
+                        
+                        }
+
                     </ButtonGroup>
                 
                 </Col>
@@ -119,7 +204,7 @@ const MetodoPago = (props) => {
                 <Col>
 
 
-                    <Button type="button" variant="warning" size="lg">Gestionar Pedido</Button>
+                    <Button type="submit" variant="warning" size="lg">Gestionar Pedido</Button>
 
                 </Col>
 

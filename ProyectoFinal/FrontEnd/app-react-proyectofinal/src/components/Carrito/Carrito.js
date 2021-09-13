@@ -19,17 +19,17 @@ const Carrito = (props) => {
     // Hook cantidadTotal 
     const [cantidadTotal, setCantidadTotal] = useState(0)
 
-    // Hook cantidadTotal 
+    // Hook sinStock 
     const [sinStock, setSinStock] = useState(true)
 
     useEffect(() => {
         //Guardamos en el estado datos los valores obtenidos del localStorage productos:
         setDatos(JSON.parse(localStorage.getItem("productos")))
         activarModal()
-        setCantidadTotal(obtenerCantidadesTotales())
+        obtenerCantidadesTotales()
         //Fuerza la actualizacion del componente:
         setRecargar(false)
-    }, [recargar])
+    }, [recargar, cantidadTotal])
 
     //Metodo para incrementar cantidad desde el evento boton:
 
@@ -52,6 +52,7 @@ const Carrito = (props) => {
         //Fuerza la actualizacion del componente:
         setRecargar(true)
     }
+
 
     const hayIngredientes = async (id, cantidad) => {
         
@@ -93,6 +94,8 @@ const Carrito = (props) => {
         }
 
         localStorage.setItem("productos", JSON.stringify(datos))
+        //Se borra mensaje:
+        document.querySelector("#mensaje").innerHTML = ""
         //Fuerza la actualizacion del componente:
         setRecargar(true)
     }
@@ -114,32 +117,43 @@ const Carrito = (props) => {
         
         let array = new Array();
         array = JSON.parse(localStorage.getItem("productos"));
-        let sumaCantidad = cantidadTotal;
-        let sumaMonto = 0;
+        
         
         if(array) {
+
+
+            let sumaCantidad = cantidadTotal;
+            let sumaMonto = 0;
+
             for (let i = 0; i < array.length; i++) {
                 sumaCantidad += array[i].cantidad;
                 sumaMonto += array[i].precioVenta * array[i].cantidad;
 
             }
+
+            console.log(array)
+            console.log(sumaCantidad)
+            //Se pasa el valor obtenido para mostrar =>
+            document.querySelector("#cantidadTotal").innerHTML = sumaCantidad;
+            document.querySelector("#montoTotal").innerHTML = "$ " + sumaMonto;
+
+
+            //Fuerza la actualizacion del componente:
+            //setRecargar(true)
         }
         else {
+
             array = [];
+
+           
+            //Se pasa el valor obtenido para mostrar =>
+            document.querySelector("#cantidadTotal").innerHTML = 0;
+            document.querySelector("#montoTotal").innerHTML = "$ " + 0;
+
+
+            //Fuerza la actualizacion del componente:
+            //setRecargar(true)
         }
-
-        
-        console.log(array)
-        console.log(sumaCantidad)
-        //Se pasa el valor obtenido para mostrar =>
-        document.querySelector("#cantidadTotal").innerHTML = sumaCantidad;
-        document.querySelector("#montoTotal").innerHTML = "$ " + sumaMonto;
-
-
-        //Fuerza la actualizacion del componente:
-        setRecargar(true)
-
-        return sumaCantidad
 
 
     }

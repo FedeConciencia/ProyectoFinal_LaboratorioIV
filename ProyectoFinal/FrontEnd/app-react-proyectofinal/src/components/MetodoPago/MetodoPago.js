@@ -66,16 +66,18 @@ const MetodoPago = (props) => {
             let array = new Array();
             array = JSON.parse(localStorage.getItem("productos"));
 
+            
+
             axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
                 params: {
         
                     action:'insertar',
-                    codigo: datos.codigo,
-                    horaEstimadaFin: datos.horaEstimadaFin,
-                    tipoEnvio: datos.tipoEnvio,
-                    total: datos.total,
-                    idCliente: datos.idCliente,
-                    idDomicilio: datos.idDomicilio,
+                    //codigo: datos.codigo, desde java random
+                    horaEstimadaFin: moment("00:00:00").format('hh:mm:ss'),
+                    tipoEnvio: datos.selectPago,
+                    total: localStorage.getItem("totalCarrito"),
+                    idCliente: "continuamos aca",
+                    //idDomicilio: datos.idDomicilio,
                     fechaAlta: moment().format('YYYY-MM-DD'), 
                     fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
                     estado: "activo"
@@ -173,14 +175,14 @@ const MetodoPago = (props) => {
                         {datos.boton2 === true &&  datos.boton1 === false ?
 
                         <DropdownButton as={ButtonGroup} title="Metodo Pago" id="bg-nested-dropdown" name="selectPago" onChange={handleInputChange}>
-                            <Dropdown.Item eventKey="1" value="PagoEfectivo">Pago Efectivo</Dropdown.Item>
-                            <Dropdown.Item eventKey="2" value="MercadoPago">MercadoPago</Dropdown.Item>
+                            <Dropdown.Item eventKey="1" value="1">Pago Efectivo</Dropdown.Item>
+                            <Dropdown.Item eventKey="2" value="2">MercadoPago</Dropdown.Item>
                         </DropdownButton>
 
                         : 
 
                         <DropdownButton as={ButtonGroup} title="Metodo Pago" id="bg-nested-dropdown" name="selectPago" onChange={handleInputChange}>
-                        <Dropdown.Item eventKey="2" value="MercadoPago">MercadoPago</Dropdown.Item>
+                        <Dropdown.Item eventKey="2" value="2">MercadoPago</Dropdown.Item>
                         </DropdownButton>
                         
                         

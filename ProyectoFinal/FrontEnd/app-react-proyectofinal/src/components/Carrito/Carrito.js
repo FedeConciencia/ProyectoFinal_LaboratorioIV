@@ -137,6 +137,8 @@ const Carrito = (props) => {
             document.querySelector("#cantidadTotal").innerHTML = sumaCantidad;
             document.querySelector("#montoTotal").innerHTML = "$ " + sumaMonto;
 
+            //Pasamos el valor del totalCarrito:
+            localStorage.setItem("totalCarrito", JSON.stringify(sumaMonto))
 
             //Fuerza la actualizacion del componente:
             //setRecargar(true)

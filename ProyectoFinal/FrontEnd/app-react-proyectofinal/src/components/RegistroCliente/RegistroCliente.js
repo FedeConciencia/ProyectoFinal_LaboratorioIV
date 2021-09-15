@@ -128,6 +128,7 @@ const RegistroCliente = (props) => {
 
    const getUsuario = async (datos) => {
 
+
     //Obtengo el ultimo idCliente, con una consulta al metodo del backEnd:
     const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=proximoId");
     let idCliente = await response.json();
@@ -286,8 +287,31 @@ const RegistroCliente = (props) => {
     }
       
   }
- 
- 
+
+  
+
+  //Metodo que permite recopiar el email ingresado en email al usuario que no permite modificar el input:
+  const confirmEmail = (email) => {
+
+    let validar = false;
+
+    console.log("DATOS =>", (email).toString())
+
+    if((email).toString() !== ""){
+
+        console.log("INGRESO =>")
+        setValue('usuario', email)
+        validar = true;
+        
+        
+    }
+
+    console.log("INGRESO =>", validar)
+    return validar;
+    
+  }
+
+  
  
  
    return (
@@ -428,6 +452,7 @@ const RegistroCliente = (props) => {
                          onChange={handleInputChange}
                          placeholder="Ingrese el Dni"
                          className="form-control"
+                         min="1"
                          {...register("dni", { 
  
                              required:{
@@ -565,7 +590,7 @@ const RegistroCliente = (props) => {
  
                  <Col className="col-md-3">
                      <br></br>
-                     <label>Email: </label>
+                     <label>Usuario / Email: </label>
  
                  
                  </Col>
@@ -576,7 +601,7 @@ const RegistroCliente = (props) => {
                          type="email"
                          name="email"
                          onChange={handleInputChange}
-                         placeholder="Ingrese el email"
+                         placeholder="Ingrese el usuario/email"
                          className="form-control"
                          {...register("email", { 
  
@@ -584,6 +609,16 @@ const RegistroCliente = (props) => {
                                  value: true,
                                  message: 'Campo Obligatorio' 
                              },
+
+                             validate:{
+
+                                validacion1:validarUsuario,
+                                validacion2: confirmEmail, //Permite agregar el setvalue a usuario
+                                
+
+                            }
+
+                             
  
                          })}      
                      >
@@ -599,6 +634,22 @@ const RegistroCliente = (props) => {
                          <span className="text-danger text-small d-block mb-2">
                          {errors.email && errors.email.message}
                          </span>
+
+                         <span className="text-danger text-small d-block mb-2">
+                            {
+                                errors.email && errors.email.type === "validacion1" && (
+                                    <div className="error">El usuario ya existe</div>
+                                )
+                            }
+                        </span>
+
+                        <span className="text-danger text-small d-block mb-2">
+                            {
+                                errors.email && errors.email.type === "validacion2" && (
+                                    <div className="error"></div>
+                                )
+                            }
+                        </span>
  
                  </Col>
  
@@ -619,7 +670,7 @@ const RegistroCliente = (props) => {
 
                 <Col className="col-md-3">
                     <br></br>
-                    <label className="my-2">Usuario: </label>
+                    <label className="my-2">Confirm Usuario / Email: </label>
 
 
                 </Col>
@@ -630,17 +681,12 @@ const RegistroCliente = (props) => {
                         type="email"
                         name="usuario"
                         onChange={handleInputChange}
-                        placeholder="Ingrese el Usuario (email@example.com)"
+                        placeholder= "Confirmacion de email ingresado"
+                        readOnly={true}
                         className="form-control my-2"
                         {...register("usuario", { 
 
-                            required:{
-                                value: true,
-                                message: 'Campo Obligatorio' 
-                            },
-
-                            validate:validarUsuario
-
+                           
                         })}   
 
                     >
@@ -656,14 +702,8 @@ const RegistroCliente = (props) => {
                         {errors.usuario && errors.usuario.message}
                         </span>
 
-                        <span className="text-danger text-small d-block mb-2">
-                            {
-                                errors.usuario && errors.usuario.type === "validate" && (
-                                    <div className="error">El usuario ya existe</div>
-                                )
-                            }
-                        </span>
-
+                       
+                       
                 </Col>
 
 

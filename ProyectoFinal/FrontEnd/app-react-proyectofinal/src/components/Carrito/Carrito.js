@@ -254,7 +254,7 @@ const Carrito = (props) => {
 
                 <h3 id="mensaje"></h3>
 
-                <Button href={`/`} className="boton" variant="success" size="lg">CONFIRMAR</Button>&nbsp;&nbsp;&nbsp;
+                <Button href={`/metodoPago`} className="boton" variant="success" size="lg">CONFIRMAR</Button>&nbsp;&nbsp;&nbsp;
                 
                 <Button type="button" href={`/productos`} className="boton" variant="danger" size="lg">RETURN</Button>            
                 <br></br>

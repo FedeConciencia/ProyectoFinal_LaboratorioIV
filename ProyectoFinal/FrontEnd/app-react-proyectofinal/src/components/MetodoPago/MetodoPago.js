@@ -13,6 +13,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import axios from "axios";
 import moment from 'moment';
 
+var crypto = require("crypto");
+
 
 const MetodoPago = (props) => {
 
@@ -21,6 +23,9 @@ const MetodoPago = (props) => {
 
     const {register, formState: { errors }, handleSubmit} = useForm()
 
+    const [datoId, setDatoId] = useState()
+
+    const [datoIdDomicilio, setDatoIdDomicilio] = useState()
 
     const [datos, setDatos] = useState({
 
@@ -51,7 +56,24 @@ const MetodoPago = (props) => {
                 
             alert(JSON.stringify(datos));
 
-            getDatos();
+            getIdCliente();
+
+            getIdDomicilio();
+
+            const timerDom = setTimeout(() => {
+
+                //La espera permite que guarde los datos ya insertado:
+                getIdDomicilio();
+            
+            }, 5000);
+
+
+            const timerDatos = setTimeout(() => {
+
+                //La espera permite que guarde los datos ya insertado:
+                getDatos();
+            
+            }, 5000);
 
             //Limpio todos los input
             event.target.reset();
@@ -59,25 +81,86 @@ const MetodoPago = (props) => {
             
         }
 
-        //Metodo para ejecutar con el evento onSubmit:
+        const getIdDomicilio = async () => {
 
-        const getDatos = (datos) => {
+            try{
 
-            let array = new Array();
-            array = JSON.parse(localStorage.getItem("productos"));
+                let id = 72;
+                
+                const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=idDomicilioXidCliente&idCliente="+id);
+                const resJson = await response.json();
+
+                alert(JSON.stringify(resJson));
+
+                setDatoIdDomicilio(JSON.stringify(resJson));
+
+                console.log("ID OBTENIDO =>", datoIdDomicilio)
+
+            }catch(error){
+
+                console.log("Error => ", error);
+            }    
+
+
+        }    
+
+        const getIdCliente = async () => {
+
+            try{
+
+                let email = JSON.parse(localStorage.getItem("usuario")).email;
+                
+
+                const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=idxEmail&email="+email);
+                const resJson = await response.json();
+
+                alert(JSON.stringify(resJson));
+
+                setDatoId(JSON.stringify(resJson));
+
+                console.log("ID OBTENIDO =>", datoId)
+
+            }catch(error){
+
+                console.log("Error => ", error);
+            }    
+
+
+        }    
+
+
+        //Metodo que permite crear un Password Hexadecimal de 14 bytes Hexadecimal:
+        const passwordGmail = () => {
 
             
+            var id = crypto.randomBytes(7).toString('hex');
+
+            console.log("CODIGO PEDIDO => ", id)
+
+            return id
+
+        }
+
+        
+
+        //Metodo para ejecutar con el evento onSubmit:
+
+        const getDatos = () => {
+
+            let codigo = passwordGmail();
+         
+            console.log("FORMA DE PAGO FINAL =>", datos.selectPago)
 
             axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
                 params: {
         
                     action:'insertar',
-                    //codigo: datos.codigo, desde java random
-                    horaEstimadaFin: moment("00:00:00").format('hh:mm:ss'),
+                    codigo: codigo, 
+                    horaEstimadaFin: "00:00:00",
                     tipoEnvio: datos.selectPago,
                     total: localStorage.getItem("totalCarrito"),
-                    idCliente: "continuamos aca",
-                    //idDomicilio: datos.idDomicilio,
+                    idCliente: datoId,
+                    idDomicilio: datoIdDomicilio,
                     fechaAlta: moment().format('YYYY-MM-DD'), 
                     fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
                     estado: "activo"
@@ -103,39 +186,36 @@ const MetodoPago = (props) => {
 
         //Metodo para ejecutar el evento onclik boton1:
 
-        const eventoUno = (datos) => {
+        const eventoUno = () => {
 
-            const set = {
-
-                boton1:true,
-                boton2:false,
-
-            }
-
-            setDatos(set)
+            
+            setDatos({...datos, boton1:true, boton2:false })
             console.log("boton1 =>", datos.boton1)
             console.log("boton2 =>", datos.boton2)
+            console.log("selectPago Domicilio =>", datos.selectPago)
 
         }
 
         //Metodo para ejecutar el evento onclik boton2:
 
-        const eventoDos = (datos) => {
+        const eventoDos = () => {
 
-            const set = {
-
-                boton1:false,
-                boton2:true,
-
-            }
-
-            setDatos(set)
+            setDatos({...datos, boton1:false, boton2:true })
             console.log("boton1 =>", datos.boton1)
             console.log("boton2 =>", datos.boton2)
+            console.log("selectPago Local =>", datos.selectPago)
 
         }
 
+        const obtenerSelectPago = (e) => {
 
+            console.log("Evento  =>", e)
+            setDatos({...datos, selectPago: e })
+            console.log("selectPago => ", datos.selectPago)
+
+        }
+
+        
     return (
 
         <Fragment>
@@ -169,20 +249,22 @@ const MetodoPago = (props) => {
                 <Col>
                 
                     <ButtonGroup>
-                        <Button name="boton1" onClick={eventoUno} onChange={handleInputChange}>Domicilio</Button>
-                        <Button name="boton2" onClick={eventoDos} onChange={handleInputChange}>Retiro en Local</Button>
+                        <Button name="boton1" onClick={eventoUno} >Domicilio</Button>
+                        <Button name="boton2" onClick={eventoDos} >Retiro en Local</Button>
 
-                        {datos.boton2 === true &&  datos.boton1 === false ?
+                        { datos.boton2 === true &&  datos.boton1 === false ?
 
-                        <DropdownButton as={ButtonGroup} title="Metodo Pago" id="bg-nested-dropdown" name="selectPago" onChange={handleInputChange}>
-                            <Dropdown.Item eventKey="1" value="1">Pago Efectivo</Dropdown.Item>
-                            <Dropdown.Item eventKey="2" value="2">MercadoPago</Dropdown.Item>
+                        <DropdownButton  as={ButtonGroup} title="Metodo Pago" id="bg-nested-dropdown" name="selectPago"  onSelect={obtenerSelectPago}>
+                            
+                            <Dropdown.Item eventKey="1" >Pago Efectivo</Dropdown.Item>
+                            <Dropdown.Item eventKey="2" >MercadoPago</Dropdown.Item>
+
                         </DropdownButton>
 
                         : 
 
-                        <DropdownButton as={ButtonGroup} title="Metodo Pago" id="bg-nested-dropdown" name="selectPago" onChange={handleInputChange}>
-                        <Dropdown.Item eventKey="2" value="2">MercadoPago</Dropdown.Item>
+                        <DropdownButton as={ButtonGroup} title="Metodo Pago" id="bg-nested-dropdown" name="selectPago" onSelect={obtenerSelectPago}>
+                        <Dropdown.Item eventKey="2">MercadoPago</Dropdown.Item>
                         </DropdownButton>
                         
                         
@@ -200,8 +282,6 @@ const MetodoPago = (props) => {
             <br></br>
 
             <Row>
-
-               
 
                 <Col>
 

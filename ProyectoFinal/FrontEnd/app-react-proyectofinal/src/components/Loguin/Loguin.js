@@ -13,6 +13,8 @@ import moment from 'moment';
 import GoogleLogin from 'react-google-login';
 import { ContextoUsuario } from "../ContextoUsuario";
 
+var crypto = require("crypto");
+
 //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
 //Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
 
@@ -187,7 +189,7 @@ const Loguin = (props) => {
     //Metodo que permite crear un Password Hexadecimal de 14 bytes Hexadecimal:
     const passwordGmail = () => {
 
-        var crypto = require("crypto");
+        
         var id = crypto.randomBytes(7).toString('hex');
 
         console.log("PASSWORD GMAIL => ", id)

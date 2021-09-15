@@ -1,0 +1,9 @@
+Componentes =>
+
+Carrito (fecha: 14/9/21) => solucionar decremento de productos y aumento de productos indefinidamente.
+
+RegistroCliente (fecha: 14/9/21) => solucionar email usuario mismo que del cliente. (Solucionado)
+
+metodoPago (fecha: 14/9/21) => solucionar componente select detectar datos. (Solucionado)
+Se deberia crear un domicilio por defecto cuando se loguea un usuario con google desde loguin
+ya que caso contrario el idDomicilio que devuelve es 0 y la base de datos no valida el mismo.

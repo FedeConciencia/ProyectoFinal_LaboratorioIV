@@ -378,7 +378,7 @@ public class ControladorCliente {
             while (rs.next()) {
 
                 idCliente = rs.getLong(1); //cada numero del parametro hace referencia al dato del campo que se desea obtener = idPersona
-                idCliente++; //Incrementa en 1 el ultimo idCliente. Obteniendo el siguiente
+                //idCliente++; //Incrementa en 1 el ultimo idCliente. Obteniendo el siguiente
             }
 
             conexion.close();
@@ -457,6 +457,108 @@ public class ControladorCliente {
         }
 
         return idCliente; //devolvemos el ultimo id
+
+    }
+     
+     
+     //METODO PARA OBTENER IDCLIENTE INGRESADO EMAIL:
+    
+     public long buscarIdxEmail(String email) {
+
+        Connection conexion = null;
+        Conexion con = new Conexion();
+        long idCliente = 0;
+        PreparedStatement ps = null;  //Este objeto permite guardar las consultas que hacemos a la BD.
+        ResultSet rs = null;  // este objeto lo usamos cuando obtenemos algo de la base de datos.
+
+        try {
+
+            conexion = con.getConnection(); //metodo getConnection, logueamos el usuario.
+
+            ps = conexion.prepareStatement("SELECT idCliente from cliente where email = ?");
+            
+            ps.setString(1, email);
+
+            rs = ps.executeQuery();
+            
+            
+            if(rs.next()) {
+
+                idCliente = rs.getLong(1); //cada numero del parametro hace referencia al dato del campo que se desea obtener = idPersona
+                //idCliente++; //Incrementa en 1 el ultimo idCliente. Obteniendo el siguiente
+            }
+
+            conexion.close();
+
+        } catch (Exception ex) {
+
+            System.err.println("Error. " + ex);
+
+        } finally {
+
+            try {
+
+                ps.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+                System.err.println("Error. " + ex);
+            }
+
+        }
+
+        return idCliente; //devolvemos el ultimo id
+
+    }
+     
+     
+     //METODO PARA BUSCAR IDDOMICILIO INGRESADO IDCLIENTE:
+    
+     public long buscarDomicilioxIdCliente(long id) {
+
+        Connection conexion = null;
+        Conexion con = new Conexion();
+        long idDomicilio = 0;
+        PreparedStatement ps = null;  //Este objeto permite guardar las consultas que hacemos a la BD.
+        ResultSet rs = null;  // este objeto lo usamos cuando obtenemos algo de la base de datos.
+
+        try {
+
+            conexion = con.getConnection(); //metodo getConnection, logueamos el usuario.
+
+            ps = conexion.prepareStatement("SELECT idDomicilio from domicilio where idCliente = ?");
+            
+            ps.setLong(1, id);
+
+            rs = ps.executeQuery();
+            
+            
+            if(rs.next()) {
+
+                idDomicilio = rs.getLong(1); //cada numero del parametro hace referencia al dato del campo que se desea obtener = idPersona
+                //idCliente++; //Incrementa en 1 el ultimo idCliente. Obteniendo el siguiente
+            }
+
+            conexion.close();
+
+        } catch (Exception ex) {
+
+            System.err.println("Error. " + ex);
+
+        } finally {
+
+            try {
+
+                ps.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+                System.err.println("Error. " + ex);
+            }
+
+        }
+
+        return idDomicilio; //devolvemos el ultimo id
 
     }
      

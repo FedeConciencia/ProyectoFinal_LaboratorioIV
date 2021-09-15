@@ -31,7 +31,26 @@ public class Principal {
         }
         
         */
+        /*
+        //TESTEO ID CLIENTE X EMAIL:
+        ControladorCliente controlador = new ControladorCliente();
         
+        long id = controlador.buscarIdxEmail("alumnosutn424@gmail.com");
+        
+        System.out.println("EMAIL =>" + id);
+        
+        */
+        
+        /*
+        
+        //TESTEO ID DOMICILIO X IDCLIENTE:
+        ControladorCliente controlador = new ControladorCliente();
+        
+        long id = controlador.buscarDomicilioxIdCliente(72L);
+        
+        System.out.println("ID DOMICILIO =>" + id);
+        
+        */
      
         //TESTEO CLIENTE:
         
@@ -112,7 +131,7 @@ public class Principal {
         //Metodo para obtener el ultimo idCLiente (Funciona Ok):
         
         ControladorCliente controlador = new ControladorCliente();
-        long id = controlador.proximoId();
+        long id = controlador.buscarUltimoId();
         
         System.out.println("El ultimo idCliente generado: " + id);
         

@@ -146,8 +146,28 @@ public class ClienteServlet extends HttpServlet {
                     String clienteJson = gsonBuilder.toJson(idCliente);
                     respuestaServer = clienteJson;
                     
-                }    
-            
+                }else if(request.getParameter("action").equals("ultimoId")){
+                    
+                    ControladorCliente controladorCliente = new ControladorCliente();    
+                    long idCliente = controladorCliente.buscarUltimoId();
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String clienteJson = gsonBuilder.toJson(idCliente);
+                    respuestaServer = clienteJson;    
+                }else if(request.getParameter("action").equals("idxEmail")){
+                    
+                    ControladorCliente controladorCliente = new ControladorCliente();    
+                    long idCliente = controladorCliente.buscarIdxEmail(request.getParameter("email"));
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String clienteJson = gsonBuilder.toJson(idCliente);
+                    respuestaServer = clienteJson; 
+                }else if(request.getParameter("action").equals("idDomicilioXidCliente")){
+                    
+                    ControladorCliente controladorCliente = new ControladorCliente();
+                    long idDomicilio = controladorCliente.buscarDomicilioxIdCliente(Long.parseLong(request.getParameter("idCliente")));
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String clienteJson = gsonBuilder.toJson(idDomicilio);
+                    respuestaServer = clienteJson; 
+                }
             }
             out.write(respuestaServer);
         }catch(Exception ex){

@@ -77,7 +77,7 @@ public class ControladorAuxIngredientes {
 
         }
 
-        return listaIngredientes; //devolvemos lista ingredientes encontrados
+        return listaIngredientes; //devolvemos el alumno encontrado
     }
     
     

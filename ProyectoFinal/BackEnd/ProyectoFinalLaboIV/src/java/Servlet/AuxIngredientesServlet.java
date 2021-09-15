@@ -18,7 +18,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 
-//Se especifica el nombre y ruta de la clase: 'http://localhost:8080/ProyectoFinalLaboIV/AuxIngredientes?
+//Se especifica el nombre y ruta de la clase: 'http://localhost:8080/ProyectoFinalLaboIV/AuxIngredientesServlet?
 @WebServlet(name = "AuxIngredientesServlet", urlPatterns = {"/AuxIngredientesServlet"})
 public class AuxIngredientesServlet extends HttpServlet {
     

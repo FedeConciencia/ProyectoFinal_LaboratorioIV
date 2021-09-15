@@ -13,6 +13,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import axios from "axios";
 import moment from 'moment';
 
+//Permite crear un random de numero hex, dec, etc
 var crypto = require("crypto");
 
 
@@ -23,9 +24,11 @@ const MetodoPago = (props) => {
 
     const {register, formState: { errors }, handleSubmit} = useForm()
 
-    const [datoId, setDatoId] = useState()
+    //Estado Hook para almacenar el idCliente:
+    const [datoId, setDatoId] = useState("")
 
-    const [datoIdDomicilio, setDatoIdDomicilio] = useState()
+    //Estado Hook para almacenar el idDomicilio:
+    const [datoIdDomicilio, setDatoIdDomicilio] = useState("")
 
     const [datos, setDatos] = useState({
 
@@ -34,6 +37,24 @@ const MetodoPago = (props) => {
         selectPago: '',
 
     })
+
+
+    useEffect(() => {
+
+        getIdCliente();
+
+        
+        const timerDom = setTimeout(() => {
+
+            //La espera permite que guarde los datos ya insertado:
+            getIdDomicilio();
+            
+        }, 5000);
+
+        
+    
+    
+    },[datoId, datoIdDomicilio, datos])
 
 
 
@@ -56,81 +77,151 @@ const MetodoPago = (props) => {
                 
             alert(JSON.stringify(datos));
 
-            getIdCliente();
 
-            getIdDomicilio();
-
-            const timerDom = setTimeout(() => {
-
-                //La espera permite que guarde los datos ya insertado:
-                getIdDomicilio();
+            //La espera permite que guarde los datos ya insertado:
+            getDatos();
             
-            }, 5000);
-
-
-            const timerDatos = setTimeout(() => {
-
-                //La espera permite que guarde los datos ya insertado:
-                getDatos();
             
-            }, 5000);
-
-            //Limpio todos los input
-            event.target.reset();
-
+        
             
         }
 
+        //Metodo que obtiene el idDomicilio a traves del idCliente buscando en la entidad cliente:
         const getIdDomicilio = async () => {
+
+
+            console.log("DOMICILIO VALOR DATOID =>", datoId);
+
+            axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
+                params: {
+        
+                    action:'idDomicilioXidCliente',
+                    idCliente: datoId,
+                   
+        
+                }
+              })
+            .then(response => {
+        
+                console.log(JSON.stringify(response))
+
+                console.log(response.data)
+
+                setDatoIdDomicilio(response.data);
+
+                console.log("DATOIDDOMICILIO =>", datoIdDomicilio)
+                
+        
+            })
+            .catch(error =>{
+                console.log("Error");
+                console.log(error);
+            })
+
+
+            /*
 
             try{
 
-                let id = 72;
+                console.log("EN DOMICILIO VALOR idCliente =>",  datoId);
+
+                let idCliente = "72";
+                let id = "";
                 
-                const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=idDomicilioXidCliente&idCliente="+id);
+                const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=idDomicilioXidCliente&idCliente="+idCliente);
                 const resJson = await response.json();
+
+                console.log("RESPONSE => ", response);
 
                 alert(JSON.stringify(resJson));
 
-                setDatoIdDomicilio(JSON.stringify(resJson));
+                id = JSON.stringify(resJson);
 
-                console.log("ID OBTENIDO =>", datoIdDomicilio)
+                await setDatoIdDomicilio(id);
+
+                console.log("ID OBTENIDO DOMICILIO =>", datoIdDomicilio)
 
             }catch(error){
 
                 console.log("Error => ", error);
             }    
 
+            */
+
 
         }    
 
-        const getIdCliente = async () => {
+        //Metodo que obtiene el idCliente a traves del mail buscando en la entidad cliente:
+        const getIdCliente = () => {
+
+            let email = JSON.parse(localStorage.getItem("usuario")).email;
+            
+
+            axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
+                params: {
+        
+                    action:'idxEmail',
+                    email: email,
+                   
+        
+                }
+              })
+            .then(response => {
+        
+                console.log(JSON.stringify(response))
+
+                console.log(response.data)
+
+                setDatoId(response.data);
+
+                console.log("DATOID =>", datoId)
+                
+        
+            })
+            .catch(error =>{
+                console.log("Error");
+                console.log(error);
+            })
+
+
+            
+
+            /*
 
             try{
 
                 let email = JSON.parse(localStorage.getItem("usuario")).email;
+                let id = "";
                 
 
                 const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=idxEmail&email="+email);
                 const resJson = await response.json();
 
+                console.log("RESPONSE => ", response);
+
                 alert(JSON.stringify(resJson));
 
-                setDatoId(JSON.stringify(resJson));
+                id = JSON.stringify(resJson);
 
-                console.log("ID OBTENIDO =>", datoId)
+                console.log("VALOR ID  => ", id);
+
+                await setDatoId(id);
+
+                console.log("ID OBTENIDO EN CLIENTE=>", datoId)
 
             }catch(error){
 
                 console.log("Error => ", error);
-            }    
+            }  
+            
+            */
 
 
         }    
 
 
         //Metodo que permite crear un Password Hexadecimal de 14 bytes Hexadecimal:
-        const passwordGmail = () => {
+        const passwordCodigo = () => {
 
             
             var id = crypto.randomBytes(7).toString('hex');
@@ -147,18 +238,29 @@ const MetodoPago = (props) => {
 
         const getDatos = () => {
 
-            let codigo = passwordGmail();
+            let codigo = passwordCodigo();
+
+            let total = JSON.parse(localStorage.getItem("totalCarrito"));
          
             console.log("FORMA DE PAGO FINAL =>", datos.selectPago)
 
+            if(datos.boton2 === true){
+
+                total = total * 0.90;
+
+            }
+
+
+
             axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
                 params: {
+
         
                     action:'insertar',
                     codigo: codigo, 
                     horaEstimadaFin: "00:00:00",
                     tipoEnvio: datos.selectPago,
-                    total: localStorage.getItem("totalCarrito"),
+                    total: JSON.stringify(total),
                     idCliente: datoId,
                     idDomicilio: datoIdDomicilio,
                     fechaAlta: moment().format('YYYY-MM-DD'), 

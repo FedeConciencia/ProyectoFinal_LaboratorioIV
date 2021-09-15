@@ -13,6 +13,7 @@ public class Pedido extends EstadoEntidad {
     private Long idPedido;
     private String codigo;
     private LocalTime horaEstimadaFin;  //Modifico por LocalTime que representa solo la hora y en BD con TIME
+    private int estadoPedido;
     private int tipoEnvio;
     private double total;
     private Long idCliente;
@@ -43,63 +44,75 @@ public class Pedido extends EstadoEntidad {
     public Pedido() {
     }
 
-    public Pedido(Long idPedido, String codigo, LocalTime horaEstimadaFin, int tipoEnvio, double total, Long idCliente, Long idDomicilio, LocalDate fechaAlta) {
+    public Pedido(Long idPedido, String codigo, LocalTime horaEstimadaFin, int estadoPedido,
+            int tipoEnvio, double total, Long idCliente, Long idDomicilio, LocalDate fechaAlta) {
         super(fechaAlta);
         this.idPedido = idPedido;
         this.codigo = codigo;
         this.horaEstimadaFin = horaEstimadaFin;
+        this.estadoPedido = estadoPedido;
         this.tipoEnvio = tipoEnvio;
         this.total = total;
         this.idCliente = idCliente;
         this.idDomicilio = idDomicilio;
     }
 
-    public Pedido(Long idPedido, String codigo, LocalTime horaEstimadaFin, int tipoEnvio, double total, Long idCliente, Long idDomicilio, LocalDate fechaAlta, String estado) {
+    public Pedido(Long idPedido, String codigo, LocalTime horaEstimadaFin, int estadoPedido,
+            int tipoEnvio, double total, Long idCliente, Long idDomicilio, LocalDate fechaAlta, String estado) {
         super(fechaAlta, estado);
         this.idPedido = idPedido;
         this.codigo = codigo;
         this.horaEstimadaFin = horaEstimadaFin;
+        this.estadoPedido = estadoPedido;
         this.tipoEnvio = tipoEnvio;
         this.total = total;
         this.idCliente = idCliente;
         this.idDomicilio = idDomicilio;
     }
 
-    public Pedido(Long idPedido, String codigo, LocalTime horaEstimadaFin, int tipoEnvio, double total, Long idCliente, Long idDomicilio, LocalDate fechaAlta, LocalDate fechaBaja, String estado) {
+    public Pedido(Long idPedido, String codigo, LocalTime horaEstimadaFin, int estadoPedido,
+            int tipoEnvio, double total, Long idCliente, Long idDomicilio, LocalDate fechaAlta, LocalDate fechaBaja, String estado) {
         super(fechaAlta, fechaBaja, estado);
         this.idPedido = idPedido;
         this.codigo = codigo;
         this.horaEstimadaFin = horaEstimadaFin;
+        this.estadoPedido = estadoPedido;
         this.tipoEnvio = tipoEnvio;
         this.total = total;
         this.idCliente = idCliente;
         this.idDomicilio = idDomicilio;
     }
 
-    public Pedido(String codigo, LocalTime horaEstimadaFin, int tipoEnvio, double total, Long idCliente, Long idDomicilio, LocalDate fechaAlta) {
+    public Pedido(String codigo, LocalTime horaEstimadaFin, int estadoPedido, int tipoEnvio,
+            double total, Long idCliente, Long idDomicilio, LocalDate fechaAlta) {
         super(fechaAlta);
         this.codigo = codigo;
         this.horaEstimadaFin = horaEstimadaFin;
+        this.estadoPedido = estadoPedido;
         this.tipoEnvio = tipoEnvio;
         this.total = total;
         this.idCliente = idCliente;
         this.idDomicilio = idDomicilio;
     }
 
-    public Pedido(String codigo, LocalTime horaEstimadaFin, int tipoEnvio, double total, Long idCliente, Long idDomicilio, LocalDate fechaAlta, String estado) {
+    public Pedido(String codigo, LocalTime horaEstimadaFin, int estadoPedido, int tipoEnvio,
+            double total, Long idCliente, Long idDomicilio, LocalDate fechaAlta, String estado) {
         super(fechaAlta, estado);
         this.codigo = codigo;
         this.horaEstimadaFin = horaEstimadaFin;
+        this.estadoPedido = estadoPedido;
         this.tipoEnvio = tipoEnvio;
         this.total = total;
         this.idCliente = idCliente;
         this.idDomicilio = idDomicilio;
     }
 
-    public Pedido(String codigo, LocalTime horaEstimadaFin, int tipoEnvio, double total, Long idCliente, Long idDomicilio, LocalDate fechaAlta, LocalDate fechaBaja, String estado) {
+    public Pedido(String codigo, LocalTime horaEstimadaFin, int estadoPedido, int tipoEnvio,
+            double total, Long idCliente, Long idDomicilio, LocalDate fechaAlta, LocalDate fechaBaja, String estado) {
         super(fechaAlta, fechaBaja, estado);
         this.codigo = codigo;
         this.horaEstimadaFin = horaEstimadaFin;
+        this.estadoPedido = estadoPedido;
         this.tipoEnvio = tipoEnvio;
         this.total = total;
         this.idCliente = idCliente;
@@ -132,6 +145,14 @@ public class Pedido extends EstadoEntidad {
         this.horaEstimadaFin = horaEstimadaFin;
     }
 
+    public int getEstadoPedido() {
+        return estadoPedido;
+    }
+
+    public void setEstadoPedido(int estadoPedido) {
+        this.estadoPedido = estadoPedido;
+    }
+    
     public int getTipoEnvio() {
         return tipoEnvio;
     }
@@ -211,10 +232,9 @@ public class Pedido extends EstadoEntidad {
     @Override
     public String toString() {
         return "\nIdPedido: " + idPedido + "\nCodigo: " + codigo + "\nHoraEstimadaFin: " + horaEstimadaFin + 
-                "\nTipoEnvio: " + tipoEnvio + "\nTotal: " + total + "\nIdCliente: " + idCliente + 
-                "\nIdDomicilio: " + idDomicilio + "\nFechaAlta: " + 
-                fechaAlta + "\nFechaBaja: " + fechaBaja + 
-                "\nEstado: " + estado;
+                "\nEstadoPedido: " + estadoPedido + "\nTipoEnvio: " + tipoEnvio + "\nTotal: " + total 
+                + "\nIdCliente: " + idCliente + "\nIdDomicilio: " + idDomicilio + "\nFechaAlta: " + 
+                fechaAlta + "\nFechaBaja: " + fechaBaja + "\nEstado: " + estado;
     }
     
 

@@ -1,7 +1,6 @@
 import React, {Component, useState, useEffect, Fragment} from 'react';
 import {useParams} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
-import Navigation from "../Navigation";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from "react-bootstrap/Col";
@@ -36,6 +35,7 @@ const ActualizarPedido = (props) => {
         
         codigo:'',
         horaEstimadaFin:'',
+        estadoPedido:'',
         tipoEnvio:'',
         total:'',
         idCliente:'',
@@ -100,6 +100,7 @@ const ActualizarPedido = (props) => {
                 idPedido: id,
                 codigo: datos.codigo,
                 horaEstimadaFin: datos.horaEstimadaFin,
+                estadoPedido: datos.estadoPedido,
                 tipoEnvio: datos.tipoEnvio,
                 total: datos.total,
                 idCliente: datos.idCliente,
@@ -147,6 +148,7 @@ const ActualizarPedido = (props) => {
 
           setValue('codigo', resJson.codigo);
           setValue('horaEstimadaFin', moment(resJson.horaEstimadaFin).add(5,'M').format('HH:MM:SS'));
+          setValue('estadoPedido', resJson.estadoPedido);
           setValue('tipoEnvio', resJson.tipoEnvio);
           setValue('total', resJson.total);
           setValue('idCliente', (resJson.idCliente).toString()); //parseo a String
@@ -186,8 +188,6 @@ const ActualizarPedido = (props) => {
             if((listaCliente[i].idCliente).toString() === (idCliente).toString() && ((listaCliente[i].estado).toString() === "activo")){
 
                 return validar = true;
-                break;
-
 
             }
         
@@ -227,8 +227,6 @@ const ActualizarPedido = (props) => {
             if((listaDomicilio[i].idDomicilio).toString() === (idDomicilio).toString() && ((listaDomicilio[i].estado).toString() === "activo")){
 
                 return validar = true;
-                break;
-
 
             }
         
@@ -274,8 +272,6 @@ const ActualizarPedido = (props) => {
 
                 
                 return validar = false;
-                break;
-
 
             }
         }
@@ -340,7 +336,7 @@ const ActualizarPedido = (props) => {
 
             <Form onSubmit={handleSubmit(enviarDatos)}>
 
-            <Row>
+                <Row>
 
 
                     <Col className="col-md-3">
@@ -399,9 +395,9 @@ const ActualizarPedido = (props) => {
 
 
 
-                    </Row>
+                </Row>
 
-                    <Row>
+                <Row>
 
 
                     <Col className="col-md-3">
@@ -449,10 +445,42 @@ const ActualizarPedido = (props) => {
 
 
 
-                    </Row>
+                </Row>
 
+                <Row>
+                    <Col className="col-md-3">
+                        <br></br>
+                        <label>Estado Pedido: </label>
+                    </Col>
 
-                    <Row>
+                    <Col>
+                        <br></br>
+                        <input 
+                            type="number"
+                            name="estadoPedido"
+                            onChange={handleInputChange}
+                            placeholder="Ingrese el Estado Pedido"
+                            className="form-control"
+                            min="0"
+                            {...register("estadoPedido", {
+                                required:{
+                                    value: true,
+                                    message: 'Campo Obligatorio'
+                                },
+                            })}
+                        >
+                        </input>
+                    </Col>
+
+                    <Col className="col-md-3">
+                            <br></br>
+                            <span className="text-danger text-small d-block mb-2">
+                            {errors.estadoPedido && errors.estadoPedido.message}
+                            </span>
+                    </Col>
+                </Row>
+
+                <Row>
 
 
                     <Col className="col-md-3">
@@ -494,9 +522,9 @@ const ActualizarPedido = (props) => {
 
                     </Col>
 
-                    </Row>  
+                </Row>  
 
-                    <Row>
+                <Row>
 
 
                     <Col className="col-md-3">
@@ -539,288 +567,288 @@ const ActualizarPedido = (props) => {
 
                     </Col>
 
-                    </Row>  
+                </Row>  
 
-                    <Row>
+                <Row>
 
 
-                        <Col className="col-md-3">
+                    <Col className="col-md-3">
+                        <br></br>
+                        <label>Id_Cliente: </label>
+
+
+                    </Col>
+
+                    <Col>
+                        <br></br>
+                        <input 
+                            type="number"
+                            name="idCliente"
+                            onChange={handleInputChange}
+                            placeholder="Ingrese el idCliente"
+                            className="form-control"
+                            min="1"
+                            {...register("idCliente", { 
+
+                                required:{
+                                    value: true,
+                                    message: 'Campo Obligatorio' 
+                                },
+
+
+                                validate:validarCliente
+
+                            })}      
+                        >
+                        </input>
+
+
+                    </Col>
+
+                    <Col className="col-md-3">
+
                             <br></br>
-                            <label>Id_Cliente: </label>
+                            <span className="text-danger text-small d-block mb-2">
+                            {errors.idCliente && errors.idCliente.message}
+                            </span>
+
+                            <span className="text-danger text-small d-block mb-2">
+                            {
+                                errors.idCliente && errors.idCliente.type === "validate" && (
+                                    <div className="error">El idCliente no existe</div>
+                                )
+                            }
+                            </span>
+
+                    </Col>
 
 
-                        </Col>
 
-                        <Col>
+                </Row>
+
+                <Row>
+
+
+                    <Col className="col-md-3">
+                        <br></br>
+                        <label>Id_Domicilio: </label>
+
+
+                    </Col>
+
+                    <Col>
+                        <br></br>
+                        <input 
+                            type="number"
+                            name="idDomicilio"
+                            onChange={handleInputChange}
+                            placeholder="Ingrese el idDomicilio"
+                            className="form-control"
+                            min="1"
+                            {...register("idDomicilio", { 
+
+                                required:{
+                                    value: true,
+                                    message: 'Campo Obligatorio' 
+                                },
+
+
+                                validate:validarDomicilio
+
+                            })}      
+                        >
+                        </input>
+
+
+                    </Col>
+
+                    <Col className="col-md-3">
+
                             <br></br>
-                            <input 
-                                type="number"
-                                name="idCliente"
-                                onChange={handleInputChange}
-                                placeholder="Ingrese el idCliente"
-                                className="form-control"
-                                min="1"
-                                {...register("idCliente", { 
+                            <span className="text-danger text-small d-block mb-2">
+                            {errors.idDomicilio && errors.idDomicilio.message}
+                            </span>
 
-                                    required:{
-                                        value: true,
-                                        message: 'Campo Obligatorio' 
-                                    },
+                            <span className="text-danger text-small d-block mb-2">
+                            {
+                                errors.idDomicilio && errors.idDomicilio.type === "validate" && (
+                                    <div className="error">El idDomicilio no existe</div>
+                                )
+                            }
+                            </span>
 
-
-                                    validate:validarCliente
-
-                                })}      
-                            >
-                            </input>
-
-
-                        </Col>
-
-                        <Col className="col-md-3">
-
-                                <br></br>
-                                <span className="text-danger text-small d-block mb-2">
-                                {errors.idCliente && errors.idCliente.message}
-                                </span>
-
-                                <span className="text-danger text-small d-block mb-2">
-                                {
-                                    errors.idCliente && errors.idCliente.type === "validate" && (
-                                        <div className="error">El idCliente no existe</div>
-                                    )
-                                }
-                                </span>
-
-                        </Col>
+                    </Col>
 
 
 
-                    </Row>
+                </Row>
 
-                    <Row>
-
-
-                        <Col className="col-md-3">
-                            <br></br>
-                            <label>Id_Domicilio: </label>
-
-
-                        </Col>
-
-                        <Col>
-                            <br></br>
-                            <input 
-                                type="number"
-                                name="idDomicilio"
-                                onChange={handleInputChange}
-                                placeholder="Ingrese el idDomicilio"
-                                className="form-control"
-                                min="1"
-                                {...register("idDomicilio", { 
-
-                                    required:{
-                                        value: true,
-                                        message: 'Campo Obligatorio' 
-                                    },
-
-
-                                    validate:validarDomicilio
-
-                                })}      
-                            >
-                            </input>
-
-
-                        </Col>
-
-                        <Col className="col-md-3">
-
-                                <br></br>
-                                <span className="text-danger text-small d-block mb-2">
-                                {errors.idDomicilio && errors.idDomicilio.message}
-                                </span>
-
-                                <span className="text-danger text-small d-block mb-2">
-                                {
-                                    errors.idDomicilio && errors.idDomicilio.type === "validate" && (
-                                        <div className="error">El idDomicilio no existe</div>
-                                    )
-                                }
-                                </span>
-
-                        </Col>
-
-
-
-                    </Row>
-
+        
             
-             
-                    <Row>
+                <Row>
 
-                        <Col className="col-md-3">
+                    <Col className="col-md-3">
+                        <br></br>
+                        <label>Fecha de Alta: </label>
+
+                    
+                    </Col>
+
+                    <Col>
+                        <br></br>
+                        <input 
+                            type="date"
+                            name="fechaAlta"
+                            onChange={handleInputChange}
+                            placeholder="Ingrese la Fecha de Alta 2020-11-05"
+                            className="form-control"
+                            {...register("fechaAlta", { 
+
+                                required:{
+                                    value: true,
+                                    message: 'Campo Obligatorio' 
+                                },
+
+                            })}      
+                        >
+                        </input>
+                    
+                    
+                    </Col>
+
+                    <Col className="col-md-3">
+
                             <br></br>
-                            <label>Fecha de Alta: </label>
+                            <span className="text-danger text-small d-block mb-2">
+                            {errors.fechaAlta && errors.fechaAlta.message}
+                            </span>
 
-                        
-                        </Col>
+                    </Col>
 
-                        <Col>
+
+
+                </Row>
+
+                <Row>
+
+
+                    <Col className="col-md-3">
+                        <br></br>
+                        <label>Fecha de Baja: </label>
+
+                    
+                    </Col>
+
+                    <Col>
+                        <br></br>
+                        <input 
+                            type="date"
+                            name="fechaBaja"
+                            onChange={handleInputChange}
+                            placeholder="Ingrese la Fecha de Baja 2020-11-05"
+                            className="form-control"
+                            {...register("fechaBaja", { 
+
+                                required:{
+                                    value: true,
+                                    message: 'Campo Obligatorio' 
+                                },
+
+                            })}      
+                        >
+                        </input>
+                    
+                    
+                    </Col>
+
+                    <Col className="col-md-3">
+
                             <br></br>
-                            <input 
-                                type="date"
-                                name="fechaAlta"
-                                onChange={handleInputChange}
-                                placeholder="Ingrese la Fecha de Alta 2020-11-05"
-                                className="form-control"
-                                {...register("fechaAlta", { 
+                            <span className="text-danger text-small d-block mb-2">
+                            {errors.fechaBaja && errors.fechaBaja.message}
+                            </span>
 
-                                    required:{
-                                        value: true,
-                                        message: 'Campo Obligatorio' 
-                                    },
-
-                                })}      
-                            >
-                            </input>
-                        
-                        
-                        </Col>
-
-                        <Col className="col-md-3">
-
-                                <br></br>
-                                <span className="text-danger text-small d-block mb-2">
-                                {errors.fechaAlta && errors.fechaAlta.message}
-                                </span>
-
-                        </Col>
+                    </Col>
 
 
 
-                    </Row>
-
-                    <Row>
+                </Row>
 
 
-                        <Col className="col-md-3">
+
+                <Row>
+
+
+                    <Col className="col-md-3">
+                        <br></br>
+                        <label>Estado: </label>
+
+                    </Col>
+
+                    <Col>
+                        <br></br>
+                    
+                        <input 
+                            type="text"
+                            name="estado"
+                            onChange={handleInputChange}
+                            placeholder="Ingrese el estado"
+                            className="form-control"
+                            {...register("estado", { 
+
+                                required:{
+                                    value: true,
+                                    message: 'Campo Obligatorio' 
+                                },
+
+                                validate:{
+
+                                    validate1:validarEstado,
+                                    
+
+                                }    
+
+                            })}      
+                        >
+                        </input>
+                    
+                    
+                    </Col>
+
+                    <Col className="col-md-3">
+
                             <br></br>
-                            <label>Fecha de Baja: </label>
+                            <span className="text-danger text-small d-block mb-2">
+                            {errors.estado && errors.estado.message}
+                            </span>
 
-                        
-                        </Col>
+                            <span className="text-danger text-small d-block mb-2">
+                                    {
+                                    errors.estado && errors.estado.type === "validate1" && (
+                                    <div className="error">El estado debe ser activo o inactivo</div>
+                                    )
+                                    }
+                            </span>
 
-                        <Col>
-                            <br></br>
-                            <input 
-                                type="date"
-                                name="fechaBaja"
-                                onChange={handleInputChange}
-                                placeholder="Ingrese la Fecha de Baja 2020-11-05"
-                                className="form-control"
-                                {...register("fechaBaja", { 
-
-                                    required:{
-                                        value: true,
-                                        message: 'Campo Obligatorio' 
-                                    },
-
-                                })}      
-                            >
-                            </input>
-                        
-                        
-                        </Col>
-
-                        <Col className="col-md-3">
-
-                                <br></br>
-                                <span className="text-danger text-small d-block mb-2">
-                                {errors.fechaBaja && errors.fechaBaja.message}
-                                </span>
-
-                        </Col>
+                    </Col>
 
 
 
-                    </Row>
+                </Row>
+
+                <Row>
+
+                    <Col ClassName='boton'>
+                        <br></br>
+                        <br></br>
+                        <Button type="submit" className="btn btn-primary">UPDATE</Button>&nbsp;&nbsp;
+                        <Button type="button" href={`/adminPedido`} className="btn btn-danger">RETURN</Button>
+                            
+                    
+                    </Col>
 
 
-
-                    <Row>
-
-
-                        <Col className="col-md-3">
-                            <br></br>
-                            <label>Estado: </label>
-
-                        </Col>
-
-                        <Col>
-                            <br></br>
-                        
-                            <input 
-                                type="text"
-                                name="estado"
-                                onChange={handleInputChange}
-                                placeholder="Ingrese el estado"
-                                className="form-control"
-                                {...register("estado", { 
-
-                                    required:{
-                                        value: true,
-                                        message: 'Campo Obligatorio' 
-                                    },
-
-                                    validate:{
-
-                                        validate1:validarEstado,
-                                        
-    
-                                    }    
-
-                                })}      
-                            >
-                            </input>
-                        
-                        
-                        </Col>
-
-                        <Col className="col-md-3">
-
-                                <br></br>
-                                <span className="text-danger text-small d-block mb-2">
-                                {errors.estado && errors.estado.message}
-                                </span>
-
-                                <span className="text-danger text-small d-block mb-2">
-                                        {
-                                        errors.estado && errors.estado.type === "validate1" && (
-                                        <div className="error">El estado debe ser activo o inactivo</div>
-                                        )
-                                        }
-                                </span>
-
-                        </Col>
-
-
-
-                    </Row>
-
-                    <Row>
-
-                        <Col ClassName='boton'>
-                            <br></br>
-                            <br></br>
-                            <Button type="submit" className="btn btn-primary">UPDATE</Button>&nbsp;&nbsp;
-                            <Button type="button" href={`/adminPedido`} className="btn btn-danger">RETURN</Button>
-                                
-                        
-                        </Col>
-
-
-                    </Row>
+                </Row>
 
             </Form>
 

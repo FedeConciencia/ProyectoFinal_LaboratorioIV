@@ -1,8 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import Navigation from '../Navigation';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Table from 'react-bootstrap/Table'
+import Table from 'react-bootstrap/Table';
 import '../../assets/css/form.css';
 import moment from 'moment';
 
@@ -71,11 +70,12 @@ const FormPedido = (props) => {
                         <tr>
                             <th>Id</th>
                             <th>Codigo</th>
-                            <th>Hora_Estimada</th>
-                            <th>Tipo_Envio</th>
+                            <th>Hora Estimada</th>
+                            <th>Estado Pedido</th>
+                            <th>Tipo Envio</th>
                             <th>Total</th>
-                            <th>fecha_Alta</th>
-                            <th>fecha_Baja</th>
+                            <th>Fecha Alta</th>
+                            <th>Fecha Baja</th>
                             <th>Estado</th>
                             <th>IdCliente</th>
                             <th>IdDomicilio</th>
@@ -93,6 +93,7 @@ const FormPedido = (props) => {
                             <td>{pedido.idPedido}</td>
                             <td>{pedido.codigo}</td>
                             <td>{moment(pedido.horaEstimadaFin).add(5,'M').format('HH:MM:SS')}</td>
+                            <td>{pedido.estadoPedido}</td>
                             <td>{pedido.tipoEnvio}</td>
                             <td>{pedido.total}</td>
                             <td>{moment(pedido.fechaAlta).subtract(1,'M').format('YYYY-MM-DD')}</td>

@@ -27,18 +27,19 @@ public class ControladorPedido {
 
             conexion = con.getConnection(); //metodo getConnection, logueamos el usuario.
 
-            ps = conexion.prepareStatement("INSERT INTO pedido (codigo, horaEstimadaFin, tipoEnvio, total, fechaAlta, fechaBaja, estado, idCliente, idDomicilio) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            ps = conexion.prepareStatement("INSERT INTO pedido (codigo, horaEstimadaFin, estadoPedido, tipoEnvio, total, fechaAlta, fechaBaja, estado, idCliente, idDomicilio) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             // Se establecen los parámetros y se ejecuta la sentencia.
             ps.setString(1, pedido.getCodigo());
             ps.setTime(2, Time.valueOf(pedido.getHoraEstimadaFin()));  //Modifico por LocalTime que representa solo la hora y en BD con TIME
-            ps.setInt(3, pedido.getTipoEnvio());
-            ps.setDouble(4, pedido.getTotal());
-            ps.setDate(5, Date.valueOf(pedido.getFechaAlta()));
-            ps.setDate(6, Date.valueOf(pedido.getFechaBaja()));
-            ps.setString(7, pedido.getEstado());
-            ps.setLong(8, pedido.getIdCliente());
-            ps.setLong(9, pedido.getIdDomicilio());
+            ps.setInt(3, pedido.getEstadoPedido());
+            ps.setInt(4, pedido.getTipoEnvio());
+            ps.setDouble(5, pedido.getTotal());
+            ps.setDate(6, Date.valueOf(pedido.getFechaAlta()));
+            ps.setDate(7, Date.valueOf(pedido.getFechaBaja()));
+            ps.setString(8, pedido.getEstado());
+            ps.setLong(9, pedido.getIdCliente());
+            ps.setLong(10, pedido.getIdDomicilio());
 
             //Ejecutamos el comando y mandamos los datos al sistema:
             int resultado = ps.executeUpdate();
@@ -87,18 +88,19 @@ public class ControladorPedido {
 
             conexion = con.getConnection(); //metodo getConnection, logueamos el usuario.
 
-            ps = conexion.prepareStatement("UPDATE pedido SET codigo = ?, horaEstimadaFin = ?, tipoEnvio = ?, total = ?, fechaAlta = ?, fechaBaja = ?, estado = ?, idCliente = ?, idDomicilio = ?  WHERE idPedido = ?");
+            ps = conexion.prepareStatement("UPDATE pedido SET codigo = ?, horaEstimadaFin = ?, estadoPedido = ?, tipoEnvio = ?, total = ?, fechaAlta = ?, fechaBaja = ?, estado = ?, idCliente = ?, idDomicilio = ?  WHERE idPedido = ?");
 
             ps.setString(1, pedido.getCodigo());
             ps.setTime(2, Time.valueOf(pedido.getHoraEstimadaFin()));  //Modifico por LocalTime que representa solo la hora y en BD con TIME
-            ps.setInt(3, pedido.getTipoEnvio());
-            ps.setDouble(4, pedido.getTotal());
-            ps.setDate(5, Date.valueOf(pedido.getFechaAlta()));
-            ps.setDate(6, Date.valueOf(pedido.getFechaBaja()));
-            ps.setString(7, pedido.getEstado());
-            ps.setLong(8, pedido.getIdCliente());
-            ps.setLong(9, pedido.getIdDomicilio());
-            ps.setLong(10, pedido.getIdPedido());
+            ps.setInt(3, pedido.getEstadoPedido());
+            ps.setInt(4, pedido.getTipoEnvio());
+            ps.setDouble(5, pedido.getTotal());
+            ps.setDate(6, Date.valueOf(pedido.getFechaAlta()));
+            ps.setDate(7, Date.valueOf(pedido.getFechaBaja()));
+            ps.setString(8, pedido.getEstado());
+            ps.setLong(9, pedido.getIdCliente());
+            ps.setLong(10, pedido.getIdDomicilio());
+            ps.setLong(11, pedido.getIdPedido());
 
             //Ejecutamos el comando y mandamos los datos al sistema:
             int resultado = ps.executeUpdate();
@@ -205,15 +207,17 @@ public class ControladorPedido {
                 Long idPedido = rs.getLong(1); //cada numero del parametro hace referencia al dato del campo que se desea obtener = idPersona
                 String codigo = rs.getString(2);
                 LocalTime horaEstimadaFin = (rs.getTime(3)).toLocalTime(); //modifico a local time para obtener solo la hora
-                int tipoEnvio = rs.getInt(4);
-                double total = rs.getDouble(5);
-                LocalDate fechaAlta = (rs.getDate(6)).toLocalDate();
-                LocalDate fechaBaja = (rs.getDate(7)).toLocalDate();
-                String estado = rs.getString(8);
-                Long idCliente = rs.getLong(9);
-                Long idDomicilio = rs.getLong(10);
+                int estadoPedido = rs.getInt(4);
+                int tipoEnvio = rs.getInt(5);
+                double total = rs.getDouble(6);
+                LocalDate fechaAlta = (rs.getDate(7)).toLocalDate();
+                LocalDate fechaBaja = (rs.getDate(8)).toLocalDate();
+                String estado = rs.getString(9);
+                Long idCliente = rs.getLong(10);
+                Long idDomicilio = rs.getLong(11);
 
-                pedido = new Pedido(idPedido, codigo, horaEstimadaFin, tipoEnvio, total, idCliente, idDomicilio, fechaAlta, fechaBaja, estado);
+                pedido = new Pedido(idPedido, codigo, horaEstimadaFin, estadoPedido, 
+                        tipoEnvio, total, idCliente, idDomicilio, fechaAlta, fechaBaja, estado);
 
                 System.out.println("El Registro fue encontrado con exito.");
                 //JOptionPane.showMessageDialog(null, "El Registro fue encontrado con exito.");
@@ -269,15 +273,17 @@ public class ControladorPedido {
                 Long idPedido = rs.getLong(1); //cada numero del parametro hace referencia al dato del campo que se desea obtener = idPersona
                 String codigo = rs.getString(2);
                 LocalTime horaEstimadaFin = (rs.getTime(3)).toLocalTime();
-                int tipoEnvio = rs.getInt(4);
-                double total = rs.getDouble(5);
-                LocalDate fechaAlta = (rs.getDate(6)).toLocalDate();
-                LocalDate fechaBaja = (rs.getDate(7)).toLocalDate();
-                String estado = rs.getString(8);
-                Long idCliente = rs.getLong(9);
-                Long idDomicilio = rs.getLong(10);
+                int estadoPedido = rs.getInt(4);
+                int tipoEnvio = rs.getInt(5);
+                double total = rs.getDouble(6);
+                LocalDate fechaAlta = (rs.getDate(7)).toLocalDate();
+                LocalDate fechaBaja = (rs.getDate(8)).toLocalDate();
+                String estado = rs.getString(9);
+                Long idCliente = rs.getLong(10);
+                Long idDomicilio = rs.getLong(11);
 
-                pedido = new Pedido(idPedido, codigo, horaEstimadaFin, tipoEnvio, total, idCliente, idDomicilio, fechaAlta, fechaBaja, estado);
+                pedido = new Pedido(idPedido, codigo, horaEstimadaFin, estadoPedido, tipoEnvio, 
+                        total, idCliente, idDomicilio, fechaAlta, fechaBaja, estado);
 
                 listaPedido.add(pedido);
 

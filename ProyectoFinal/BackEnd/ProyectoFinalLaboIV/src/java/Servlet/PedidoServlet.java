@@ -70,8 +70,7 @@ public class PedidoServlet extends HttpServlet {
                     
                 }else if(request.getParameter("action").equals("buscar")){
                     
-                    ControladorPedido controladorPedido = new ControladorPedido();  
-                    List<Pedido> listaPedido = new ArrayList<Pedido>();
+                    ControladorPedido controladorPedido = new ControladorPedido();
                     Pedido pedido = controladorPedido.buscarOnePedido(Long.parseLong(request.getParameter("idPedido"))); 
                     Gson gsonBuilder = new GsonBuilder().create();
                     String pedidoJson = gsonBuilder.toJson(pedido);
@@ -82,6 +81,7 @@ public class PedidoServlet extends HttpServlet {
                     
                     String codigo = (request.getParameter("codigo"));
                     LocalTime horaEstimadaFin = LocalTime.parse(request.getParameter("horaEstimadaFin"));
+                    int estadoPedido = Integer.parseInt(request.getParameter("estadoPedido"));
                     int tipoEnvio = Integer.parseInt(request.getParameter("tipoEnvio"));
                     double total = Double.parseDouble(request.getParameter("total"));
                     Long idCliente = Long.valueOf(request.getParameter("idCliente"));
@@ -91,7 +91,7 @@ public class PedidoServlet extends HttpServlet {
                     String estado = (request.getParameter("estado"));
                     
                     ControladorPedido controladorPedido = new ControladorPedido();   
-                    Pedido pedido = new Pedido(codigo, horaEstimadaFin, tipoEnvio, total, idCliente, idDomicilio, fechaAlta, fechaBaja, estado);
+                    Pedido pedido = new Pedido(codigo, horaEstimadaFin, estadoPedido, tipoEnvio, total, idCliente, idDomicilio, fechaAlta, fechaBaja, estado);
                     controladorPedido.insertarPedido(pedido);
                     Gson gsonBuilder = new GsonBuilder().create();
                     String pedidoJson = gsonBuilder.toJson(pedido);
@@ -102,6 +102,7 @@ public class PedidoServlet extends HttpServlet {
                     Long idPedido = Long.parseLong(request.getParameter("idPedido"));
                     String codigo = (request.getParameter("codigo"));
                     LocalTime horaEstimadaFin = LocalTime.parse(request.getParameter("horaEstimadaFin"));
+                    int estadoPedido = Integer.parseInt(request.getParameter("estadoPedido"));
                     int tipoEnvio = Integer.parseInt(request.getParameter("tipoEnvio"));
                     double total = Double.parseDouble(request.getParameter("total"));
                     Long idCliente = Long.valueOf(request.getParameter("idCliente"));
@@ -111,7 +112,7 @@ public class PedidoServlet extends HttpServlet {
                     String estado = (request.getParameter("estado"));
                     
                     ControladorPedido controladorPedido = new ControladorPedido();   
-                    Pedido pedido = new Pedido(idPedido, codigo, horaEstimadaFin, tipoEnvio, total, idCliente, idDomicilio, fechaAlta, fechaBaja, estado);
+                    Pedido pedido = new Pedido(idPedido, codigo, horaEstimadaFin, estadoPedido, tipoEnvio, total, idCliente, idDomicilio, fechaAlta, fechaBaja, estado);
                     controladorPedido.actualizarPedido(pedido);
                     Gson gsonBuilder = new GsonBuilder().create();
                     String pedidoJson = gsonBuilder.toJson(pedido);

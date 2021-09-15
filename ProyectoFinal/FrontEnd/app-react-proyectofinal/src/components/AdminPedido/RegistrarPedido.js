@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from "react";
-import Navigation from "../Navigation";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -23,6 +22,7 @@ const RegistrarPedido = () => {
 
         codigo:'',
         horaEstimadaFin:'',
+        estadoPedido:'',
         tipoEnvio:'',
         total:'',
         idCliente:'',
@@ -65,6 +65,7 @@ const RegistrarPedido = () => {
             action:'insertar',
             codigo: datos.codigo,
             horaEstimadaFin: datos.horaEstimadaFin,
+            estadoPedido: datos.estadoPedido,
             tipoEnvio: datos.tipoEnvio,
             total: datos.total,
             idCliente: datos.idCliente,
@@ -114,8 +115,6 @@ const RegistrarPedido = () => {
             if((listaCliente[i].idCliente).toString() === (idCliente).toString() && ((listaCliente[i].estado).toString() === "activo")){
 
                 return validar = true;
-                break;
-
 
             }
         
@@ -155,8 +154,6 @@ const RegistrarPedido = () => {
             if((listaDomicilio[i].idDomicilio).toString() === (idDomicilio).toString() && ((listaDomicilio[i].estado).toString() === "activo")){
 
                 return validar = true;
-                break;
-
 
             }
         
@@ -197,8 +194,6 @@ const RegistrarPedido = () => {
 
                 
                 return validar = false;
-                break;
-
 
             }
         
@@ -349,6 +344,36 @@ const RegistrarPedido = () => {
 
 
 
+            </Row>
+
+            <Row>
+                <Col className="col-md-3">
+                    <label className="my-2">Estado Pedido: </label>
+                </Col>
+
+                <Col>
+                    <input 
+                        type="number"
+                        name="estadoPedido"
+                        onChange={handleInputChange}
+                        placeholder="Ingrese el estado del pedido"
+                        className="form-control my-2"
+                        min="0"
+                        {...register("estadoPedido", {
+                            required:{
+                                value: true,
+                                message: 'Campo Obligatorio' 
+                            }
+                        })}
+                    >
+                    </input>
+                </Col>
+
+                <Col className="col-md-3">
+                        <span className="text-danger text-small d-block mb-2">
+                        {errors.estadoPedido && errors.estadoPedido.message}
+                        </span>
+                </Col>
             </Row>
 
     

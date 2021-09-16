@@ -349,12 +349,11 @@ const ActualizarPedido = (props) => {
                     <Col>
                         
                         <input 
-                            type="number"
+                            type="text"
                             name="codigo"
                             onChange={handleInputChange}
                             placeholder="Ingrese el Codigo"
                             className="form-control my-2"
-                            min="1000"
                             {...register("codigo", { 
 
                                 required:{
@@ -499,6 +498,7 @@ const ActualizarPedido = (props) => {
                             placeholder="Ingrese el Tipo de Envio"
                             className="form-control"
                             min="1"
+                            max="2"
                             {...register("tipoEnvio", { 
 
                                 required:{

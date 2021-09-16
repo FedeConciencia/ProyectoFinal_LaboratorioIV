@@ -81,7 +81,6 @@ const MetodoPago = (props) => {
             //La espera permite que guarde los datos ya insertado:
             getDatos();
             
-            
         
             
         }
@@ -259,6 +258,7 @@ const MetodoPago = (props) => {
                     action:'insertar',
                     codigo: codigo, 
                     horaEstimadaFin: "00:00:00",
+                    estadoPedido:"0",
                     tipoEnvio: datos.selectPago,
                     total: JSON.stringify(total),
                     idCliente: datoId,
@@ -275,6 +275,8 @@ const MetodoPago = (props) => {
             .then(response => {
         
                 console.log(JSON.stringify(response))
+
+              
                 
         
             })
@@ -282,9 +284,103 @@ const MetodoPago = (props) => {
                 console.log("Error");
                 console.log(error);
             })
+
+            
+            const timerDom = setTimeout(() => {
+
+                guardarDetallePedido();
+                
+            }, 10000);
         
         
         }
+
+        //Metodo para insertar detalle pedido:
+        const insertarDetallePedido = (articulo) => {
+
+
+            axios.get("http://localhost:8080/ProyectoFinalLaboIV//DetallePedidoServlet", {
+                params: {
+
+        
+                    action:'insertar',
+                    cantidad: articulo.cantidad, 
+                    subTotal: articulo.subTotal,
+                    idPedido: articulo.idPedido,
+                    idArticuloManufacturado: articulo.idArticulo,
+        
+        
+                }
+              })
+            .then(response => {
+        
+                console.log(JSON.stringify(response))
+                
+        
+            })
+            .catch(error =>{
+                console.log("Error");
+                console.log(error);
+            })
+
+        }
+
+
+        const guardarDetallePedido = () => {
+
+
+            let array = JSON.parse(localStorage.getItem("productos"));
+
+            let ultimoId = 0;
+
+            axios.get("http://localhost:8080/ProyectoFinalLaboIV//PedidoServlet", {
+                params: {
+
+        
+                    action:'buscarUltimoId',
+        
+        
+                }
+              })
+            .then(response => {
+        
+                console.log(JSON.stringify(response))
+
+                console.log("VALOR ID DATA =>", response.data)
+                
+                ultimoId = response.data;
+
+                console.log("VALOR ULTIMOID =>", ultimoId)
+
+                for(let i = 0; i < array.length; i++){
+
+                    let articulo = {
+    
+                        cantidad: array[i].cantidad,
+                        subTotal: array[i].cantidad * array[i].precioVenta,
+                        idPedido: ultimoId,
+                        idArticulo: array[i].idArticulo,
+    
+                    }
+    
+                    insertarDetallePedido(articulo);
+    
+                }
+                
+        
+            })
+            .catch(error =>{
+                console.log("Error");
+                console.log(error);
+            })
+
+            console.log("VALOR ULTIMOID GUARDAR =>", ultimoId)
+            
+
+            
+
+        }
+
 
         //Metodo para ejecutar el evento onclik boton1:
 

@@ -248,12 +248,11 @@ const RegistrarPedido = () => {
                 <Col>
                     
                     <input 
-                        type="number"
+                        type="text"
                         name="codigo"
                         onChange={handleInputChange}
                         placeholder="Ingrese el Codigo"
                         className="form-control my-2"
-                        min="1000"
                         {...register("codigo", { 
 
                             required:{
@@ -348,10 +347,12 @@ const RegistrarPedido = () => {
 
             <Row>
                 <Col className="col-md-3">
+                    <br></br>
                     <label className="my-2">Estado Pedido: </label>
                 </Col>
 
                 <Col>
+                    <br></br>
                     <input 
                         type="number"
                         name="estadoPedido"
@@ -370,6 +371,7 @@ const RegistrarPedido = () => {
                 </Col>
 
                 <Col className="col-md-3">
+                        <br></br>
                         <span className="text-danger text-small d-block mb-2">
                         {errors.estadoPedido && errors.estadoPedido.message}
                         </span>
@@ -396,6 +398,7 @@ const RegistrarPedido = () => {
                         placeholder="Ingrese el Tipo de Envio"
                         className="form-control"
                         min="1"
+                        max="2"
                         {...register("tipoEnvio", { 
 
                             required:{

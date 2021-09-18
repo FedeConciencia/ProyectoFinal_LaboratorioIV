@@ -37,9 +37,6 @@ const MetodoPago = (props) => {
     //Estado Hook para almacenar artManuf en la Cocina:
     const [artManfCocinaTiempo, setArtManfCocinaTiempo] = useState(0);
 
-    //Estado Hook para almacena el calculo final del tiempo del pedido:
-    const [tiempo, setTiempo] = useState(0);
-
     //Creo el estado de la variable modalCarrito:
     const [modalPedido, setModalPedido] = useState();
 
@@ -72,7 +69,7 @@ const MetodoPago = (props) => {
         //Se llama metodo que obtiene la sumatoria de tiempo de art en cocina:
         obtenerCocineros();
     
-    },[datoId, tiempo, datoIdDomicilio, datos, cantidadCocinero, artManfCocinaTiempo, modalPedido]) //Importante pasar los estados de hooks al useEffect
+    },[datoId, datoIdDomicilio, datos, cantidadCocinero, artManfCocinaTiempo, modalPedido]) //Importante pasar los estados de hooks al useEffect
 
 
 
@@ -93,11 +90,7 @@ const MetodoPago = (props) => {
         const enviarDatos = (datos, event) => {
 
                 
-
             alert(JSON.stringify(datos));
-
-            //Se llama metodo que gestiona el calculo final tiempo del pedido:
-            calculoFinalTiempoPedido();
 
             const timerDom = setTimeout(() => {
 
@@ -106,10 +99,7 @@ const MetodoPago = (props) => {
                 
             }, 3000);
 
-            
-
-           
-            
+             
         }
 
         //Metodo que obtiene el idDomicilio a traves del idCliente buscando en la entidad cliente:
@@ -204,6 +194,8 @@ const MetodoPago = (props) => {
 
         const getDatos = () => {
 
+            //Llamo al metodo que obtiene el tiempoFinal:
+            let time = calculoFinalTiempoPedido();
 
             //Guardo el codigo generado Random:
             let codigo = passwordCodigo();
@@ -228,7 +220,7 @@ const MetodoPago = (props) => {
         
                     action:'insertar',
                     codigo: codigo, 
-                    horaEstimadaFin: "00:00:00",
+                    horaEstimadaFin: time,
                     estadoPedido:"0",
                     tipoEnvio: datos.selectPago,
                     total: JSON.stringify(total),
@@ -259,11 +251,13 @@ const MetodoPago = (props) => {
             const timerDom = setTimeout(() => {
 
                 guardarDetallePedido();
+
                 //Ejecuto el modal de aviso Pedido;
-                modalPedidos(); 
+                modalPedidos(time); 
+
                 
             }, 7000);
-        
+
         
         }
 
@@ -499,30 +493,40 @@ const MetodoPago = (props) => {
 
             }
 
-            //Guardo la respuesta en el hooks:
-            setTiempo(sumatoriaFinal);
-
-            
             console.log("TIEMPO FINAL CON ENVIO A DOMICILIO +10 M => ", sumatoriaFinal)
 
+            let time = convertMinutos(sumatoriaFinal);
 
-            
+            console.log("VARIABLE TIME => ", time)
+
+            return time;
          
         }   
 
     
         //Guardo en una constante el componente modalPedido y paso el props:
-        const modalPedidos = () => {
+        const modalPedidos = (time) => {
 
                 let totalCarrito = localStorage.getItem("totalCarrito");
 
                 let tipoEnvio = "Retiro en Local";
+
+                let formaPago = ""
 
                 //Si se selecciona el boton domicilio +10 minutos :
                 if(datos.boton1 === true){
 
                     tipoEnvio = "Delivery Domicilio";
 
+                }
+
+                if(datos.selectPago === "1"){
+
+                    formaPago = "Pago Efectivo";
+
+                }else if(datos.selectPago === "2"){
+
+                    formaPago = "MercadoPago";
                 }
                 
                 const modal = () => {
@@ -532,9 +536,10 @@ const MetodoPago = (props) => {
                         //Al componente ModalPedido le asigamos propiedades que luego son accedidas por el componente para mostrar.
                     <ModalPedido
                         pedido = { true }
-                        tiempo = { tiempo }
-                        total = {totalCarrito }
+                        tiempo = { time }
+                        total = { totalCarrito }
                         tipoEnvio =  { tipoEnvio }
+                        formaPago = { formaPago }
                     ></ModalPedido>
 
                     );
@@ -555,7 +560,7 @@ const MetodoPago = (props) => {
             let m = mins % 60;
             h = h < 10 ? '0' + h : h;
             m = m < 10 ? '0' + m : m;
-            return `${h}:${m}:"00"`;
+            return `${h}:${m}:00`;
           }
 
 

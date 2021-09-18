@@ -82,6 +82,8 @@ import { ContextoUsuario } from './components/ContextoUsuario';
 import Navigation from './components/Navigation';
 import Carrito from './components/Carrito/Carrito';
 import MetodoPago from './components/MetodoPago/MetodoPago';
+import PrincipalCocinero from './components/AdminCocinero/Principal';
+import ConfirmarPedido from './components/AdminCocinero/ConfirmarPedido';
 
 
 export default function App(){
@@ -112,6 +114,12 @@ export default function App(){
         <Route path="/detallePlato/:id" component={DetallePlato} ></Route>
         <Route exact path="/carrito" component={Carrito} />
         <Route exact path="/metodoPago" component={MetodoPago} />
+
+
+        {/* Rutas de AdminCocinero: */}
+
+        <Route exact path="/cocineroPrincipal" component={PrincipalCocinero} ></Route>
+        <Route exact path="/confirmarPedido" component={ConfirmarPedido} ></Route>
         
 
 

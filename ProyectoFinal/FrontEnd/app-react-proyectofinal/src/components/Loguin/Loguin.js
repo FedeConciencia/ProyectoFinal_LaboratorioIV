@@ -344,8 +344,10 @@ const Loguin = (props) => {
         if(usuarioActual["rol"] === "administrador"){
             history.push("/adminPrincipal");
         }
-        else{
-            history.push("/");
+        else if (usuarioActual["rol"] === "cocinero"){
+            history.push("/cocineroPrincipal");
+        }else if (usuarioActual["rol"] === "cliente"){
+            history.push("/productos");
         }
         window.location.reload();
     }

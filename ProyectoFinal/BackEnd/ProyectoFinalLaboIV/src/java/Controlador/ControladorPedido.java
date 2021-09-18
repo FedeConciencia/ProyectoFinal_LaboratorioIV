@@ -134,6 +134,56 @@ public class ControladorPedido {
         }
 
     }
+    
+    //METODO PARA GESTIONAR ACTUALIZACION PEDIDO:
+    public void actualizarEstadoPedido(int estado, long id) {
+
+        Connection conexion = null;
+        Conexion con = new Conexion();
+        PreparedStatement ps = null;  //Este objeto permite guardar las consultas que hacemos a la BD.
+        ResultSet rs = null;  // este objeto lo usamos cuando obtenemos algo de la base de datos.
+
+        try {
+
+            conexion = con.getConnection(); //metodo getConnection, logueamos el usuario.
+
+            ps = conexion.prepareStatement("UPDATE pedido SET  estadoPedido = ?  WHERE idPedido = ?");
+
+            ps.setInt(1, estado);
+            ps.setLong(2, id);  
+
+            //Ejecutamos el comando y mandamos los datos al sistema:
+            int resultado = ps.executeUpdate();
+
+            if (resultado > 0) {
+
+                System.out.println("El Registro fue actualizado con exito a la Base de Datos.");
+                //JOptionPane.showMessageDialog(null, "El Registro fue modificado con exito a la Base de Datos.");
+            } else {
+
+                System.out.println("Error al intentar actualizar el registro.");
+                //JOptionPane.showMessageDialog(null, "Error al intentar modificar el registro.");
+            }
+
+            conexion.close(); //cerramos la conexion.
+
+        } catch (Exception ex) {
+
+            System.err.println("Error. " + ex);
+
+        } finally {
+
+            try {
+                ps.close();
+
+            } catch (SQLException ex) {
+
+                System.err.println("Error. " + ex);
+            }
+
+        }
+
+    }
 
     //METODO ELIMINAR PEDIDO:
     public void eliminarPedido(Long id) {

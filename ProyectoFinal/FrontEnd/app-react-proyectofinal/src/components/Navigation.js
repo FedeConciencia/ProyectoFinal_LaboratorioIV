@@ -21,10 +21,27 @@ export default function Navigation() {
       if(usuario["rol"] !== undefined && usuario["rol"] === "administrador"){
           return <Nav.Link href="/adminPrincipal">ADMINISTRADOR</Nav.Link>;
         
+      }else if(usuario["rol"] !== undefined && usuario["rol"] === "cliente"){
+
+        return <><Nav.Link href="/productos">PRODUCTOS</Nav.Link>
+                <Nav.Link href="/contacto">CONTACTO</Nav.Link>
+                <Nav.Link href="/carrito">CARRITO</Nav.Link></>;
+
+      }else if(usuario["rol"] !== undefined && usuario["rol"] === "cocinero"){
+
+        return <Nav.Link href="/cocineroPrincipal">PRINCIPAL</Nav.Link>;
+
       }
+
+      
+    }else{
+
+      return <><Nav.Link href="/productos">PRODUCTOS</Nav.Link>
+                <Nav.Link href="/contacto">CONTACTO</Nav.Link></>;
+
     }
 
-    return <span/>;
+   
   }
 
   //Metodo para desloquearte de API google:
@@ -40,9 +57,6 @@ export default function Navigation() {
       <Navbar bg="primary" variant="dark" className="navbar-parent">
         <Navbar.Brand href="/">INICIO</Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="/productos">PRODUCTOS</Nav.Link>
-          <Nav.Link href="/contacto">CONTACTO</Nav.Link>
-          <Nav.Link href="/carrito">CARRITO</Nav.Link>
           <VerificarRolUsuario />
           
           <Form inline className="search-box">

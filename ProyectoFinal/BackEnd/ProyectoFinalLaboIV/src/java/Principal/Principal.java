@@ -16,6 +16,11 @@ public class Principal {
     public static void main(String[] args) {
         
         
+        //TESTEO AUX_DATO_PEDIDO:
+        
+        ControladorPedido controlador = new ControladorPedido();
+        controlador.actualizarEstadoPedido(2, 50L);
+        
         /*
         
         //TESTEO AUX_DATO_PEDIDO:

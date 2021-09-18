@@ -1,9 +1,10 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useContext } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table'
 import '../../assets/css/form.css';
 import moment from 'moment';
+import { ContextoUsuario } from "../ContextoUsuario";
 
 //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
 //Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
@@ -14,6 +15,25 @@ const FormArtInsumo = (props) => {
 
 
  const [datos, setDatos] = useState([])
+
+  // Hook con el estado actual
+  const {usuario, setUsuario} = useContext(ContextoUsuario);
+
+ function VerificarRolUsuario() {
+  if(usuario != null && usuario !== undefined) {
+    if(usuario["rol"] !== undefined && usuario["rol"] === "administrador"){
+        
+      return <Button type="button" href={`/adminPrincipal`}  className="boton" variant="danger" size="lg">RETURN</Button>;
+      
+    }else if(usuario["rol"] !== undefined && usuario["rol"] === "cocinero"){
+
+      return <Button type="button" href={`/cocineroPrincipal`}  className="boton" variant="danger" size="lg">RETURN</Button>;
+
+    }
+  }
+
+  return <span/>;
+}
     
   //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
   //los corchetes permite que nuestro userEffect se ejecute una sola vez
@@ -127,7 +147,7 @@ const FormArtInsumo = (props) => {
                 <br></br>
 
                 <Button href={`registrarArtInsumo`} className="boton" variant="success" size="lg">INSERT</Button>&nbsp;&nbsp;&nbsp;
-                <Button type="button" href={`/adminPrincipal`}  className="boton" variant="danger" size="lg">RETURN</Button>            
+                <VerificarRolUsuario />
                 <br></br>
                 <br></br>
 

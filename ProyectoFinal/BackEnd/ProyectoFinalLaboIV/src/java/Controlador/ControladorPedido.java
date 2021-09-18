@@ -362,5 +362,53 @@ public class ControladorPedido {
         }
 
     }
+    
+    //METODO PARA OBTENER EL ULTIMO IDPEDIDO:
+    
+     public long buscarUltimoId() {
 
+        Connection conexion = null;
+        Conexion con = new Conexion();
+        long idPedido = 0;
+        PreparedStatement ps = null;  //Este objeto permite guardar las consultas que hacemos a la BD.
+        ResultSet rs = null;  // este objeto lo usamos cuando obtenemos algo de la base de datos.
+
+        try {
+
+            conexion = con.getConnection(); //metodo getConnection, logueamos el usuario.
+
+            ps = conexion.prepareStatement("SELECT MAX(idPedido) FROM pedido");
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                idPedido = rs.getLong(1); //cada numero del parametro hace referencia al dato del campo que se desea obtener = idPersona
+                //idCliente++; //Incrementa en 1 el ultimo idCliente. Obteniendo el siguiente
+            }
+
+            conexion.close();
+
+        } catch (Exception ex) {
+
+            System.err.println("Error. " + ex);
+
+        } finally {
+
+            try {
+
+                ps.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+                System.err.println("Error. " + ex);
+            }
+
+        }
+
+        return idPedido; //devolvemos el ultimo id
+
+    }
+    
+    
 }

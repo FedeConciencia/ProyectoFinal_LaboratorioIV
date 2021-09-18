@@ -12,6 +12,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import axios from "axios";
 import moment from 'moment';
+import ModalPedido from "./ModalPedido.js";
 
 //Permite crear un random de numero hex, dec, etc
 var crypto = require("crypto");
@@ -22,14 +23,27 @@ const MetodoPago = (props) => {
 
     //Usamos el useForm para la validacion del formulario:
 
-    const {register, formState: { errors }, handleSubmit} = useForm()
+    const {register, formState: { errors }, handleSubmit} = useForm();
 
     //Estado Hook para almacenar el idCliente:
-    const [datoId, setDatoId] = useState("")
+    const [datoId, setDatoId] = useState("");
 
     //Estado Hook para almacenar el idDomicilio:
-    const [datoIdDomicilio, setDatoIdDomicilio] = useState("")
+    const [datoIdDomicilio, setDatoIdDomicilio] = useState("");
 
+    //Estado Hook para almacenar la cantidad cocinero:
+    const [cantidadCocinero, setCantidadCocinero] = useState(0);
+
+    //Estado Hook para almacenar artManuf en la Cocina:
+    const [artManfCocinaTiempo, setArtManfCocinaTiempo] = useState(0);
+
+    //Estado Hook para almacena el calculo final del tiempo del pedido:
+    const [tiempo, setTiempo] = useState(0);
+
+    //Creo el estado de la variable modalCarrito:
+    const [modalPedido, setModalPedido] = useState();
+
+    //Estado Hook para los componentes botones y select:
     const [datos, setDatos] = useState({
 
         boton1: false,
@@ -41,9 +55,10 @@ const MetodoPago = (props) => {
 
     useEffect(() => {
 
+        //Se ejecuta el metodo obtener idCliente al cargar la pagina:
         getIdCliente();
 
-        
+        //Se ejecuta una esperda de 5 segundos:
         const timerDom = setTimeout(() => {
 
             //La espera permite que guarde los datos ya insertado:
@@ -51,10 +66,13 @@ const MetodoPago = (props) => {
             
         }, 5000);
 
-        
+        //Se llama metodo que obtiene la cantidad de cocineros consulta servidor:
+        artCocinaTiempo();
+
+        //Se llama metodo que obtiene la sumatoria de tiempo de art en cocina:
+        obtenerCocineros();
     
-    
-    },[datoId, datoIdDomicilio, datos])
+    },[datoId, tiempo, datoIdDomicilio, datos, cantidadCocinero, artManfCocinaTiempo, modalPedido]) //Importante pasar los estados de hooks al useEffect
 
 
 
@@ -75,13 +93,22 @@ const MetodoPago = (props) => {
         const enviarDatos = (datos, event) => {
 
                 
+
             alert(JSON.stringify(datos));
 
+            //Se llama metodo que gestiona el calculo final tiempo del pedido:
+            calculoFinalTiempoPedido();
 
-            //La espera permite que guarde los datos ya insertado:
-            getDatos();
+            const timerDom = setTimeout(() => {
+
+                 //Se ejecuta Metodo para guardar el pedido
+                 getDatos();
+                
+            }, 3000);
+
             
-        
+
+           
             
         }
 
@@ -106,6 +133,7 @@ const MetodoPago = (props) => {
 
                 console.log(response.data)
 
+                //Guardo la respuesta en el hooks:
                 setDatoIdDomicilio(response.data);
 
                 console.log("DATOIDDOMICILIO =>", datoIdDomicilio)
@@ -118,41 +146,12 @@ const MetodoPago = (props) => {
             })
 
 
-            /*
-
-            try{
-
-                console.log("EN DOMICILIO VALOR idCliente =>",  datoId);
-
-                let idCliente = "72";
-                let id = "";
-                
-                const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=idDomicilioXidCliente&idCliente="+idCliente);
-                const resJson = await response.json();
-
-                console.log("RESPONSE => ", response);
-
-                alert(JSON.stringify(resJson));
-
-                id = JSON.stringify(resJson);
-
-                await setDatoIdDomicilio(id);
-
-                console.log("ID OBTENIDO DOMICILIO =>", datoIdDomicilio)
-
-            }catch(error){
-
-                console.log("Error => ", error);
-            }    
-
-            */
-
-
         }    
 
         //Metodo que obtiene el idCliente a traves del mail buscando en la entidad cliente:
         const getIdCliente = () => {
 
+            //Obtenemos el email desde el usuario en localStorage:
             let email = JSON.parse(localStorage.getItem("usuario")).email;
             
 
@@ -171,6 +170,7 @@ const MetodoPago = (props) => {
 
                 console.log(response.data)
 
+                //Guardo la respuesta en el hooks:
                 setDatoId(response.data);
 
                 console.log("DATOID =>", datoId)
@@ -181,39 +181,6 @@ const MetodoPago = (props) => {
                 console.log("Error");
                 console.log(error);
             })
-
-
-            
-
-            /*
-
-            try{
-
-                let email = JSON.parse(localStorage.getItem("usuario")).email;
-                let id = "";
-                
-
-                const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=idxEmail&email="+email);
-                const resJson = await response.json();
-
-                console.log("RESPONSE => ", response);
-
-                alert(JSON.stringify(resJson));
-
-                id = JSON.stringify(resJson);
-
-                console.log("VALOR ID  => ", id);
-
-                await setDatoId(id);
-
-                console.log("ID OBTENIDO EN CLIENTE=>", datoId)
-
-            }catch(error){
-
-                console.log("Error => ", error);
-            }  
-            
-            */
 
 
         }    
@@ -237,12 +204,16 @@ const MetodoPago = (props) => {
 
         const getDatos = () => {
 
+
+            //Guardo el codigo generado Random:
             let codigo = passwordCodigo();
 
+            //Guardo el total del carrito guardado en el localStorage:
             let total = JSON.parse(localStorage.getItem("totalCarrito"));
          
             console.log("FORMA DE PAGO FINAL =>", datos.selectPago)
 
+            //Si se selecciona el boton retiro en local 10% descuento:
             if(datos.boton2 === true){
 
                 total = total * 0.90;
@@ -276,8 +247,7 @@ const MetodoPago = (props) => {
         
                 console.log(JSON.stringify(response))
 
-              
-                
+
         
             })
             .catch(error =>{
@@ -289,8 +259,10 @@ const MetodoPago = (props) => {
             const timerDom = setTimeout(() => {
 
                 guardarDetallePedido();
+                //Ejecuto el modal de aviso Pedido;
+                modalPedidos(); 
                 
-            }, 10000);
+            }, 7000);
         
         
         }
@@ -299,7 +271,7 @@ const MetodoPago = (props) => {
         const insertarDetallePedido = (articulo) => {
 
 
-            axios.get("http://localhost:8080/ProyectoFinalLaboIV//DetallePedidoServlet", {
+            axios.get("http://localhost:8080/ProyectoFinalLaboIV/DetallePedidoServlet", {
                 params: {
 
         
@@ -328,12 +300,14 @@ const MetodoPago = (props) => {
 
         const guardarDetallePedido = () => {
 
-
+            //Obtengo todos los articulos manufacturados del localStorage:
             let array = JSON.parse(localStorage.getItem("productos"));
 
             let ultimoId = 0;
 
-            axios.get("http://localhost:8080/ProyectoFinalLaboIV//PedidoServlet", {
+            //Obtengo el ultimo idPedido, que se cargo:
+
+            axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
                 params: {
 
         
@@ -348,10 +322,12 @@ const MetodoPago = (props) => {
 
                 console.log("VALOR ID DATA =>", response.data)
                 
+                //Guardo el ultimo idPedido:
                 ultimoId = response.data;
 
                 console.log("VALOR ULTIMOID =>", ultimoId)
 
+                //Obtengo los datos de cada articuloManufacturado y lo guardo en un objeto:
                 for(let i = 0; i < array.length; i++){
 
                     let articulo = {
@@ -363,6 +339,7 @@ const MetodoPago = (props) => {
     
                     }
     
+                    //Inserto el objeto en articuloDetallePedido:
                     insertarDetallePedido(articulo);
     
                 }
@@ -380,6 +357,207 @@ const MetodoPago = (props) => {
             
 
         }
+
+        //Metodo Calcular Sumatoria Articulos Carrito:
+
+        const calcularTiempoArtCarrito = () => {
+
+            //Obtengo todos los articulos manufacturados del localStorage:
+            let array = JSON.parse(localStorage.getItem("productos"));
+
+            let tiempoTotalCarrito = 0;
+
+            //Obtengo la sumatoria total de tiempo productos carrito:
+            for(let i = 0; i < array.length; i++){
+
+                
+                tiempoTotalCarrito += array[i].tiempoEstimado * array[i].cantidad;
+
+
+            }
+
+            console.log("TIEMPO TOTAL CARRITO => ", tiempoTotalCarrito);
+
+            return tiempoTotalCarrito;
+
+
+        }
+
+
+        //Obtener cantidad de cocineros:
+
+        const obtenerCocineros = () => {
+
+            let cocineros = 0;
+
+            axios.get("http://localhost:8080/ProyectoFinalLaboIV/ConfiguracionServlet", {
+                params: {
+
+                    action:'buscar',
+                    idConfiguracion:"1",
+        
+        
+                }
+              })
+            .then(response => {
+        
+                console.log(JSON.stringify(response))
+
+                //Guardo la cantidad de cocineros:
+                let config = response.data;
+                cocineros = config.cantidadCocineros;
+
+                console.log("CANTIDAD COCINEROS => ", cocineros)
+
+                //Seteo el estado de hook:
+                setCantidadCocinero(cocineros);
+                
+        
+            })
+            .catch(error =>{
+                console.log("Error");
+                console.log(error);
+            })
+
+            
+
+
+        }
+
+        //Metodo para obtener la sumatoria del tiempo de articulos en la cocina:
+
+        const artCocinaTiempo = () => {
+
+            let array = new Array();
+            let sumatoriaTiempo = 0;
+
+
+            axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxDatoPedidoServlet", {
+                params: {
+
+                    action:'listar',
+                
+        
+                }
+              })
+            .then(response => {
+        
+                console.log(JSON.stringify(response))
+
+                //Guardo el array de datos:
+                array = response.data;
+                
+                //Obtengo la sumatoria total de tiempo productos carrito:
+                 for(let i = 0; i < array.length; i++){
+
+                
+                    sumatoriaTiempo += array[i].tiempoEstimado * array[i].cantidad;
+
+
+                }
+
+                console.log("SUMATORIA TIEMPO => ", sumatoriaTiempo)
+
+                //Seteo el Hooks:
+                setArtManfCocinaTiempo(sumatoriaTiempo);
+                
+        
+            })
+            .catch(error =>{
+                console.log("Error");
+                console.log(error);
+            })
+
+        }
+
+        //Metodo Final Para calcular tiempo de preparacion Pedido:
+        const calculoFinalTiempoPedido = () => {
+
+            let totalCarrito = localStorage.getItem("totalCarrito");
+
+            let tipoEnvio = "Retiro en Local";
+
+            let sumatoriaFinal = 0;
+
+            let tiempoArt = calcularTiempoArtCarrito();
+                
+            console.log("TIEMPO ART CARRITO => ", tiempoArt);
+
+            console.log("TIEMPO ART COCINA => ", artManfCocinaTiempo);
+
+            console.log("CANTIDAD DE COCINEROS => ", cantidadCocinero);
+
+            sumatoriaFinal = tiempoArt + (artManfCocinaTiempo / cantidadCocinero);
+
+            console.log("SUMATORIA FINAL SIN ENVIO DOMICILIO => ", sumatoriaFinal)
+
+            //Si se selecciona el boton domicilio +10 minutos :
+            if(datos.boton1 === true){
+
+                sumatoriaFinal += 10;
+                
+
+            }
+
+            //Guardo la respuesta en el hooks:
+            setTiempo(sumatoriaFinal);
+
+            
+            console.log("TIEMPO FINAL CON ENVIO A DOMICILIO +10 M => ", sumatoriaFinal)
+
+
+            
+         
+        }   
+
+    
+        //Guardo en una constante el componente modalPedido y paso el props:
+        const modalPedidos = () => {
+
+                let totalCarrito = localStorage.getItem("totalCarrito");
+
+                let tipoEnvio = "Retiro en Local";
+
+                //Si se selecciona el boton domicilio +10 minutos :
+                if(datos.boton1 === true){
+
+                    tipoEnvio = "Delivery Domicilio";
+
+                }
+                
+                const modal = () => {
+                    
+                    return (
+                    
+                        //Al componente ModalPedido le asigamos propiedades que luego son accedidas por el componente para mostrar.
+                    <ModalPedido
+                        pedido = { true }
+                        tiempo = { tiempo }
+                        total = {totalCarrito }
+                        tipoEnvio =  { tipoEnvio }
+                    ></ModalPedido>
+
+                    );
+                }    
+                
+
+            //Guardo la constante en el estado:  
+            setModalPedido(modal);  
+
+        }
+
+        
+
+        //Funcion para convertir minutos en horas y minutos:
+
+        function convertMinutos(mins) {
+            let h = Math.floor(mins / 60);
+            let m = mins % 60;
+            h = h < 10 ? '0' + h : h;
+            m = m < 10 ? '0' + m : m;
+            return `${h}:${m}:"00"`;
+          }
+
 
 
         //Metodo para ejecutar el evento onclik boton1:
@@ -418,6 +596,8 @@ const MetodoPago = (props) => {
 
         <Fragment>
 
+            { modalPedido }
+
             <div>
 
             <br></br>
@@ -433,6 +613,15 @@ const MetodoPago = (props) => {
             <Alert.Heading className="titulo">CONFIRMACION DE METODO PAGO</Alert.Heading>
             
            
+            <br></br>
+            <br></br>
+
+            <Row>
+
+            <h4>Los retiros en local aplican un 10% de descuento sobre el total del pedido.</h4>
+
+            </Row>    
+
             <br></br>
             <br></br>
 
@@ -477,7 +666,7 @@ const MetodoPago = (props) => {
 
             <br></br>
             <br></br>
-            <br></br>
+            
 
             <Row>
 

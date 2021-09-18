@@ -15,6 +15,24 @@ public class Principal {
     
     public static void main(String[] args) {
         
+        
+        /*
+        
+        //TESTEO AUX_DATO_PEDIDO:
+        
+        ControladorAuxDatoPedido controlador = new ControladorAuxDatoPedido();
+        List<AuxDatoPedido> lista = controlador.buscarAllAuxDatoPedido();
+        
+        for(AuxDatoPedido item: lista){
+            
+            System.out.println(item.toString());
+            System.out.println("");
+            
+            
+        }
+        
+        */
+        
         /*
         
         //TESTEO AUX_INGREDIENTES:
@@ -296,8 +314,14 @@ public class Principal {
         
         //************************************************************
         
-    
+    /*
         //TESTEO PEDIDO:
+        
+        ControladorPedido controlador = new ControladorPedido();
+        
+        long id = controlador.buscarUltimoId();
+        
+        System.out.println("ULTIMO ID PEDIDO =>"+ id);
         
         /*
         

@@ -17,21 +17,27 @@ export default function Navigation() {
   const history = useHistory();
 
   function VerificarRolUsuario() {
-    if(usuario != null && usuario !== undefined) {
-      if(usuario["rol"] !== undefined && usuario["rol"] === "administrador"){
+
+    if(usuario !== null && usuario !== undefined) {
+
+      if(usuario["rol"] === "administrador"){
+        
           return <Nav.Link href="/adminPrincipal">ADMINISTRADOR</Nav.Link>;
         
-      }else if(usuario["rol"] !== undefined && usuario["rol"] === "cliente"){
+      }else if(usuario["rol"] === "cliente"){
 
         return <><Nav.Link href="/productos">PRODUCTOS</Nav.Link>
                 <Nav.Link href="/contacto">CONTACTO</Nav.Link>
                 <Nav.Link href="/carrito">CARRITO</Nav.Link></>;
 
-      }else if(usuario["rol"] !== undefined && usuario["rol"] === "cocinero"){
+      }else if(usuario["rol"] === "cocinero"){
 
         return <Nav.Link href="/cocineroPrincipal">PRINCIPAL</Nav.Link>;
 
-      }
+      }else if(usuario["rol"] === "cajero"){
+
+        return <Nav.Link href="/cajeroPrincipal">PRINCIPAL</Nav.Link>;
+      }  
 
       
     }else{
@@ -68,7 +74,7 @@ export default function Navigation() {
           ? <Nav.Link href="/loguin" className="log-btn">LOGIN</Nav.Link>
           :
           <GoogleLogout
-          clientId="190721094702-ifpj8nj34rqig6799jeqjrjolpanmssa.apps.googleusercontent.com"
+          clientId="190721094702-63klckib64q045jnncsicra1m0t498ui.apps.googleusercontent.com"
           onLogoutSuccess={logout}
           render={renderProps => (
             <Button onClick={() => {

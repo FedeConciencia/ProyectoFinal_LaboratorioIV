@@ -84,6 +84,9 @@ import Carrito from './components/Carrito/Carrito';
 import MetodoPago from './components/MetodoPago/MetodoPago';
 import PrincipalCocinero from './components/AdminCocinero/Principal';
 import ConfirmarPedido from './components/AdminCocinero/ConfirmarPedido';
+import PrincipalCajero from './components/AdminCajero/Principal';
+import TablaIngreso from './components/AdminCajero/TablaIngreso';
+import TablaEgreso from './components/AdminCajero/TablaEgreso';
 
 
 export default function App(){
@@ -101,6 +104,7 @@ export default function App(){
 
       <ContextoUsuario.Provider value={{usuario, setUsuario}}>
 
+        
         <Navigation />
         {/* Rutas de Componentes-Vistas Home-Contacto-AdminPrincipal-Loguin-RegistroCliente: */}
 
@@ -120,8 +124,13 @@ export default function App(){
 
         <Route exact path="/cocineroPrincipal" component={PrincipalCocinero} ></Route>
         <Route exact path="/confirmarPedido" component={ConfirmarPedido} ></Route>
-        
 
+        {/* Rutas de AdminCajero: */}
+
+        <Route exact path="/cajeroPrincipal" component={PrincipalCajero} ></Route>
+        <Route exact path="/tablaIngreso" component={TablaIngreso} ></Route>
+        <Route exact path="/tablaEgreso" component={TablaEgreso} ></Route>
+        
 
         {/* Rutas de Componentes-Vistas AdminCliente CRUD: */}
 

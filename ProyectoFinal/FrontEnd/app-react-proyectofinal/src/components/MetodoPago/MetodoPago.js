@@ -197,6 +197,8 @@ const MetodoPago = (props) => {
             //Llamo al metodo que obtiene el tiempoFinal:
             let time = calculoFinalTiempoPedido();
 
+            let tipoEnvio = 1;
+
             //Guardo el codigo generado Random:
             let codigo = passwordCodigo();
 
@@ -209,6 +211,7 @@ const MetodoPago = (props) => {
             if(datos.boton2 === true){
 
                 total = total * 0.90;
+                tipoEnvio = 2;
 
             }
 
@@ -222,7 +225,7 @@ const MetodoPago = (props) => {
                     codigo: codigo, 
                     horaEstimadaFin: time,
                     estadoPedido:"0",
-                    tipoEnvio: datos.selectPago,
+                    tipoEnvio: tipoEnvio,
                     total: JSON.stringify(total),
                     idCliente: datoId,
                     idDomicilio: datoIdDomicilio,

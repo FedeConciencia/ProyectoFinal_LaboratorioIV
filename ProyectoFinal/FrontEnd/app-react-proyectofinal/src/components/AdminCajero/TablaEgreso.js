@@ -13,7 +13,7 @@ import axios from "axios";
 
 
 //Se pasan los props (parametros):
-const ConfirmarPedido = (props) => {
+const TablaEgreso = (props) => {
 
 
  const [datos, setDatos] = useState([])
@@ -59,7 +59,7 @@ const ConfirmarPedido = (props) => {
         params: {
 
             action:'actualizarEstado',
-            estado: "2",
+            estado: "4",
             idPedido: id,
         
 
@@ -68,7 +68,7 @@ const ConfirmarPedido = (props) => {
     .then(response => {
 
         console.log(JSON.stringify(response))
-        
+        //window.location.reload()
         
 
     })
@@ -80,6 +80,40 @@ const ConfirmarPedido = (props) => {
 
   }
 
+
+  const cambiarEstadoDomicilio = (id) => {
+
+    axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
+        params: {
+
+            action:'actualizarEstado',
+            estado: "3",
+            idPedido: id,
+        
+
+        }
+      })
+    .then(response => {
+
+        console.log(JSON.stringify(response))
+        //window.location.reload()
+        
+
+    })
+    .catch(error =>{
+        console.log("Error");
+        console.log(error);
+    })
+
+
+  }
+
+  const crearFactura = (id) => {
+
+
+
+
+  }
 
 
    
@@ -113,7 +147,7 @@ const ConfirmarPedido = (props) => {
        
                         {datos.map((pedido, i)=> ( 
                             
-                        pedido.estadoPedido === 1 ?
+                        pedido.estadoPedido > 1 ?
 
                         
                         <tr id={pedido.idPedido} key={i}>
@@ -125,10 +159,19 @@ const ConfirmarPedido = (props) => {
                             <td>{pedido.tipoEnvio}</td>
                             <td>{pedido.total}</td>
                             <td>
+                            {  pedido.estadoPedido === 4 ?
 
+                            <Button onClick={ crearFactura(pedido.idPedido) }  className="boton" variant="danger" size="sm">FACTURAR</Button>
+                            :
+  
+                            pedido.tipoEnvio === 1 && pedido.estadoPedido === 2 ?
+                            <Button onClick={ cambiarEstadoDomicilio(pedido.idPedido) }  className="boton" variant="warning" size="sm">DELIVERY</Button>
+                            :
                             <Button onClick={ cambiarEstado(pedido.idPedido) }  className="boton" variant="primary" size="sm">CONFIRMAR</Button>
                             
-
+                            
+                            }
+                            
                             </td>
                            
 
@@ -148,7 +191,9 @@ const ConfirmarPedido = (props) => {
                 <br></br>
 
                 
-                <Button type="button" href={`/cocineroPrincipal`}  className="boton" variant="danger" size="lg">RETURN</Button> 
+                <Button type="button" href={`/cajeroPrincipal`}  className="boton" variant="danger" size="lg">RETURN</Button> 
+
+
 
                 <br></br>
                 <br></br>
@@ -163,4 +208,4 @@ const ConfirmarPedido = (props) => {
 }
 
 
-export default ConfirmarPedido;
+export default TablaEgreso;

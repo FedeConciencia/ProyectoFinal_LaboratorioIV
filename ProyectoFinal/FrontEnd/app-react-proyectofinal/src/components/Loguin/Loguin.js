@@ -78,11 +78,13 @@ const Loguin = (props) => {
     const responseGoogle = async (response) => {
         console.log("Respuesta google: ",response);
         //Tener en cuenta que estas variables pueden ser modificadas por google:
+        
         const nombre = response["Ws"]["Qe"]; 
         const tokenId = response["tokenId"];
         const email = response["profileObj"]["email"];
+        const rol = "cliente"
         console.log(email)
-        const usuarioActual = { nombre, tokenId, email }
+        const usuarioActual = { nombre, tokenId, email, rol }
         validarRegistroGmail(usuarioActual)
 
         //Constante para ejecutar espera de milisegundos;
@@ -93,6 +95,7 @@ const Loguin = (props) => {
         
         }, 10000);
 
+        
         
 
     }
@@ -348,7 +351,9 @@ const Loguin = (props) => {
             history.push("/cocineroPrincipal");
         }else if (usuarioActual["rol"] === "cliente"){
             history.push("/productos");
-        }
+        }else if (usuarioActual["rol"] === "cajero"){
+            history.push("/cajeroPrincipal");
+        }    
         window.location.reload();
     }
 
@@ -373,7 +378,7 @@ const Loguin = (props) => {
             <br></br>  
 
             <GoogleLogin
-                clientId="190721094702-ifpj8nj34rqig6799jeqjrjolpanmssa.apps.googleusercontent.com"
+                clientId="190721094702-63klckib64q045jnncsicra1m0t498ui.apps.googleusercontent.com"
                 render={renderProps => (
                     <Button onClick={renderProps.onClick} disabled={renderProps.disabled} variant="primary"  size="lg">LOGUIN GOOGLE ACCOUNT</Button>
                 )}

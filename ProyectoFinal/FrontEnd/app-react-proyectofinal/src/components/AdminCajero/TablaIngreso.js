@@ -13,7 +13,7 @@ import axios from "axios";
 
 
 //Se pasan los props (parametros):
-const ConfirmarPedido = (props) => {
+const TablaIngreso = (props) => {
 
 
  const [datos, setDatos] = useState([])
@@ -59,7 +59,7 @@ const ConfirmarPedido = (props) => {
         params: {
 
             action:'actualizarEstado',
-            estado: "2",
+            estado: "1",
             idPedido: id,
         
 
@@ -68,7 +68,7 @@ const ConfirmarPedido = (props) => {
     .then(response => {
 
         console.log(JSON.stringify(response))
-        
+       
         
 
     })
@@ -113,7 +113,7 @@ const ConfirmarPedido = (props) => {
        
                         {datos.map((pedido, i)=> ( 
                             
-                        pedido.estadoPedido === 1 ?
+                        pedido.estadoPedido === 0 ?
 
                         
                         <tr id={pedido.idPedido} key={i}>
@@ -148,7 +148,7 @@ const ConfirmarPedido = (props) => {
                 <br></br>
 
                 
-                <Button type="button" href={`/cocineroPrincipal`}  className="boton" variant="danger" size="lg">RETURN</Button> 
+                <Button type="button" href={`/cajeroPrincipal`}  className="boton" variant="danger" size="lg">RETURN</Button> 
 
                 <br></br>
                 <br></br>
@@ -163,4 +163,4 @@ const ConfirmarPedido = (props) => {
 }
 
 
-export default ConfirmarPedido;
+export default TablaIngreso;

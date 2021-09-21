@@ -15,7 +15,7 @@ import java.util.List;
 public class ControladorAuxDatoPedido {
     
     
-    //OBTENER ALL CLIENTES:
+    //OBTENER ALL AuxDato Pedido Sirve para en MetodoPago calcular TiempoArtCocina:
     public List<AuxDatoPedido> buscarAllAuxDatoPedido() {
 
         Connection conexion = null;
@@ -32,7 +32,7 @@ public class ControladorAuxDatoPedido {
             ps = conexion.prepareStatement("select a.tiempoEstimado as tiempoEstimado, a.denominacion as producto, \n" +
             "a.precioVenta as precioUnitario, d.cantidad as cantidad, d.subtotal as subTotal, d.idPedido as idPedido,\n" +
             "d.idArtManufacturado as idArtManuf, p.total as total from pedido as p INNER JOIN detalle_pedido as d ON p.idPedido = d.idPedido\n" +
-            "INNER JOIN articulo_manufacturado as a ON d.idArtManufacturado = a.idArticulo WHERE p.estadoPedido = 2");
+            "INNER JOIN articulo_manufacturado as a ON d.idArtManufacturado = a.idArticulo WHERE p.estadoPedido = 1");
 
             rs = ps.executeQuery();
 

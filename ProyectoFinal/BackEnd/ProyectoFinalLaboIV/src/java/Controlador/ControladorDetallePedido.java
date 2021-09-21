@@ -289,4 +289,63 @@ public class ControladorDetallePedido {
 
     }
     
+    
+    //OBTENER ALL DETALLE_PEDIDO:
+    public List<DetallePedido> buscarAllDetallePedidoId (long id) {
+
+        Connection conexion = null;
+        Conexion con = new Conexion();
+        DetallePedido detallePedido = null;
+        List<DetallePedido> listaDetallePedido = new ArrayList<DetallePedido>();
+        PreparedStatement ps = null;  //Este objeto permite guardar las consultas que hacemos a la BD.
+        ResultSet rs = null;  // este objeto lo usamos cuando obtenemos algo de la base de datos.
+
+        try {
+
+            conexion = con.getConnection(); //metodo getConnection, logueamos el usuario.
+
+            ps = conexion.prepareStatement("SELECT * FROM detalle_pedido Where idPedido = ?");
+            
+            ps.setLong(1, id); //pasamos el id parametro y se ingresa en el ? del query
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Long idDetallePedido = rs.getLong(1); //cada numero del parametro hace referencia al dato del campo que se desea obtener = idPersona
+                int cantidad = rs.getInt(2);
+                double subTotal = rs.getDouble(3);
+                Long idPedido = rs.getLong(4);
+                Long idArticuloManufacturado = rs.getLong(5);
+                
+
+                detallePedido = new DetallePedido(idDetallePedido, cantidad, subTotal, idPedido, idArticuloManufacturado);
+
+                listaDetallePedido.add(detallePedido);
+
+            }
+
+            conexion.close();
+
+        } catch (Exception ex) {
+
+            System.err.println("Error. " + ex);
+
+        } finally {
+
+            try {
+
+                ps.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+                System.err.println("Error. " + ex);
+            }
+
+        }
+
+        return listaDetallePedido; //devolvemos la lista de alumnos encontrado
+
+    }
+    
 }

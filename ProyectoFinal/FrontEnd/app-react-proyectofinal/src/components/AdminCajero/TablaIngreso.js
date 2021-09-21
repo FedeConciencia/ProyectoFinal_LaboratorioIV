@@ -5,6 +5,7 @@ import Table from 'react-bootstrap/Table';
 import '../../assets/css/form.css';
 import moment from 'moment';
 import axios from "axios";
+import { useHistory } from 'react-router-dom';
 
 
 //Se descarga libreria moment: npm install moment --save, para el manejo de Date y LocalDate: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
@@ -17,6 +18,9 @@ const TablaIngreso = (props) => {
 
 
  const [datos, setDatos] = useState([])
+
+ //Redireccion de la Pagina:
+ let history = useHistory();
 
  
   //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
@@ -53,7 +57,7 @@ const TablaIngreso = (props) => {
       
   }
 
-  const cambiarEstado = (id) => {
+  const cambiarEstado = (id, e) => {
 
     axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
         params: {
@@ -68,8 +72,10 @@ const TablaIngreso = (props) => {
     .then(response => {
 
         console.log(JSON.stringify(response))
-       
-        
+
+         //Redireccionar a la pagina form cliente:
+         history.push('/tablaIngreso');
+
 
     })
     .catch(error =>{
@@ -77,6 +83,7 @@ const TablaIngreso = (props) => {
         console.log(error);
     })
 
+    
 
   }
 
@@ -121,12 +128,26 @@ const TablaIngreso = (props) => {
                             <td>{pedido.idPedido}</td>
                             <td>{pedido.codigo}</td>
                             <td>{moment(pedido.horaEstimadaFin).add(5,'M').format('HH:MM:SS')}</td>
-                            <td>{pedido.estadoPedido}</td>
-                            <td>{pedido.tipoEnvio}</td>
+                            <td>
+                              
+                              {pedido.estadoPedido === 0 ?
+                              <span>POR CONFIRMAR</span>
+                              :
+                              <span></span>
+                            
+                            }</td>
+                            <td>
+                              {pedido.tipoEnvio === 1 ?
+                            
+                              <span>DOMICILIO</span>
+                              :
+                              <span>RETIRO LOCAL</span>
+                            
+                            }</td>
                             <td>{pedido.total}</td>
                             <td>
 
-                            <Button onClick={ cambiarEstado(pedido.idPedido) }  className="boton" variant="primary" size="sm">CONFIRMAR</Button>
+                            <Button onClick={ (e) => cambiarEstado(pedido.idPedido, e) }  className="boton" variant="primary" size="sm">CONFIRMAR</Button>
                             
 
                             </td>

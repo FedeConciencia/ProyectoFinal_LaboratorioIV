@@ -115,7 +115,15 @@ public class DetallePedidoServlet extends HttpServlet {
                     String detallePedidoJson = gsonBuilder.toJson(listaDetallePedido);
                     respuestaServer = detallePedidoJson;
                     
-                }
+                } else if (request.getParameter("action").equals("listarXId")){
+                    
+                    ControladorDetallePedido controladorDetallePedido = new ControladorDetallePedido();
+                    List<DetallePedido> listaDetallePedido = controladorDetallePedido.buscarAllDetallePedidoId(Long.parseLong(request.getParameter("idPedido")));
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String detallePedidoJson = gsonBuilder.toJson(listaDetallePedido);
+                    respuestaServer = detallePedidoJson;
+                    
+                }    
                 
                 //Las Tablas Uniones no tienen eliminacion Logica ya que las poseeen las entidades participes.
             

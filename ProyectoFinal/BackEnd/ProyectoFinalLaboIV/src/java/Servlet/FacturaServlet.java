@@ -134,7 +134,23 @@ public class FacturaServlet extends HttpServlet {
                     String facturaJson = gsonBuilder.toJson(listaFactura);
                     respuestaServer = facturaJson;
                     
-                }
+                }else if(request.getParameter("action").equals("buscarUltimoId")){
+                    
+                    ControladorFactura controladorFactura = new ControladorFactura();
+                    long idFactura = controladorFactura.buscarUltimoId();
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String facturaJson = gsonBuilder.toJson(idFactura);
+                    respuestaServer = facturaJson;
+                    
+                }else if(request.getParameter("action").equals("proximoId")){
+                    
+                    ControladorFactura controladorFactura = new ControladorFactura();    
+                    long idFactura = controladorFactura.proximoId(); 
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String facturaJson = gsonBuilder.toJson(idFactura);
+                    respuestaServer = facturaJson;
+                    
+                }    
             
             }
             out.write(respuestaServer);

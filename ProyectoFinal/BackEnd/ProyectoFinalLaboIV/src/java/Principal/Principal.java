@@ -15,7 +15,7 @@ public class Principal {
     
     public static void main(String[] args) {
         
-        
+        /*
         //TESTEO AUX_DATO_PEDIDO:
         
         ControladorPedido controlador = new ControladorPedido();
@@ -352,17 +352,17 @@ public class Principal {
         
         */
         
-        /*
+        
         
         //Metodo BuscaOne Pedido (Funciona Ok):
         
         ControladorPedido controlador = new ControladorPedido();
         
-        Pedido pedido = controlador.buscarOnePedido(1L);
+        Pedido pedido = controlador.buscarOnePedido(52L);
         
         System.out.println(pedido.toString());
 
-        */
+        
         
         /*
         

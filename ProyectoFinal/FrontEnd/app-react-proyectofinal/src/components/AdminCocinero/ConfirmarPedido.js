@@ -53,7 +53,7 @@ const ConfirmarPedido = (props) => {
       
   }
 
-  const cambiarEstado = (id) => {
+  const cambiarEstado = (id, e) => {
 
     axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
         params: {
@@ -121,12 +121,26 @@ const ConfirmarPedido = (props) => {
                             <td>{pedido.idPedido}</td>
                             <td>{pedido.codigo}</td>
                             <td>{moment(pedido.horaEstimadaFin).add(5,'M').format('HH:MM:SS')}</td>
-                            <td>{pedido.estadoPedido}</td>
-                            <td>{pedido.tipoEnvio}</td>
+                            <td>{pedido.estadoPedido  === 1 ?
+
+                              <span>COCINA</span>
+                              :
+                              <span></span>
+                            
+                            
+                            }</td>
+                            <td>
+                              {pedido.tipoEnvio === 1 ?
+                            
+                              <span>DOMICILIO</span>
+                              :
+                              <span>RETIRO LOCAL</span>
+                            
+                            }</td>
                             <td>{pedido.total}</td>
                             <td>
 
-                            <Button onClick={ cambiarEstado(pedido.idPedido) }  className="boton" variant="primary" size="sm">CONFIRMAR</Button>
+                            <Button onClick={ (e) => cambiarEstado(pedido.idPedido, e) }  className="boton" variant="primary" size="sm">CONFIRMAR</Button>
                             
 
                             </td>

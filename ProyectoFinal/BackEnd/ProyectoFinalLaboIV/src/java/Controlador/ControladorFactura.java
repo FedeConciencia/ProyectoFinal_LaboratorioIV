@@ -359,4 +359,109 @@ public class ControladorFactura {
     
     
     
+    //METODO PARA OBTENER EL ULTIMO IDFACTURA:
+    
+     public long buscarUltimoId() {
+
+        Connection conexion = null;
+        Conexion con = new Conexion();
+        long idFactura = 0;
+        PreparedStatement ps = null;  //Este objeto permite guardar las consultas que hacemos a la BD.
+        ResultSet rs = null;  // este objeto lo usamos cuando obtenemos algo de la base de datos.
+
+        try {
+
+            conexion = con.getConnection(); //metodo getConnection, logueamos el usuario.
+
+            ps = conexion.prepareStatement("SELECT MAX(idFactura) FROM factura");
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                idFactura = rs.getLong(1); //cada numero del parametro hace referencia al dato del campo que se desea obtener = idPersona
+                //idCliente++; //Incrementa en 1 el ultimo idCliente. Obteniendo el siguiente
+            }
+
+            conexion.close();
+
+        } catch (Exception ex) {
+
+            System.err.println("Error. " + ex);
+
+        } finally {
+
+            try {
+
+                ps.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+                System.err.println("Error. " + ex);
+            }
+
+        }
+
+        return idFactura; //devolvemos el ultimo id
+
+    }
+     
+  
+     
+     //METODO PARA OBTENER EL PROXIMO ID A GENERARSE EN FACTURA:
+    
+     public long proximoId() {
+
+        Connection conexion = null;
+        Conexion con = new Conexion();
+        long idFactura = 0;
+        PreparedStatement ps = null;  //Este objeto permite guardar las consultas que hacemos a la BD.
+        PreparedStatement ps1 = null;  //Este objeto permite guardar las consultas que hacemos a la BD.
+        ResultSet rs = null;  // este objeto lo usamos cuando obtenemos algo de la base de datos.
+
+        try {
+
+            conexion = con.getConnection(); //metodo getConnection, logueamos el usuario.
+            
+            //Debemos ejecutar esta primer consulta para posteriormente ejecutar el segundo query:
+            
+            ps1 = conexion.prepareStatement("SET @@SESSION.information_schema_stats_expiry = 0");
+            
+            //Ejecutamos el comando y mandamos los datos al sistema:
+            int resultado = ps1.executeUpdate();
+            
+            ps = conexion.prepareStatement("SELECT `AUTO_INCREMENT` FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'proyectofinal' AND TABLE_NAME = 'factura'");
+                                           
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                idFactura = rs.getLong(1); //cada numero del parametro hace referencia al dato del campo que se desea obtener = idPersona
+                
+            }
+
+            conexion.close();
+
+        } catch (Exception ex) {
+
+            System.err.println("Error. " + ex);
+
+        } finally {
+
+            try {
+
+                ps.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+                System.err.println("Error. " + ex);
+            }
+
+        }
+
+        return idFactura; //devolvemos el ultimo id
+
+    }
+    
+    
 }

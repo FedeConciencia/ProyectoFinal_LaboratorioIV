@@ -207,6 +207,7 @@ const MetodoPago = (props) => {
          
             console.log("FORMA DE PAGO FINAL =>", datos.selectPago)
 
+
             //Si se selecciona el boton retiro en local 10% descuento:
             if(datos.boton2 === true){
 
@@ -214,7 +215,6 @@ const MetodoPago = (props) => {
                 tipoEnvio = 2;
 
             }
-
 
 
             axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {

@@ -3,6 +3,7 @@ package Controlador;
 
 
 import Conexion.Conexion;
+import Ecooder.Encooder;
 import Modelo.Usuario;
 import java.sql.Connection;
 import java.sql.Date;
@@ -206,8 +207,12 @@ public class ControladorUsuario {
                 LocalDate fechaBaja = (rs.getDate(6)).toLocalDate();
                 String estado = rs.getString(7);
                 Long idCliente = rs.getLong(8);
+                
+                //Desencriptar contraseña:
+                Encooder encod = new Encooder();
+                String contraseñaDesencriptada = encod.deecnode(contraseña);
 
-                usuario = new Usuario(idUsuario, user, contraseña, rol ,  idCliente, fechaAlta, fechaBaja, estado);
+                usuario = new Usuario(idUsuario, user, contraseñaDesencriptada, rol ,  idCliente, fechaAlta, fechaBaja, estado);
 
                 System.out.println("El Registro fue encontrado con exito.");
                 //JOptionPane.showMessageDialog(null, "El Registro fue encontrado con exito.");

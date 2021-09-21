@@ -461,6 +461,7 @@ const ActualizarPedido = (props) => {
                             placeholder="Ingrese el Estado Pedido"
                             className="form-control"
                             min="0"
+                            max="4"
                             {...register("estadoPedido", {
                                 required:{
                                     value: true,

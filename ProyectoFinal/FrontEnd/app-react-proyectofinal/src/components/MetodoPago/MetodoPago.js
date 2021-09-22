@@ -106,7 +106,7 @@ const MetodoPago = (props) => {
         const getIdDomicilio = async () => {
 
 
-            console.log("DOMICILIO VALOR DATOID =>", datoId);
+            console.log("GETDOMICILIO IDCLIENTE =>", datoId);
 
             axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
                 params: {
@@ -119,14 +119,13 @@ const MetodoPago = (props) => {
               })
             .then(response => {
         
-                console.log(JSON.stringify(response))
-
+               
                 console.log(response.data)
 
                 //Guardo la respuesta en el hooks:
                 setDatoIdDomicilio(response.data);
 
-                console.log("DATOIDDOMICILIO =>", datoIdDomicilio)
+                console.log("ID DOMICILIO =>", datoIdDomicilio)
                 
         
             })
@@ -141,8 +140,10 @@ const MetodoPago = (props) => {
         //Metodo que obtiene el idCliente a traves del mail buscando en la entidad cliente:
         const getIdCliente = () => {
 
-            //Obtenemos el email desde el usuario en localStorage:
-            let email = JSON.parse(localStorage.getItem("usuario")).email;
+            //Obtenemos el email desde el usuario en localStorage, tener en cuenta el valor en localStorage:
+            let email = JSON.parse(localStorage.getItem("usuario")).usuario;
+
+            console.log(email);
             
 
             axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
@@ -156,14 +157,13 @@ const MetodoPago = (props) => {
               })
             .then(response => {
         
-                console.log(JSON.stringify(response))
-
+    
                 console.log(response.data)
 
                 //Guardo la respuesta en el hooks:
                 setDatoId(response.data);
 
-                console.log("DATOID =>", datoId)
+                console.log("DATO IDCLIENTE =>", datoId)
                 
         
             })
@@ -240,9 +240,7 @@ const MetodoPago = (props) => {
               })
             .then(response => {
         
-                console.log(JSON.stringify(response))
-
-
+                console.log(response.data)
         
             })
             .catch(error =>{
@@ -283,7 +281,7 @@ const MetodoPago = (props) => {
               })
             .then(response => {
         
-                console.log(JSON.stringify(response))
+                console.log(response.data)
                 
         
             })
@@ -315,9 +313,9 @@ const MetodoPago = (props) => {
               })
             .then(response => {
         
-                console.log(JSON.stringify(response))
+                console.log(response.data)
 
-                console.log("VALOR ID DATA =>", response.data)
+                console.log("ID PEDIDO =>", response.data)
                 
                 //Guardo el ultimo idPedido:
                 ultimoId = response.data;
@@ -347,11 +345,7 @@ const MetodoPago = (props) => {
                 console.log("Error");
                 console.log(error);
             })
-
-            console.log("VALOR ULTIMOID GUARDAR =>", ultimoId)
-            
-
-            
+  
 
         }
 
@@ -398,7 +392,7 @@ const MetodoPago = (props) => {
               })
             .then(response => {
         
-                console.log(JSON.stringify(response))
+                console.log(response.data)
 
                 //Guardo la cantidad de cocineros:
                 let config = response.data;
@@ -439,7 +433,7 @@ const MetodoPago = (props) => {
               })
             .then(response => {
         
-                console.log(JSON.stringify(response))
+                console.log(response.data)
 
                 //Guardo el array de datos:
                 array = response.data;
@@ -540,6 +534,7 @@ const MetodoPago = (props) => {
                     <ModalPedido
                         pedido = { true }
                         tiempo = { time }
+                        idCliente = { datoId }
                         total = { totalCarrito }
                         tipoEnvio =  { tipoEnvio }
                         formaPago = { formaPago }

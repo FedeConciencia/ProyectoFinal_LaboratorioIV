@@ -17,6 +17,7 @@ const ConfirmarPedido = (props) => {
 
 
  const [datos, setDatos] = useState([])
+ 
 
  
   //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:

@@ -12,12 +12,14 @@ import '../../assets/css/registrar.css';
 import moment from 'moment';
 import {useHistory} from "react-router-dom";
 
+var crypto = require("crypto");
+
 //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
 //Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
 
 //Paso el props por parametro a la funcion principal del componente para obtener los parametros const idDinosaurio = props.match.params.id
 
-const RegistroCliente = (props) => {
+const RegistroClienteGoogle = (props) => {
 
     const history = useHistory();
 
@@ -58,6 +60,18 @@ const RegistroCliente = (props) => {
          })
  
    }
+
+   //Metodo que permite crear un Password Hexadecimal de 14 bytes Hexadecimal:
+    const passwordGmail = () => {
+
+        
+        var id = crypto.randomBytes(7).toString('hex');
+
+        console.log("PASSWORD GMAIL => ", id)
+
+        return id
+
+    }
  
    //Metodo que se ejecuta en el evento onSubmit desde el formulario:
  
@@ -92,17 +106,19 @@ const RegistroCliente = (props) => {
    //Metodo que obtiene los datos e inserta el Cliente:
  
    const getCliente = (datos) => {
+
+     let usuario = JSON.parse(localStorage.getItem("usuario"));
  
      axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
          params: {
  
              action:'insertar',
-             nombre: datos.nombre,
-             apellido: datos.apellido,
+             nombre: usuario.nombre,
+             apellido: usuario.apellido,
              dni: datos.dni,
              fechaNacimiento: datos.fechaNacimiento,
              telefono: datos.telefono,
-             email: datos.email,
+             email: usuario.usuario,
              fechaAlta: moment().format('YYYY-MM-DD'), 
              fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
              estado: "activo"
@@ -114,7 +130,7 @@ const RegistroCliente = (props) => {
        })
      .then(response => {
  
-         console.log(JSON.stringify(response))
+         console.log(response)
          
  
      })
@@ -131,6 +147,12 @@ const RegistroCliente = (props) => {
 
    const getUsuario = async (datos) => {
 
+    let usuario = JSON.parse(localStorage.getItem("usuario"));
+
+      //contraseña hexadecimal encriptada para usuarios Google.
+      let password = passwordGmail()
+      console.log("PASSWORD GMAIL => ", password)
+
 
     //Obtengo el ultimo idCliente, con una consulta al metodo del backEnd:
     const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=proximoId");
@@ -141,8 +163,8 @@ const RegistroCliente = (props) => {
         params: {
 
             action:'insertar',
-            usuario: datos.usuario,
-            contrasena: datos.contrasena,
+            usuario: usuario.usuario,
+            contrasena: password,
             rol: "cliente",
             idCliente: idCliente,
             fechaAlta: moment().format('YYYY-MM-DD'), 
@@ -157,7 +179,7 @@ const RegistroCliente = (props) => {
       })
     .then(response => {
 
-        console.log(JSON.stringify(response))
+        console.log(response)
         
 
     })
@@ -196,11 +218,9 @@ const RegistroCliente = (props) => {
       })
     .then(response => {
 
-        console.log(JSON.stringify(response))
-
-        history.push("/loguin")
+        console.log(response)
         
-
+        history.push("/loguin")
     })
     .catch(error =>{
         console.log("Error");
@@ -247,77 +267,9 @@ const RegistroCliente = (props) => {
        
    }
 
-   //Validacion personalizada que valida que el usuario ingresado no deba existir o estar activo:
-
-  const validarUsuario = async (usuario) => {
-
-    try{
-
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/UsuarioServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaUsuario =   resJson;
-      let validar = true;
-
-      //alert(JSON.stringify(listaCliente))
-
-      
-      for(let i = 0; i < listaUsuario.length; i++){
-
-             //Se verifica si el usuario existe y esta inactivo === true se puede ingresar (Eliminado Logico):
-	        //Si el usuario existe y el estado es activo === false, no se puede crear el usuario	
-
-            if((listaUsuario[i].usuario).toString() === (usuario).toString() && ((listaUsuario[i].estado).toString() === "inactivo")){
-
-                return validar = true;
-                break;
-
-
-            }else if((listaUsuario[i].usuario).toString() === (usuario).toString() && ((listaUsuario[i].estado).toString() === "activo")){
-
-                return validar = false;
-                break;
-
-            }
-        
-
-      }
-
-      return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
-    }
-      
-  }
+   
 
   
-
-  //Metodo que permite recopiar el email ingresado en email al usuario que no permite modificar el input:
-  const confirmEmail = (email) => {
-
-    let validar = false;
-
-    console.log("DATOS =>", (email).toString())
-
-    if((email).toString() !== ""){
-
-        console.log("INGRESO =>")
-        setValue('usuario', email)
-        validar = true;
-        
-        
-    }
-
-    console.log("INGRESO =>", validar)
-    return validar;
-    
-  }
-
-  
- 
  
    return (
    
@@ -335,7 +287,7 @@ const RegistroCliente = (props) => {
              <br></br>
              <br></br>
  
-             <Alert.Heading className="titulo">FORMULARIO REGISTRO CLIENTE</Alert.Heading>
+             <Alert.Heading className="titulo">FORMULARIO REGISTRO CLIENTE GOOGLE</Alert.Heading>
              
             
              <br></br>
@@ -347,98 +299,8 @@ const RegistroCliente = (props) => {
            
              <Form onSubmit={handleSubmit(enviarDatos)}>
  
-             <Row>
- 
- 
-                 <Col className="col-md-3">
-                    <br></br>
-                     <label className="my-2">Nombre: </label>
- 
-                 
-                 </Col>
- 
-                 <Col>
-                    <br></br>
-                     <input 
-                         type="text"
-                         name="nombre"
-                         onChange={handleInputChange}
-                         placeholder="Ingrese el Nombre"
-                         className="form-control my-2"
-                         {...register("nombre", { 
- 
-                             required:{
-                                 value: true,
-                                 message: 'Campo Obligatorio' 
-                             },
- 
-                         })}   
- 
-                     >
-                     </input>
-                 
-                 
-                 </Col>
- 
-                 <Col className="col-md-3">
- 
-                        <br></br>
-                         <span className="text-danger text-small d-block mb-2">
-                         {errors.nombre && errors.nombre.message}
-                         </span>
- 
-                 </Col>
- 
- 
- 
-             </Row>
- 
-             <Row>
- 
- 
-                 <Col className="col-md-3">
-                     <br></br>
-                     <label>Apellido: </label>
- 
-                 
-                 </Col>
- 
-                 <Col>
-                     <br></br>
-                     <input 
-                         type="text"
-                         name="apellido"
-                         onChange={handleInputChange}
-                         placeholder="Ingrese el Apellido"
-                         className="form-control"
-                         {...register("apellido", { 
- 
-                             required:{
-                                 value: true,
-                                 message: 'Campo Obligatorio' 
-                             },
- 
-                         })}      
-                     >
-                     </input>
-                 
-                 
-                 </Col>
- 
-                 <Col className="col-md-3">
- 
-                         <br></br>
-                         <span className="text-danger text-small d-block mb-2">
-                         {errors.apellido && errors.apellido.message}
-                         </span>
- 
-                 </Col>
- 
- 
- 
-             </Row>
- 
- 
+             
+
              <Row>
  
  
@@ -590,185 +452,11 @@ const RegistroCliente = (props) => {
  
              </Row>
  
-             <Row>
- 
- 
-                 <Col className="col-md-3">
-                     <br></br>
-                     <label>Usuario / Email: </label>
- 
-                 
-                 </Col>
- 
-                 <Col>
-                     <br></br>
-                     <input 
-                         type="email"
-                         name="email"
-                         onChange={handleInputChange}
-                         placeholder="Ingrese el usuario/email"
-                         className="form-control"
-                         {...register("email", { 
- 
-                             required:{
-                                 value: true,
-                                 message: 'Campo Obligatorio' 
-                             },
-
-                             validate:{
-
-                                validacion1:validarUsuario,
-                                validacion2: confirmEmail, //Permite agregar el setvalue a usuario
-                                
-
-                            }
-
-                             
- 
-                         })}      
-                     >
-                     </input>
-                 
-                 
-                 </Col>
- 
- 
-                 <Col className="col-md-3">
- 
-                         <br></br>
-                         <span className="text-danger text-small d-block mb-2">
-                         {errors.email && errors.email.message}
-                         </span>
-
-                         <span className="text-danger text-small d-block mb-2">
-                            {
-                                errors.email && errors.email.type === "validacion1" && (
-                                    <div className="error">El usuario ya existe</div>
-                                )
-                            }
-                        </span>
-
-                        <span className="text-danger text-small d-block mb-2">
-                            {
-                                errors.email && errors.email.type === "validacion2" && (
-                                    <div className="error"></div>
-                                )
-                            }
-                        </span>
- 
-                 </Col>
- 
- 
- 
-             </Row>
+            
 
              <br></br>
              <br></br>
 
-             <Alert.Heading className="titulo">DATOS DE CUENTA</Alert.Heading>  
-
-             <br></br>
-             
-
-             <Row>
-
-
-                <Col className="col-md-3">
-                    <br></br>
-                    <label className="my-2">Confirm Usuario / Email: </label>
-
-
-                </Col>
-
-                <Col>
-                    <br></br>
-                    <input 
-                        type="email"
-                        name="usuario"
-                        onChange={handleInputChange}
-                        placeholder= "Confirmacion de email ingresado"
-                        readOnly={true}
-                        className="form-control my-2"
-                        {...register("usuario", { 
-
-                           
-                        })}   
-
-                    >
-                    </input>
-
-
-                </Col>
-
-                <Col className="col-md-3">
-
-                        <br></br>   
-                        <span className="text-danger text-small d-block mb-2">
-                        {errors.usuario && errors.usuario.message}
-                        </span>
-
-                       
-                       
-                </Col>
-
-
-
-            </Row>
-
-            <Row>
-
-
-                <Col className="col-md-3">
-                    <br></br>
-                    <label>Contraseña: </label>
-
-                
-                </Col>
-
-                <Col>
-                    <br></br>
-                    <input 
-                        type="password"
-                        name="contrasena"
-                        onChange={handleInputChange}
-                        placeholder="Ingrese la Contraseña"
-                        className="form-control"
-                        {...register("contrasena", { 
-
-                            required:{
-                                value: true,
-                                message: 'Campo Obligatorio' 
-                            },
-
-                            pattern: {
-                                    
-                                //Se debe agregar /^+expression regular + $/:
-                                value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-                                message: "Invalid format PassWord"
-                            },
-
-                        })}      
-                    >
-                    </input>
-                
-                
-                </Col>
-
-                <Col className="col-md-3">
-
-                        <br></br>
-                        <span className="text-danger text-small d-block mb-2">
-                        {errors.contrasena && errors.contrasena.message}
-                        </span>
-
-                </Col>
-
-
-
-            </Row>
-
-            <br></br>
-             <br></br>
 
              <Alert.Heading className="titulo">DATOS DE DOMICILIO</Alert.Heading>  
 
@@ -945,4 +633,4 @@ const RegistroCliente = (props) => {
 
 };
 
-export default RegistroCliente;
+export default RegistroClienteGoogle;

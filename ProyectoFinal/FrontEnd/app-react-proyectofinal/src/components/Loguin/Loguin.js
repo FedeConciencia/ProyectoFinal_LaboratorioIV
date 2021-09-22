@@ -13,6 +13,7 @@ import moment from 'moment';
 import GoogleLogin from 'react-google-login';
 import { ContextoUsuario } from "../ContextoUsuario";
 
+
 var crypto = require("crypto");
 
 //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
@@ -79,24 +80,20 @@ const Loguin = (props) => {
         console.log("Respuesta google: ",response);
         //Tener en cuenta que estas variables pueden ser modificadas por google:
         
-        const nombre = response["Ws"]["Qe"]; 
+        const nombre = response["profileObj"]["givenName"]; 
+        const apellido = response["profileObj"]["familyName"];
         const tokenId = response["tokenId"];
-        const email = response["profileObj"]["email"];
+        const usuario = response["profileObj"]["email"];
         const rol = "cliente"
-        console.log(email)
-        const usuarioActual = { nombre, tokenId, email, rol }
+
+        const usuarioActual = { nombre, apellido, tokenId, usuario, rol }
+
+        localStorage.setItem('usuario', JSON.stringify(usuarioActual));
+
+        
         validarRegistroGmail(usuarioActual)
+           
 
-        //Constante para ejecutar espera de milisegundos;
-
-        const timer = setTimeout(() => {
-
-            actualizarEstado(usuarioActual)
-        
-        }, 10000);
-
-        
-        
 
     }
 
@@ -117,7 +114,7 @@ const Loguin = (props) => {
         for(let i = 0; i < resJsonCliente.length; i++){
 
             
-            if(resJsonCliente[i].email === usuarioActual.email){
+            if(resJsonCliente[i].email === usuarioActual.usuario){
 
                 validarMail = true;
                 break;
@@ -130,123 +127,24 @@ const Loguin = (props) => {
         if(validarMail === false){
 
             console.log("INGRESO VALIDAR")
-            getCliente(usuarioActual)
-            //Constante para ejecutar espera de milisegundos;
-            const timer = setTimeout(() => {
 
-                //La espera permite que guarde el idCliente ya insertado:
-                getUsuario(usuarioActual)
-            
-            }, 5000);
+            history.push("/registroClienteGoogle")
             
             
         
+        }else {
+
+            
+
+            actualizarEstado(usuarioActual)
+            
+
+
         }
 
 
     }
 
-
-    //Metodo para crear un cliente con cuenta de Google:
-
-    const getCliente = async (usuarioActual) => {
-
-
-        axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
-            params: {
-    
-                action:'insertar',
-                nombre: usuarioActual.nombre,
-                apellido: "null",
-                dni: "null",
-                fechaNacimiento: moment("1900-01-01").format('YYYY-MM-DD'),
-                telefono: "null",
-                email: usuarioActual.email,
-                fechaAlta: moment().format('YYYY-MM-DD'), 
-                fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-                estado: "activo"
-    
-                //fechaAlta, fechaBaja, estado se crean x defecto:
-    
-    
-            }
-          })
-        .then(response => {
-    
-            console.log(JSON.stringify(response))
-            
-            
-    
-        })
-        .catch(error =>{
-            console.log("Error");
-            console.log(error);
-        })
-
-
-
-
-    }
-
-
-    //Metodo que permite crear un Password Hexadecimal de 14 bytes Hexadecimal:
-    const passwordGmail = () => {
-
-        
-        var id = crypto.randomBytes(7).toString('hex');
-
-        console.log("PASSWORD GMAIL => ", id)
-
-        return id
-
-    }
-
-    //Metodo para crear un usuario con cuenta de Google:
-
-    const getUsuario = async (usuarioActual) => {
-
-        //contraseña hexadecimal encriptada para usuarios Google.
-        let password = passwordGmail()
-        console.log("PASSWORD GMAIL => ", password)
-
-        //Obtengo el ultimo idCliente, con una consulta al metodo del backEnd:
-        const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=ultimoId");
-        let idCliente = await response.json();
-        console.log("ID CLIENTE => ", idCliente);
-
-
-        axios.get("http://localhost:8080/ProyectoFinalLaboIV/UsuarioServlet", {
-        params: {
-
-        action:'insertar',
-        usuario: usuarioActual.email,
-        contrasena: password,  
-        rol: "cliente",
-        idCliente: idCliente,
-        fechaAlta: moment().format('YYYY-MM-DD'), 
-        fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-        estado: "activo"
-
-        //fechaAlta, fechaBaja, estado, rol se crean x defecto:
-        //idCliente se obtiene ejecutando el metodo desde el backend.
-
-
-        }
-        })
-        .then(response => {
-
-            console.log(JSON.stringify(response))
-            
-
-        })
-        .catch(error =>{
-            console.log("Error");
-            console.log(error);
-        })
-
-
-
-    }
 
 
     //Metodo async-await que verifica en la BD que el usuario y contraseña ingresado existan esten activo y este asociado a un cliente activo.

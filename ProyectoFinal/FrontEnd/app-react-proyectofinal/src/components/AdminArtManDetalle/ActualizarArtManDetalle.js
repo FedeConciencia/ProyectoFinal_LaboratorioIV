@@ -1,7 +1,5 @@
-import React, {Component, useState, useEffect, Fragment} from 'react';
-import {useParams} from 'react-router-dom';
+import React, { useState, useEffect, Fragment} from 'react';
 import {useForm} from 'react-hook-form';
-import Navigation from "../Navigation";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from "react-bootstrap/Col";
@@ -9,7 +7,6 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from "react-bootstrap/Alert";
-import moment from 'moment';
 
 //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
 //Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
@@ -161,31 +158,27 @@ const ActualizarArtManDetalle = (props) => {
 
     try{
 
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaInsumo =   resJson;
-      let validar = false;
+        const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet?action=listar");
+        const resJson = await response.json();
+        
+        const listaInsumo =   resJson;
+        let validar = false;
 
-      //alert(JSON.stringify(listaCliente))
+        //alert(JSON.stringify(listaCliente))
 
-      
-      for(let i = 0; i < listaInsumo.length; i++){
+        
+        for(let i = 0; i < listaInsumo.length; i++){
 
             //Se verifica que el idFactura ingresado exista en la BD y este activo(devuelve true) caso contrario false:
 
             if((listaInsumo[i].idArticulo).toString() === (idArtInsumo).toString() && ((listaInsumo[i].estado).toString() === "activo")){
 
                 return validar = true;
-                break;
-
-
             }
         
+        }
 
-      }
-
-      return validar;
+        return validar;
 
     }catch(error){
 
@@ -218,11 +211,7 @@ const ActualizarArtManDetalle = (props) => {
             if((listaArticulo[i].idArticulo).toString() === (idArtManufacturado).toString() && ((listaArticulo[i].estado).toString() === "activo")){
 
                 return validar = true;
-                break;
-
-
             }
-        
 
       }
 

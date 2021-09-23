@@ -1,7 +1,5 @@
-import React, {Component, useState, useEffect, Fragment} from 'react';
-import {useParams} from 'react-router-dom';
+import React, { useState, useEffect, Fragment } from 'react';
 import {useForm} from 'react-hook-form';
-import Navigation from "../Navigation";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from "react-bootstrap/Col";
@@ -53,12 +51,8 @@ const ActualizarArtInsumo = (props) => {
     //los corchetes permite que nuestro userEffect se ejecute una sola vez
     useEffect(() => {
 
-        
-        
         //Se ejecuta el metodo obtener One al cargar la pagina
         getArtInsumo();
-       
-
 
     }, [])
 
@@ -96,7 +90,7 @@ const ActualizarArtInsumo = (props) => {
 
         axios.get("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet", {
             params: {
-    
+
                 action:'actualizar',
                 idArticulo: id,
                 denominacion: datos.denominacion,
@@ -110,12 +104,12 @@ const ActualizarArtInsumo = (props) => {
                 fechaAlta: datos.fechaAlta,
                 fechaBaja: datos.fechaBaja,
                 estado: datos.estado
-    
+
                 
             }
-          })
+        })
         .then(response => {
-    
+
             console.log(JSON.stringify(response))
         
 
@@ -124,49 +118,49 @@ const ActualizarArtInsumo = (props) => {
             console.log("Error");
             console.log(error);
         })
-    
-    
-      }
 
 
-      //Metodo Obtener los datos al Cargar la Pagina:
-      const getArtInsumo = async () => {
+    }
+
+
+    //Metodo Obtener los datos al Cargar la Pagina:
+    const getArtInsumo = async () => {
         try{
             
-          const id = props.match.params.id;  
-          const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet?action=buscar&idArticulo="+id);
-          const resJson = await response.json();
-          
-          //Verificamos la obtencion de datos correcto:
-          alert(JSON.stringify(resJson));
-          
+            const id = props.match.params.id;  
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet?action=buscar&idArticulo="+id);
+            const resJson = await response.json();
+            
+            //Verificamos la obtencion de datos correcto:
+            alert(JSON.stringify(resJson));
+            
 
-          //por medio del setDatos paso los datos recuperados a useState datos, modifico del servlet para solo pasar un objeto.json
+            //por medio del setDatos paso los datos recuperados a useState datos, modifico del servlet para solo pasar un objeto.json
 
-          setDatos(resJson);
+            setDatos(resJson);
 
-          //Modificamos con setValue los input que recibimos:
-          //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).format('YYYY-MM-DD')}
+            //Modificamos con setValue los input que recibimos:
+            //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).format('YYYY-MM-DD')}
 
-          setValue('denominacion', resJson.denominacion);
-          setValue('precioCompra', resJson.precioCompra);
-          setValue('precioVenta', resJson.precioVenta);
-          setValue('stockActual', resJson.stockActual);
-          setValue('stockMinimo', resJson.stockMinimo);
-          setValue('unidadMedida', resJson.unidadMedida);
-          setValue('esInsumo', resJson.esInsumo);
-          setValue('idRubro', (resJson.idRubro).toString()); //parseo a String
-          setValue('fechaAlta', moment(resJson.fechaAlta).subtract(1, 'M').format('YYYY-MM-DD'));
-          setValue('fechaBaja', moment(resJson.fechaBaja).subtract(1, 'M').format('YYYY-MM-DD'));
-          setValue('estado', resJson.estado);
-          
+            setValue('denominacion', resJson.denominacion);
+            setValue('precioCompra', resJson.precioCompra);
+            setValue('precioVenta', resJson.precioVenta);
+            setValue('stockActual', resJson.stockActual);
+            setValue('stockMinimo', resJson.stockMinimo);
+            setValue('unidadMedida', resJson.unidadMedida);
+            setValue('esInsumo', resJson.esInsumo);
+            setValue('idRubro', (resJson.idRubro).toString()); //parseo a String
+            setValue('fechaAlta', moment(resJson.fechaAlta).subtract(1, 'M').format('YYYY-MM-DD'));
+            setValue('fechaBaja', moment(resJson.fechaBaja).subtract(1, 'M').format('YYYY-MM-DD'));
+            setValue('estado', resJson.estado);
+            
         }catch(error){
-    
-          console.log("Error: " + error);
-    
+
+            console.log("Error: " + error);
+
         }
           
-      }
+    }
 
 
   //Validacion personalizada que valida que el idRubro Ingresado exista en la BD y si esta inactivo baja logica no existe:
@@ -192,11 +186,8 @@ const ActualizarArtInsumo = (props) => {
             if((listaRubro[i].idRubro).toString() === (idRubro).toString() && ((listaRubro[i].estado).toString() === "activo")){
 
                 return validar = true;
-                break;
-
 
             }
-        
 
       }
 
@@ -836,7 +827,7 @@ const ActualizarArtInsumo = (props) => {
 
                         <Row>
 
-                                <Col ClassName='boton'>
+                                <Col>
                                     <br></br>
                                     <br></br>
                                     <Button type="submit" className="btn btn-primary">UPDATE</Button>&nbsp;&nbsp;

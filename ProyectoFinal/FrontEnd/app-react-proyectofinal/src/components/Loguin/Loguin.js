@@ -3,18 +3,14 @@ import {useHistory} from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import axios from "axios";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {useForm} from 'react-hook-form';
 import Alert from "react-bootstrap/Alert";
-import '../../assets/css/loguin.css';
-import moment from 'moment';
+import '../../assets/css/registrar.css';
 import GoogleLogin from 'react-google-login';
 import { ContextoUsuario } from "../ContextoUsuario";
 
-
-var crypto = require("crypto");
 
 //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
 //Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
@@ -404,11 +400,9 @@ const Loguin = (props) => {
 
                 <Row>   
 
-                    <Col ClassName='boton'>
-                        <br></br>
-                        <br></br>
-                        <Button type="submit" variant="success"  size="lg">LOGUIN</Button>&nbsp;&nbsp;
-                        <Button type="button" href={`/registroCliente`} variant="primary"  size="lg">USER REGISTER</Button>&nbsp;&nbsp;
+                    <Col className="botonera">
+                        <Button type="submit" variant="success"  size="lg">LOGUIN</Button>
+                        <Button type="button" href={`/registroCliente`} variant="primary"  size="lg">USER REGISTER</Button>
                         <Button type="button" href={`/home`} variant="danger"  size="lg">RETURN</Button>
                     
                     </Col>

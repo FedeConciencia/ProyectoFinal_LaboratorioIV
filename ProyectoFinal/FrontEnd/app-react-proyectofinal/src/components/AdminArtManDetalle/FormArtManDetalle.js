@@ -1,10 +1,8 @@
 import React, { useState, useEffect, Fragment, useContext } from 'react';
-import Navigation from '../Navigation';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table'
 import '../../assets/css/form.css';
-import moment from 'moment';
 import { ContextoUsuario } from "../ContextoUsuario";
 
 //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}

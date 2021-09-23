@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from "react";
-import Navigation from "../Navigation";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -9,7 +8,6 @@ import Button from "react-bootstrap/Button";
 import {useForm} from 'react-hook-form';
 import Alert from "react-bootstrap/Alert";
 import '../../assets/css/registrar.css';
-import moment from 'moment';
 
 const RegistrarArtManDetalle = () => {
 
@@ -112,12 +110,8 @@ const RegistrarArtManDetalle = () => {
             if((listaInsumo[i].idArticulo).toString() === (idArtInsumo).toString() && ((listaInsumo[i].estado).toString() === "activo")){
 
                 return validar = true;
-                break;
-
-
             }
         
-
       }
 
       return validar;
@@ -153,12 +147,8 @@ const RegistrarArtManDetalle = () => {
             if((listaArticulo[i].idArticulo).toString() === (idArtManufacturado).toString() && ((listaArticulo[i].estado).toString() === "activo")){
 
                 return validar = true;
-                break;
-
-
             }
         
-
       }
 
       return validar;

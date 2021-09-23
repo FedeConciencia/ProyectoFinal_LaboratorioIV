@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from "react";
-import Navigation from "../Navigation";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -121,12 +120,8 @@ const RegistrarArtInsumo = () => {
             if((listaRubro[i].idRubro).toString() === (idRubro).toString() && ((listaRubro[i].estado).toString() === "activo")){
 
                 return validar = true;
-                break;
-
-
             }
         
-
       }
 
       return validar;

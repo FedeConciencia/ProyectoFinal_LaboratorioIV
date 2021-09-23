@@ -1,7 +1,5 @@
-import React, {Component, useState, useEffect, Fragment} from 'react';
-import {useParams} from 'react-router-dom';
+import React, { useState, useEffect, Fragment} from 'react';
 import {useForm} from 'react-hook-form';
-import Navigation from "../Navigation";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from "react-bootstrap/Col";
@@ -184,12 +182,8 @@ const ActualizarArtManufacturado = (props) => {
             if((listaRubro[i].idRubro).toString() === (idRubro).toString() && ((listaRubro[i].estado).toString() === "activo")){
 
                 return validar = true;
-                break;
-
-
             }
         
-
       }
 
       return validar;

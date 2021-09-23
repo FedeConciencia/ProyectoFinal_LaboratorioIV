@@ -1,6 +1,5 @@
-.boton{
 
+.botonera > * {
     text-align: center;
-
-
+    margin: 0px 3% 3%;
 }

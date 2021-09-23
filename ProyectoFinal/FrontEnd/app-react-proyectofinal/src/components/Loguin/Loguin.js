@@ -80,28 +80,23 @@ const Loguin = (props) => {
         console.log("Respuesta google: ",response);
         //Tener en cuenta que estas variables pueden ser modificadas por google:
         
-        const nombre = response["profileObj"]["givenName"]; 
-        const apellido = response["profileObj"]["familyName"];
-        const tokenId = response["tokenId"];
-        const usuario = response["profileObj"]["email"];
-        const rol = "cliente"
-
-        const usuarioActual = { nombre, apellido, tokenId, usuario, rol }
-
-        localStorage.setItem('usuario', JSON.stringify(usuarioActual));
-
-        
-        validarRegistroGmail(usuarioActual)
-           
-
-
-    }
-
+        if(response["profileObj"] != undefined){
+            const nombre = response["profileObj"]["givenName"]; 
+            const apellido = response["profileObj"]["familyName"];
+            const tokenId = response["tokenId"];
+            const usuario = response["profileObj"]["email"];
+            const rol = "cliente"
     
+            const usuarioActual = { nombre, apellido, tokenId, usuario, rol }
+    
+            localStorage.setItem('usuario', JSON.stringify(usuarioActual));    
+            
+            validarRegistroGmail(usuarioActual)
+        }
+    }
 
 
     //Metodo que verifica que el mail de logueo de google no este registrado como cliente:
-
     const validarRegistroGmail = async(usuarioActual) => {
 
         //Verificamos con el idCliente asociado al usuario ingresado, si este esta "ACTIVO":

@@ -360,7 +360,7 @@ const RegistrarPedido = () => {
                         placeholder="Ingrese el estado del pedido"
                         className="form-control my-2"
                         min="0"
-                        max="4"
+                        max="5"
                         {...register("estadoPedido", {
                             required:{
                                 value: true,

@@ -134,7 +134,7 @@ const VerificarDomicilio = (props) => {
         try{
         
             const id = idCliente;  
-            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet?action=buscarDomicilioXidCliente&idCliente="+id);
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet?action=buscarXIdCliente&idCliente="+id);
             const resJson = await response.json();
             
             //Verificamos la obtencion de datos correcto:

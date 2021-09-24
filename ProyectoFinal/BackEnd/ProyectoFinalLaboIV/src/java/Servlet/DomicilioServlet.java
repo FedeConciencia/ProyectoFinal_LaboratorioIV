@@ -134,8 +134,15 @@ public class DomicilioServlet extends HttpServlet {
                     String domicilioJson = gsonBuilder.toJson(listaDomicilio);
                     respuestaServer = domicilioJson;
                     
+                }else if(request.getParameter("action").equals("buscarXIdCliente")){
+                    
+                    ControladorDomicilio controladorDomicilio = new ControladorDomicilio();    
+                    List<Domicilio> listaDomicilio = new ArrayList<Domicilio>();
+                    Domicilio domicilio = controladorDomicilio.buscarDomicilioxIdCliente(Long.parseLong(request.getParameter("idCliente"))); 
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String domicilioJson = gsonBuilder.toJson(domicilio);
+                    respuestaServer = domicilioJson;
                 }
-            
             }
             out.write(respuestaServer);
         }catch(Exception ex){

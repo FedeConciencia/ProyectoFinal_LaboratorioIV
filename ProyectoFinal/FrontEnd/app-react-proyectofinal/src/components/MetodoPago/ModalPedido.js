@@ -34,7 +34,7 @@ const ModalPedido = (props) => {
             <Modal.Title>Datos Pedido Gestionado:</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-             Le informamos el tiempo de su pedido es : { props.tiempo } minutos
+             Le informamos el tiempo de su pedido es : { props.tiempo } 
              <br></br>
              Selecciono tipo de envio: { props.tipoEnvio}
              <br></br>

@@ -40,6 +40,7 @@ const MetodoPago = (props) => {
     //Creo el estado de la variable modalCarrito:
     const [modalPedido, setModalPedido] = useState();
 
+
     //Estado Hook para los componentes botones y select:
     const [datos, setDatos] = useState({
 
@@ -192,7 +193,7 @@ const MetodoPago = (props) => {
 
         //Metodo para ejecutar con el evento onSubmit:
 
-        const getDatos = () => {
+        const getDatos = async () => {
 
             //Llamo al metodo que obtiene el tiempoFinal:
             let time = calculoFinalTiempoPedido();
@@ -216,6 +217,7 @@ const MetodoPago = (props) => {
 
             }
 
+            localStorage.setItem("totalCarritoFinal", JSON.stringify(total));
 
             axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
                 params: {
@@ -226,7 +228,7 @@ const MetodoPago = (props) => {
                     horaEstimadaFin: time,
                     estadoPedido:"0",
                     tipoEnvio: tipoEnvio,
-                    total: JSON.stringify(total),
+                    total: total,
                     idCliente: datoId,
                     idDomicilio: datoIdDomicilio,
                     fechaAlta: moment().format('YYYY-MM-DD'), 
@@ -504,7 +506,8 @@ const MetodoPago = (props) => {
         //Guardo en una constante el componente modalPedido y paso el props:
         const modalPedidos = (time) => {
 
-                let totalCarrito = localStorage.getItem("totalCarrito");
+                //Guardo el total del carrito guardado en el localStorage:
+                let totalFinal = JSON.parse(localStorage.getItem("totalCarritoFinal"));
 
                 let tipoEnvio = "Retiro en Local";
 
@@ -535,7 +538,7 @@ const MetodoPago = (props) => {
                         pedido = { true }
                         tiempo = { time }
                         idCliente = { datoId }
-                        total = { totalCarrito }
+                        total = { totalFinal }
                         tipoEnvio =  { tipoEnvio }
                         formaPago = { formaPago }
                     ></ModalPedido>

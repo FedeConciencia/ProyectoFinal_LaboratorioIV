@@ -5,6 +5,7 @@ import Table from 'react-bootstrap/Table';
 import '../../assets/css/form.css';
 import moment from 'moment';
 import axios from "axios";
+import { useHistory } from 'react-router-dom';
 
 
 //Se descarga libreria moment: npm install moment --save, para el manejo de Date y LocalDate: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
@@ -14,6 +15,9 @@ import axios from "axios";
 
 //Se pasan los props (parametros):
 const ConfirmarPedido = (props) => {
+
+//Redireccion de la Pagina:
+ let history = useHistory();
 
 
  const [datos, setDatos] = useState([])
@@ -68,7 +72,10 @@ const ConfirmarPedido = (props) => {
       })
     .then(response => {
 
-        console.log(JSON.stringify(response))
+        console.log(response)
+
+         //Redireccionar a la pagina form cliente:
+         history.push('/returnConfirmarPedido');
         
         
 

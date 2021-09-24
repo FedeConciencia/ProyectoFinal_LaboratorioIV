@@ -351,4 +351,63 @@ public class ControladorDomicilio {
 
     }
     
+    
+    //METODO PARA BUSCAR DOMICILIO INGRESADO IDCLIENTE:
+    
+     public Domicilio buscarDomicilioxIdCliente(long id) {
+
+        Connection conexion = null;
+        Conexion con = new Conexion();
+        Domicilio domicilio = null;
+        PreparedStatement ps = null;  //Este objeto permite guardar las consultas que hacemos a la BD.
+        ResultSet rs = null;  // este objeto lo usamos cuando obtenemos algo de la base de datos.
+
+        try {
+
+            conexion = con.getConnection(); //metodo getConnection, logueamos el usuario.
+
+            ps = conexion.prepareStatement("SELECT * from domicilio where idCliente = ?");
+            
+            ps.setLong(1, id);
+
+            rs = ps.executeQuery();
+            
+            
+            if(rs.next()) {
+
+                Long idDomicilio = rs.getLong(1); //cada numero del parametro hace referencia al dato del campo que se desea obtener = idPersona
+                String calle = rs.getString(2);
+                String numero = rs.getString(3);
+                String localidad = rs.getString(4);
+                LocalDate fechaAlta = (rs.getDate(5)).toLocalDate();
+                LocalDate fechaBaja = (rs.getDate(6)).toLocalDate();
+                String estado = rs.getString(7);
+                Long idCliente = rs.getLong(8);
+
+                domicilio = new Domicilio(idDomicilio, calle, numero, localidad ,  idCliente, fechaAlta, fechaBaja, estado);
+            }
+
+            conexion.close();
+
+        } catch (Exception ex) {
+
+            System.err.println("Error. " + ex);
+
+        } finally {
+
+            try {
+
+                ps.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+                System.err.println("Error. " + ex);
+            }
+
+        }
+
+        return domicilio; //devolvemos el ultimo id
+
+    }
+    
 }

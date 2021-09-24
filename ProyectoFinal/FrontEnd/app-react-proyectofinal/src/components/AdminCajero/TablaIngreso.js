@@ -71,10 +71,10 @@ const TablaIngreso = (props) => {
       })
     .then(response => {
 
-        console.log(JSON.stringify(response))
+        console.log(response)
 
          //Redireccionar a la pagina form cliente:
-         history.push('/tablaIngreso');
+         history.push('/returnTablaIngreso');
 
 
     })

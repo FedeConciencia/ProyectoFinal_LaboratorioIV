@@ -359,7 +359,7 @@ public class ControladorFactura {
     
     
     
-    //METODO PARA OBTENER EL ULTIMO IDFACTURA:
+    //METODO PARA OBTENER EL ULTIMO IDFACTURA (SIRVE SI YA ESTA CARGADO ANTES DE SER SOLICITADO):
     
      public long buscarUltimoId() {
 
@@ -408,7 +408,7 @@ public class ControladorFactura {
      
   
      
-     //METODO PARA OBTENER EL PROXIMO ID A GENERARSE EN FACTURA:
+     //METODO PARA OBTENER EL PROXIMO ID A GENERARSE EN FACTURA (SIRVE CUANDO SE DEMORA LA SOLICITUD DE CARGA):
     
      public long proximoId() {
 

@@ -210,7 +210,7 @@ const RegistrarFactura = () => {
                 <Col>
                     
                     <input 
-                        type="number"
+                        type="text"
                         name="codigo"
                         onChange={handleInputChange}
                         placeholder="Ingrese el Codigo"

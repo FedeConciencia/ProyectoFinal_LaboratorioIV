@@ -69,6 +69,9 @@ import RegistrarArtManDetalle from './AdminArtManDetalle/RegistrarArtManDetalle'
 import ActualizarArtManDetalle from './AdminArtManDetalle/ActualizarArtManDetalle';
 import EliminarArtManDetalle from './AdminArtManDetalle/EliminarArtManDetalle';
 import EliminarLogicArtManDetalle from './AdminArtManDetalle/EliminarLogicArtManDetalle';
+import ReturnTablaIngreso from './AdminCajero/ReturnTablaIngreso';
+import ReturnTablaEgreso from './AdminCajero/ReturnTablaEgreso';
+import ReturnConfirmarPedido from './AdminCocinero/ReturnConfirmarPedido';
 
 export default function ModuloAdministrador() {
 
@@ -185,6 +188,13 @@ export default function ModuloAdministrador() {
             <Route path="/actualizarArtManDetalle/:id" component={ActualizarArtManDetalle} ></Route>
             <Route path="/eliminarArtManDetalle/:id" component={EliminarArtManDetalle} ></Route>
             <Route path="/eliminarLogicArtManDetalle/:id" component={EliminarLogicArtManDetalle} ></Route>
+
+            {/* Componentes para Retornar a los componentes TablaIngreso, TablaEgreso, : */}
+            <Route path="/returnTablaIngreso" component={ReturnTablaIngreso} ></Route>
+            <Route path="/returnTablaEgreso" component={ReturnTablaEgreso} ></Route>
+            <Route path="/returnConfirmarPedido" component={ReturnConfirmarPedido} ></Route>
+
+
         </>
     )
 }

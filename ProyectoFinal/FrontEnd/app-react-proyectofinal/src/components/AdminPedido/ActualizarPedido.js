@@ -328,7 +328,7 @@ const ActualizarPedido = (props) => {
             <br></br>
             <br></br>
 
-            <Alert.Heading className="titulo">FORMULARIO ADMIN ACTUALIZACION USUARIO</Alert.Heading>
+            <Alert.Heading className="titulo">FORMULARIO ADMIN ACTUALIZACION PEDIDO</Alert.Heading>
             
            
             <br></br>
@@ -461,7 +461,7 @@ const ActualizarPedido = (props) => {
                             placeholder="Ingrese el Estado Pedido"
                             className="form-control"
                             min="0"
-                            max="4"
+                            max="5"
                             {...register("estadoPedido", {
                                 required:{
                                     value: true,

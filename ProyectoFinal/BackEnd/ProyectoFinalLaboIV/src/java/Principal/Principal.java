@@ -16,6 +16,23 @@ public class Principal {
     public static void main(String[] args) {
         
         /*
+        
+        //TESTEO AUX_FACTURA_PEDIDO:
+        
+        ControladorAuxFacturaPedido controlador = new ControladorAuxFacturaPedido();
+        List<AuxFacturaPedido> lista = controlador.buscarAllAuxFacturaPedido(2L);
+        
+        for(AuxFacturaPedido item: lista){
+            
+            System.out.println(item.toString());
+            System.out.println("");
+            
+            
+        }
+        
+        */
+        
+        /*
         //TESTEO AUX_DATO_PEDIDO:
         
         ControladorPedido controlador = new ControladorPedido();
@@ -315,7 +332,15 @@ public class Principal {
         controlador.eliminarLogicoDomicilio(1L, LocalDate.of(2021,5,26));
         
         */
+        /*
         
+        //Metodo buscar domicilio x idCliente  (Funciona Ok):
+        
+        ControladorDomicilio controlador = new ControladorDomicilio();
+        
+        Domicilio dom = controlador.buscarDomicilioxIdCliente(74L);
+        
+        System.out.println(dom.toString());
         
         //************************************************************
         
@@ -352,7 +377,7 @@ public class Principal {
         
         */
         
-        
+        /*
         
         //Metodo BuscaOne Pedido (Funciona Ok):
         
@@ -362,7 +387,7 @@ public class Principal {
         
         System.out.println(pedido.toString());
 
-        
+        */
         
         /*
         

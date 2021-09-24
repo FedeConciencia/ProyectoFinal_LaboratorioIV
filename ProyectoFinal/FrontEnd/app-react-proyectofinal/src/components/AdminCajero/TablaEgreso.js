@@ -5,6 +5,7 @@ import Table from 'react-bootstrap/Table';
 import '../../assets/css/form.css';
 import moment from 'moment';
 import axios from "axios";
+import { useHistory } from 'react-router-dom';
 
 //Permite crear un random de numero hex, dec, etc
 var crypto = require("crypto");
@@ -17,10 +18,29 @@ var crypto = require("crypto");
 //Se pasan los props (parametros):
 const TablaEgreso = (props) => {
 
+//Redireccion de la Pagina:
+ let history = useHistory();
 
- const [datos, setDatos] = useState([])
+ //Substituir por let los Hooks variables globales=>
+
+ let pruebaPedido  = {};
+ let pruebaIdFactura = 0;
+ let pruebaLista = new Array();
+
+
+  // Hooks dentro de useEffect =>
+
+  const [datos, setDatos] = useState([])
+
+  /*
+
+ const [pedido, setPedido] = useState({})
+
+ const [idFactura, setIdFactura] = useState()
 
  const [lista, setLista] = useState([])
+
+ */
 
  
   //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
@@ -30,13 +50,11 @@ const TablaEgreso = (props) => {
         
       //Se ejecuta el metodo getOne al cargar la pagina
       getPedido()
-    
-      
 
-  }, [lista])
+  }, [])
 
 
-  //Si se usa JavaWebAplications Tomcast ver de colocar localhost:8080
+  //Metodo para obtener lista de todos los pedidos se ejecuta en el useEffect (cargar pagina) =>
 
   const getPedido = async () => {
 
@@ -44,7 +62,7 @@ const TablaEgreso = (props) => {
 
       const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet?action=listar");
       const resJson = await response.json();
-      alert(JSON.stringify(resJson));
+      console.log("LISTA DE PEDIDOS =>",resJson);
 
       //Este metodo .setState permite asignar a la variable de estado db el .JSON
       setDatos(resJson)
@@ -56,6 +74,8 @@ const TablaEgreso = (props) => {
     }
       
   }
+
+  //Libreria axios y promesa para evento onClick cambiarEstado (Actualizacion de estadoPedido en Pedido) =>
 
   const cambiarEstado = (id, e) => {
 
@@ -71,8 +91,10 @@ const TablaEgreso = (props) => {
       })
     .then(response => {
 
-        console.log(JSON.stringify(response))
-        //window.location.reload()
+        console.log(response)
+        
+        //Redireccionar a la pagina form cliente:
+        history.push('/returnTablaEgreso');
         
 
     })
@@ -84,6 +106,8 @@ const TablaEgreso = (props) => {
 
   }
 
+
+  //Libreria axios y promesa para evento onClick cambiarEstado (Actualizacion de estadoPedido en Pedido) si es pedido Domicilio (Delivery) =>
 
   const cambiarEstadoDomicilio = (id, e) => {
 
@@ -99,7 +123,10 @@ const TablaEgreso = (props) => {
       })
     .then(response => {
 
-        console.log(JSON.stringify(response))
+        console.log(response)
+
+        //Redireccionar a la pagina form cliente:
+        history.push('/returnTablaEgreso');
         
         
 
@@ -112,34 +139,115 @@ const TablaEgreso = (props) => {
 
   }
 
-  const crearFactura = async (id, e) => {
 
-        //Insertamos la Factura Generada:
-        setFactura(id);
+  //Estado Finalizado =>
 
+  const cambiarEstadoFinalizado = (id) => {
+
+    axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
+        params: {
+
+            action:'actualizarEstado',
+            estado: "5",
+            idPedido: id,
         
-        getDetallePedido(id);
 
-        console.log("LISTA DETALLE =>", lista)
-         
+        }
+      })
+    .then(response => {
 
-        const timerDos = setTimeout(() => {
+        console.log(response)
 
-          setDetalleFactura();
+        //Redireccionar a la pagina form cliente:
+        history.push('/returnTablaEgreso');
+        
+        
 
-        }, 20000);  
-
-
-
-
-        //Creamos el PDF Factura:
-
-
+    })
+    .catch(error =>{
+        console.log("Error");
+        console.log(error);
+    })
 
 
   }
 
+  /*
+
+  //Metodo para crear la factura con setTimeOut (tiempo espera) =>
+
+  const crearFactura = (id, e) => {
+
+      
+      //Obtenemos el pedido buscado por idPedido =>
+      getPedidoId(id);
+      
+      
+      //Se ejecuta una esperda de 10 segundos:
+      const timerDos = setTimeout(() => {
+        //Insertamos la Factura Generada =>
+        setFactura(id);
+      }, 3000);
+
+      //Se ejecuta una esperda de 15 segundos:
+      const timerTres = setTimeout(() => {
+        //Listamos todos los detallesPedidos asociados al idPedido =>
+        getDetallePedido(id);
+      }, 5000);
+
+      //Se ejecuta una esperda de 20 segundos:
+      const timerCuatro = setTimeout(() => {
+        //Creamos los detalles_Facturas con los detalles_Pedidos asociados al idPedido =>
+        setDetalleFactura();
+      }, 10000);  
+
+         
+      //Creamos el PDF Factura:
+
+
+  }
+
+  */
+
+  //Metodo Crear Factura (Testeo) con Async-Await =>
+
+  const crearFactura = async (id, e) => {
+
+      
+    //Obtenemos el pedido buscado por idPedido =>
+    await getPedidoId(id);
+    
+    
+    
+    //Insertamos la Factura Generada =>
+    await setFactura(id);
+    
+
+    
+    //Listamos todos los detallesPedidos asociados al idPedido =>
+    await getDetallePedido(id);
+    
+
+    
+    //Creamos los detalles_Facturas con los detalles_Pedidos asociados al idPedido =>
+    await setDetalleFactura();
+   
+
+       
+    //Creamos el PDF Factura:
+
+
+    //Un estado mas 5 que bloquea el boton final
+    await cambiarEstadoFinalizado(id);
+
+
+}
+
+
+
+
   //Metodo que permite crear un Password Hexadecimal de 14 bytes Hexadecimal:
+
   const passwordCodigo = () => {
 
             
@@ -149,204 +257,229 @@ const TablaEgreso = (props) => {
 
     return id
 
-}
+  }
+
+  //Metodo Async-Await con Axios para obtener el pedido por idPedido =>
+
+  const getPedidoId = async (id) => {
+
+    try{
 
 
-  const setFactura = (id) => {
+      const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
+            params: {
+
+    
+                action:'buscar',
+                idPedido: id, 
+                
+    
+                //fechaAlta, fechaBaja, estado se crean x defecto:
+    
+    
+            }
+      })
+
+      //Axios no hace falta pasar a JSON el response =>
+      const resJson = await response.data;
+        
+      console.log("PEDIDO => ", resJson)
+
+      //setPedido(resJson)
+
+      pruebaPedido = resJson;
+      
+      console.log("GET_PEDIDO(SIN HOOKS) => ", pruebaPedido)
+
+    }catch(error){
+
+      console.log("ERROR =>", error)
+
+    }
+
+  }
+
+  //Metodo Async-Await con Axios para crear la Factura =>
+
+  const setFactura = async (id) => {
 
      //Guardo el codigo generado Random:
      let codigo = passwordCodigo();
 
-     const pedido = getPedidoId(id);
+     console.log("PEDIDO DENTRO SET_FACTURA =>", pruebaPedido)
 
      let montoDescuento = 0;
 
-     if(pedido !== undefined){
+     if(pruebaPedido !== undefined){
 
       console.log("INGRESO A CARGA FACTURA")
 
-     const timerUno = setTimeout(() => {
 
-      if(pedido.tipoEnvio === 1){
+      if(pruebaPedido.tipoEnvio === 1){
 
-          montoDescuento = (pedido.total / 0.9) - pedido.total;  
+          montoDescuento = (pruebaPedido.total / 0.9) - pruebaPedido.total;  
 
       }
 
 
-      axios.get("http://localhost:8080/ProyectoFinalLaboIV/FacturaServlet", {
-          params: {
+      try{
 
-              action:'insertar',
-              codigo: codigo,
-              montoDescuento: montoDescuento,
-              formaPago: "verificada",
-              totalVenta: pedido.total,
-              fechaAlta: moment().format('YYYY-MM-DD'), 
-              fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-              estado: "activo",
-              idPedido: id,
-          
 
-          }
-        })
-      .then(response => {
+        const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/FacturaServlet", {
+            params: {
 
-        console.log("CARGA FACTURA => ", response.data)
+                action:'insertar',
+                codigo: codigo,
+                montoDescuento: montoDescuento,
+                formaPago: "verificada",
+                totalVenta: pruebaPedido.total,
+                fechaAlta: moment().format('YYYY-MM-DD'), 
+                fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
+                estado: "activo",
+                idPedido: id,
+            
 
-          
-      })
-      .catch(error =>{
-          console.log("Error");
-          console.log(error);
-      })
+            }
+          })
 
-    }, 20000); 
+        //Axios no hace falta pasar a JSON el response =>
+        const resJson = await response.data;
+        
+        console.log("FACTURA CREADA => ", resJson)
+      
+        }catch(error){
+
+          console.log("ERROR =>", error)
+
+        }
+      
+
+    }
     
   }
 
-  }
 
+  const getDetallePedido = async (id) => {
 
-  const getPedidoId = (id) => {
+    try{
 
+      const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/DetallePedidoServlet", {
+          params: {
 
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
-                params: {
-
-        
-                    action:'buscar',
-                    idPedido: id, 
-                    
-        
-                    //fechaAlta, fechaBaja, estado se crean x defecto:
-        
-        
-                }
-              })
-            .then(response => {
-        
-              console.log("PEDIDO => ", response.data)
-
-                return response.data
-
-            })
-            .catch(error =>{
-                console.log("Error");
-                console.log(error);
-            })
-
-
-  }
-
-
-  const getDetallePedido = (id) => {
-
-
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/DetallePedidoServlet", {
-                params: {
-
-        
-                    action:'listarXId',
-                    idPedido: id, 
-                    
-        
-                    //fechaAlta, fechaBaja, estado se crean x defecto:
-        
-        
-                }
-              })
-            .then(response => {
-        
-              console.log("LISTA DETALLE PEDIDO => ", response.data)
-
+  
+              action:'listarXId',
+              idPedido: id, 
               
+          }
+      })
 
-              setLista(response.data);
+      //Axios no hace falta pasar a JSON el response =>
 
-            })
-            .catch(error =>{
-                console.log("Error");
-                console.log(error);
-            })
+      const resJson = await response.data;
 
+      console.log("LISTA DETALLE PEDIDO => ", resJson)
+
+      //setLista(resJson);
+
+      pruebaLista = resJson;
+
+      console.log("GET_LISTA(HOOK) => ", pruebaLista)
+
+    }catch(error){
+
+      console.log("ERROR =>", error)
+
+
+    }    
 
   }
 
 
-  const getIdFactura = () => {
+  const getIdFactura = async () => {
 
+    try{
 
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/FacturaServlet", {
-                params: {
+      const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/FacturaServlet", {
+          params: {
 
-        
-                    action:'proximoId',
-                    
-                  
-                }
-              })
-            .then(response => {
+  
+              action:'buscarUltimoId',
+              
+            
+          }
+      })
+
+      //Axios no hace falta pasar a JSON el response =>
+
+      const resJson = await response.data;
+
+      console.log("ULTIMO ID FACTURA => ", resJson)
+
+      //setIdFactura(resJson)
+
+      pruebaIdFactura = resJson;
+
+      console.log("GET_ID_FACTURA(HOOK) => ", pruebaIdFactura)
+            
       
+    }catch(error){
 
-                console.log("ULTIMO ID FACTURA => ", response.data)
 
-                return response.data
+      console.log("ERROR =>", error)
+
+    }  
+                
         
-            })
-            .catch(error =>{
-                console.log("Error");
-                console.log(error);
-            })
-
   }  
 
 
-  const setDetalleFactura = () => {
+  const setDetalleFactura = async () => {
 
-      console.log(lista)
+      console.log("LISTA DETALLE_PEDIDO EN SET_DETALLE_FACTURA=> ", pruebaLista)
 
-      let ultimoId = getIdFactura();
+      
+      //Esperamos la ejecucion con await =>
+      await getIdFactura();
+           
+      if(pruebaLista !== undefined){
+
+        console.log("INGRESO A CARGA DETALLE_FACTURA")
 
 
-      if(lista !== undefined){
+      for(let i = 0; i < pruebaLista.length; i++){
 
-        console.log("INGRESO A CARGA DETALLE FACTURA")
+        try{
 
-
-      for(let i = 0; i < lista.length; i++){
-
-        axios.get("http://localhost:8080/ProyectoFinalLaboIV/DetalleFacturaServlet", {
+          const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/DetalleFacturaServlet", {
                 params: {
 
         
                     action:'insertar',
-                    cantidad: lista[i].cantidad,
-                    subTotal: lista[i].subTotal,
-                    idFactura: ultimoId,
-                    idArticuloManufacturado: lista[i].idArtManufacturado,
+                    cantidad: pruebaLista[i].cantidad,
+                    subTotal: pruebaLista[i].subTotal,
+                    idFactura: pruebaIdFactura,
+                    idArticuloManufacturado: pruebaLista[i].idArticuloManufacturado,
                     
         
         
                 }
-              })
-            .then(response => {
-        
-              console.log("CARGA DETALLE FACTURA => ", response.data)
+          })
+
+          const resJson = await response.data
+
+          console.log("CARGA DETALLE FACTURA => ", resJson)
 
 
-        
-            })
-            .catch(error =>{
-                console.log("Error");
-                console.log(error);
-            })
+        }catch(error){
 
+          console.log("ERROR =>", error)
 
-          }
+        }     
+            
+      
+      }      
 
-      }
-
+    }
 
   }  
 
@@ -401,6 +534,9 @@ const TablaEgreso = (props) => {
                               <span>DELIVERY</span>
                               :
                               pedido.estadoPedido  === 4 ?
+                              <span>FACTURAR</span>
+                              :
+                              pedido.estadoPedido  === 5 ?
                               <span>FINALIZADO</span>
                               :
                               <span></span>
@@ -424,9 +560,11 @@ const TablaEgreso = (props) => {
                             pedido.tipoEnvio === 1 && pedido.estadoPedido === 2 ?
                             <Button onClick={ (e) => cambiarEstadoDomicilio(pedido.idPedido, e) }  className="boton" variant="warning" size="sm">DELIVERY</Button>
                             :
+                            pedido.estadoPedido === 5 ?
+                            <></>
+                            :
                             <Button onClick={ (e) => cambiarEstado(pedido.idPedido, e) }  className="boton" variant="primary" size="sm">CONFIRMAR</Button>
-                            
-                            
+                        
                             }
                             
                             </td>

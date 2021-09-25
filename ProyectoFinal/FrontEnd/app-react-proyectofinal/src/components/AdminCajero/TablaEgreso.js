@@ -6,6 +6,8 @@ import '../../assets/css/form.css';
 import moment from 'moment';
 import axios from "axios";
 import { useHistory } from 'react-router-dom';
+import { jsPDF } from "jspdf";
+
 
 //Permite crear un random de numero hex, dec, etc
 var crypto = require("crypto");
@@ -26,6 +28,7 @@ const TablaEgreso = (props) => {
  let pruebaPedido  = {};
  let pruebaIdFactura = 0;
  let pruebaLista = new Array();
+ 
 
 
   // Hooks dentro de useEffect =>
@@ -233,13 +236,101 @@ const TablaEgreso = (props) => {
     await setDetalleFactura();
    
 
-       
     //Creamos el PDF Factura:
+    await crearPdf()
+
+
+    //Generar mail:
 
 
     //Un estado mas 5 que bloquea el boton final
     await cambiarEstadoFinalizado(id);
 
+
+}
+
+//Metodo para generar PDF =>
+const crearPdf = async () => {
+
+  let doc = new jsPDF();
+
+  try{
+
+
+    const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxFacturaPedidoServlet", {
+          params: {
+
+  
+              action:'listar',
+              idFactura: pruebaIdFactura, 
+              
+  
+              //fechaAlta, fechaBaja, estado se crean x defecto:
+  
+  
+          }
+    })
+
+    //Axios no hace falta pasar a JSON el response =>
+    const resJson = await response.data;
+      
+    console.log("PDF => ", resJson)
+    
+    doc.text("Fecha: " + moment().format('YYYY-MM-DD'), 100, 10);
+    doc.text("Codigo Factura: " + resJson[0].codigo , 10, 10);
+    doc.text("-------------------------------", 10, 20);
+    if(resJson[0].tipoEnvio === 1){
+
+      doc.text("Tipo de Envio: Domicilio" , 10, 30);
+
+    }else{
+
+      doc.text("Tipo de Envio: Retiro Local" , 10, 30);
+
+    }
+
+    doc.text("-------------------------------", 10, 40);
+
+    doc.text("Metodo Pago: " + resJson[0].metodoPago , 10, 50);
+
+    doc.text("-------------------------------", 10, 60);
+
+    let contador = 60;
+
+    for(let i = 0; i < resJson.length; i ++){
+
+      contador += 10;
+      doc.text("Producto: " + resJson[i].denominacion, 10, contador);
+      contador += 10;
+      doc.text("Cantidad: " + resJson[i].cantidad, 10, contador);
+      contador += 10;
+      doc.text("Precio Unitario: $" + resJson[i].precioVenta, 10, contador);
+      contador += 10;
+      doc.text("SubTotal: $" + resJson[i].subTotal, 10, contador);
+      contador += 10;
+      doc.text("-------------------------------", 10, contador);
+
+    }
+
+    contador += 10;
+    doc.text("Descuento: $" + resJson[0].montoDescuento, 10, contador);
+    contador += 10;
+    doc.text("Total: $" + resJson[0].total, 10, contador);
+
+    //doc.save("factura.pdf");
+
+    //Enviar Email:
+
+    //Se pasa el documento pdf a formato para email:
+    var pdfBase64 = doc.output('datauristring');
+
+  
+
+  }catch(error){
+
+    console.log("ERROR =>", error)
+
+  }
 
 }
 

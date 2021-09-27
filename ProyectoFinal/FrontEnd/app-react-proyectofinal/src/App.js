@@ -20,6 +20,7 @@ import TablaEgreso from './components/AdminCajero/TablaEgreso';
 import VerificarDomicilio from './components/MetodoPago/VerificarDomicilio';
 import RegistroClienteGoogle from './components/RegistroCliente/RegistroClienteGoogle';
 import ModuloAdministrador from './components/ModuloAdministrador';
+import HistorialCliente from './components/HistorialCliente/HistorialCliente';
 
 
 export default function App(){
@@ -52,6 +53,7 @@ export default function App(){
         <Route path="/carrito" component={Carrito} />
         <Route path="/metodoPago" component={MetodoPago} />
         <Route path="/verificarDomicilio" component={VerificarDomicilio} />
+        <Route path="/historialCliente" component={HistorialCliente} />
 
 
         {/* Rutas de AdminCocinero: */}

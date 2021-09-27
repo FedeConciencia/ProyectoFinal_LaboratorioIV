@@ -276,7 +276,7 @@ const crearPdf = async () => {
       
     console.log("PDF => ", resJson)
     
-    doc.text("Fecha: " + moment().format('YYYY-MM-DD'), 100, 10);
+    doc.text("Fecha: " + moment().format('YYYY-MM-DD'), 150, 10);
     doc.text("Codigo Factura: " + resJson[0].codigo , 10, 10);
     doc.text("-------------------------------", 10, 20);
     if(resJson[0].tipoEnvio === 1){
@@ -324,8 +324,39 @@ const crearPdf = async () => {
     //Se pasa el documento pdf a formato para email:
     var pdfBase64 = doc.output('datauristring');
 
-  
+    /*
 
+    window.Email.send({
+      Host : "smtp.gmail.com",
+      Username : "luciagonzalezmza2@gmail.com",
+      Password : "kolton11",
+      To : 'alumnosutn424@gmail.com',
+      From : "luciagonzalezmza2@gmail.com",
+      Subject : "EL BUEN SABOR => FACTURA",
+      Body : "Hola, El Buen Sabor le adjunta la Factura.\nGracias por elegirnos.\nSaludos"
+  }).then(
+    message => alert(message)
+  );
+
+  */
+
+    window.Email.send({
+      SecureToken : "3c187a42-806b-4da7-80e3-16d8cdb458f8", //Se crea desde la pagina => https://smtpjs.com/ 
+      To : 'alumnosutn424@gmail.com',
+      From : "martinargumedo2017@gmail.com",
+      Subject : "EL BUEN SABOR => FACTURA",
+      Body : "Hola, El Buen Sabor le adjunta la Factura.\nGracias por elegirnos.\nSaludos",
+      Attachments : [
+        {
+          name : "Factura.pdf",
+          path : ``
+        }]
+  }).then(
+    message => alert(message)
+  );
+
+    //Se debe crear el password para aplicaciones desde la cuenta de Gmail => https://www.youtube.com/watch?v=j70RVlA2rwU
+  
   }catch(error){
 
     console.log("ERROR =>", error)
@@ -333,6 +364,8 @@ const crearPdf = async () => {
   }
 
 }
+
+
 
 
 

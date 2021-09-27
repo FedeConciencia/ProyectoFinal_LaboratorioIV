@@ -15,6 +15,29 @@ public class Principal {
     
     public static void main(String[] args) {
         
+        //TESTEO FACTURA => OBTENER ALL_FACTURAS X EMAIL CLIENTE:
+        
+        ControladorFactura controlador = new ControladorFactura();
+        List<Factura> listaFactura= controlador.buscarAllFacturaXEmail("marilopez@gmail.com");
+        
+        for(Factura item: listaFactura){
+            
+              System.out.println(item.toString());  
+            
+        }
+        
+        /*
+        
+        //TESTEO FACTURA => OBTENER EMAIL X ID_FACTURA:
+        
+        ControladorFactura controlador = new ControladorFactura();
+        String email = controlador.buscarEmailXIdFactura(1L);
+        
+        System.out.println("EMAIL CLIENTE =>" + email);
+        
+        */
+        
+        
         /*
         
         //TESTEO AUX_FACTURA_PEDIDO:

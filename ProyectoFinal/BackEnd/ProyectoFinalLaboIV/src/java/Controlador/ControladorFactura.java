@@ -462,6 +462,119 @@ public class ControladorFactura {
         return idFactura; //devolvemos el ultimo id
 
     }
+     
+      //METODO PARA OBTENER MAIL CLIENTE X ID_FACTURA:
+    
+     public String buscarEmailXIdFactura(long id) {
+
+        Connection conexion = null;
+        Conexion con = new Conexion();
+        String email = "";
+        PreparedStatement ps = null;  //Este objeto permite guardar las consultas que hacemos a la BD.
+        ResultSet rs = null;  // este objeto lo usamos cuando obtenemos algo de la base de datos.
+
+        try {
+
+            conexion = con.getConnection(); //metodo getConnection, logueamos el usuario.
+
+            ps = conexion.prepareStatement("SELECT c.email AS Email from factura AS f INNER JOIN pedido AS p ON f.idPedido = p.idPedido INNER JOIN\n" +
+                                           "cliente AS c ON p.idCliente = c.idCliente WHERE f.idFactura = ?");
+            
+            ps.setLong(1, id);
+
+            rs = ps.executeQuery();
+            
+            
+            if(rs.next()) {
+
+                 email = rs.getString(1); //cada numero del parametro hace referencia al dato del campo que se desea obtener = idPersona
+                //idCliente++; //Incrementa en 1 el ultimo idCliente. Obteniendo el siguiente
+            }
+
+            conexion.close();
+
+        } catch (Exception ex) {
+
+            System.err.println("Error. " + ex);
+
+        } finally {
+
+            try {
+
+                ps.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+                System.err.println("Error. " + ex);
+            }
+
+        }
+
+        return email; //devolvemos el ultimo id
+
+    }
+     
+    //OBTENER ALL FACTURA POR ID_FACTURA (FACTURAS X CLIENTE):
+    public List<Factura> buscarAllFacturaXEmail(String email) {
+
+        Connection conexion = null;
+        Conexion con = new Conexion();
+        Factura factura = null;
+        List<Factura> listaFactura = new ArrayList<Factura>();
+        PreparedStatement ps = null;  //Este objeto permite guardar las consultas que hacemos a la BD.
+        ResultSet rs = null;  // este objeto lo usamos cuando obtenemos algo de la base de datos.
+
+        try {
+
+            conexion = con.getConnection(); //metodo getConnection, logueamos el usuario.
+
+            ps = conexion.prepareStatement("SELECT f.* FROM factura AS f INNER JOIN pedido AS p ON f.idPedido = p.idPedido INNER JOIN\n" +
+                                            "cliente AS c ON p.idCliente = c.idCliente WHERE c.email = ?");
+
+            ps.setString(1, email);
+            
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Long idFactura = rs.getLong(1); //cada numero del parametro hace referencia al dato del campo que se desea obtener = idPersona
+                String codigo = rs.getString(2);
+                double montoDescuento = rs.getDouble(3);
+                String formaPago = rs.getString(4);
+                double totalVenta = rs.getDouble(5);
+                LocalDate fechaAlta = (rs.getDate(6)).toLocalDate();
+                LocalDate fechaBaja = (rs.getDate(7)).toLocalDate();
+                String estado = rs.getString(8);
+                Long idPedido = rs.getLong(9);
+
+                factura = new Factura(idFactura, codigo, montoDescuento, formaPago, totalVenta, idPedido, fechaAlta, fechaBaja, estado);
+
+                listaFactura.add(factura);
+
+            }
+
+            conexion.close();
+
+        } catch (Exception ex) {
+
+            System.err.println("Error. " + ex);
+
+        } finally {
+
+            try {
+
+                ps.close();
+                rs.close();
+
+            } catch (SQLException ex) {
+                System.err.println("Error. " + ex);
+            }
+
+        }
+
+        return listaFactura; //devolvemos la lista de alumnos encontrado
+
+    }
     
     
 }

@@ -28,7 +28,8 @@ export default function Navigation() {
 
         return <><Nav.Link href="/productos">PRODUCTOS</Nav.Link>
                 <Nav.Link href="/contacto">CONTACTO</Nav.Link>
-                <Nav.Link href="/carrito">CARRITO</Nav.Link></>;
+                <Nav.Link href="/carrito">CARRITO</Nav.Link>
+                <Nav.Link href="/historialCliente">HISTORIAL</Nav.Link></>;
 
       }else if(usuario["rol"] === "cocinero"){
 

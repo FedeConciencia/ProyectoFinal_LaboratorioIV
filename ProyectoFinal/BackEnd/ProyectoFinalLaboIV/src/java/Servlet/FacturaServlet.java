@@ -150,8 +150,22 @@ public class FacturaServlet extends HttpServlet {
                     String facturaJson = gsonBuilder.toJson(idFactura);
                     respuestaServer = facturaJson;
                     
+                }else if(request.getParameter("action").equals("emailXid")){
+                    
+                    ControladorFactura controladorFactura = new ControladorFactura();    
+                    String email = controladorFactura.buscarEmailXIdFactura(Long.parseLong(request.getParameter("idFactura")));
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String facturaJson = gsonBuilder.toJson(email);
+                    respuestaServer = facturaJson;
+                    
+                }else if(request.getParameter("action").equals("listarXemail")){
+                    
+                    ControladorFactura controladorFactura = new ControladorFactura();
+                    List<Factura> listaFactura = controladorFactura.buscarAllFacturaXEmail(request.getParameter("email"));
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String facturaJson = gsonBuilder.toJson(listaFactura);
+                    respuestaServer = facturaJson;    
                 }    
-            
             }
             out.write(respuestaServer);
         }catch(Exception ex){

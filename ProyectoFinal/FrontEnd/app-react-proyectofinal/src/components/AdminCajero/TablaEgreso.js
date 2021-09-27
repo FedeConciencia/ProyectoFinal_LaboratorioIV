@@ -27,6 +27,7 @@ const TablaEgreso = (props) => {
 
  let pruebaPedido  = {};
  let pruebaIdFactura = 0;
+ let email = "";
  let pruebaLista = new Array();
  
 
@@ -252,6 +253,11 @@ const TablaEgreso = (props) => {
 //Metodo para generar PDF =>
 const crearPdf = async () => {
 
+  //Se obtiene el email del cliente a traves del id_Factura =>
+  await getEmail();
+
+  console.log("EMAIL DENTRO DE PDF => ", email)
+
   let doc = new jsPDF();
 
   try{
@@ -324,6 +330,10 @@ const crearPdf = async () => {
     //Se pasa el documento pdf a formato para email:
     var pdfBase64 = doc.output('datauristring');
 
+    let dataUri = "data:application/pdf;filename=generated.pdf;base64," + btoa(doc);
+
+    console.log(pdfBase64);
+    
     /*
 
     window.Email.send({
@@ -342,14 +352,15 @@ const crearPdf = async () => {
 
     window.Email.send({
       SecureToken : "3c187a42-806b-4da7-80e3-16d8cdb458f8", //Se crea desde la pagina => https://smtpjs.com/ 
-      To : 'alumnosutn424@gmail.com',
+      To : `${email}`,
       From : "martinargumedo2017@gmail.com",
       Subject : "EL BUEN SABOR => FACTURA",
       Body : "Hola, El Buen Sabor le adjunta la Factura.\nGracias por elegirnos.\nSaludos",
+
       Attachments : [
         {
           name : "Factura.pdf",
-          path : ``
+          path : `${dataUri}`
         }]
   }).then(
     message => alert(message)
@@ -357,6 +368,44 @@ const crearPdf = async () => {
 
     //Se debe crear el password para aplicaciones desde la cuenta de Gmail => https://www.youtube.com/watch?v=j70RVlA2rwU
   
+  }catch(error){
+
+    console.log("ERROR =>", error)
+
+  }
+
+}
+
+
+//Metodo Async-Await con Axios para obtener el email del cliente x idFactura =>
+
+const getEmail = async () => {
+
+  try{
+
+
+    const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/FacturaServlet", {
+          params: {
+
+  
+              action:'emailXid',
+              idFactura: pruebaIdFactura, 
+              
+  
+          }
+    })
+
+    //Axios no hace falta pasar a JSON el response =>
+    const resJson = await response.data;
+      
+    console.log("GET ID_FACTURA X EMAIL => ", resJson)
+
+    //setPedido(resJson)
+
+    email = resJson;
+    
+    console.log("ID_FACTURA X EMAIL(SIN HOOKS) => ", email)
+
   }catch(error){
 
     console.log("ERROR =>", error)

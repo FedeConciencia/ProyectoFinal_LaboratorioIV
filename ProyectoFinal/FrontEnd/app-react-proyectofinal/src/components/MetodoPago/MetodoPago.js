@@ -13,6 +13,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import axios from "axios";
 import moment from 'moment';
 import ModalPedido from "./ModalPedido.js";
+import mercadoPago from '../MercadoPago/MercadoPago.js';
+
 
 //Permite crear un random de numero hex, dec, etc
 var crypto = require("crypto");
@@ -88,18 +90,28 @@ const MetodoPago = (props) => {
 
          //Metodo que se ejecuta en el evento onSubmit desde el formulario:
 
-        const enviarDatos = (datos, event) => {
+        const enviarDatos = (event) => {
 
+
+            console.log("DATOS SELECT PAGO MERCADOPAGO =>", datos.selectPago)
+
+            if(datos.selectPago === "2"){
+
+                console.log("INGRESO A MERCADOPAGO")
+
+                mercadoPago.apply()
+
+            }else{
                 
-            alert(JSON.stringify(datos));
+                alert(JSON.stringify(datos));
 
-            const timerDom = setTimeout(() => {
+                const timerDom = setTimeout(() => {
 
-                 //Se ejecuta Metodo para guardar el pedido
-                 getDatos();
-                
-            }, 3000);
-
+                    //Se ejecuta Metodo para guardar el pedido
+                    getDatos();
+                    
+                }, 3000);
+            }    
              
         }
 
@@ -480,7 +492,7 @@ const MetodoPago = (props) => {
 
             console.log("CANTIDAD DE COCINEROS => ", cantidadCocinero);
 
-            sumatoriaFinal = tiempoArt + (artManfCocinaTiempo / cantidadCocinero);
+            sumatoriaFinal = tiempoArt + Math.round(artManfCocinaTiempo / cantidadCocinero);
 
             console.log("SUMATORIA FINAL SIN ENVIO DOMICILIO => ", sumatoriaFinal)
 
@@ -611,7 +623,7 @@ const MetodoPago = (props) => {
 
             <Alert variant="success" className="bodyDetalle"> 
 
-            <Form onSubmit={handleSubmit(enviarDatos)}>
+            <Form  onSubmit={handleSubmit(enviarDatos)}>
 
             <br></br>
             <br></br>
@@ -677,7 +689,6 @@ const MetodoPago = (props) => {
             <Row>
 
                 <Col>
-
 
                     <Button type="submit" variant="warning" size="lg">Gestionar Pedido</Button>
 

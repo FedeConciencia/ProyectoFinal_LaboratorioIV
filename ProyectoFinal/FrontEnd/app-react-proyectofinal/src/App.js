@@ -21,6 +21,10 @@ import VerificarDomicilio from './components/MetodoPago/VerificarDomicilio';
 import RegistroClienteGoogle from './components/RegistroCliente/RegistroClienteGoogle';
 import ModuloAdministrador from './components/ModuloAdministrador';
 import HistorialCliente from './components/HistorialCliente/HistorialCliente';
+import success from './components/MercadoPago/Success';
+import failure from './components/MercadoPago/Failure';
+import pending from './components/MercadoPago/Pending';
+
 
 
 export default function App(){
@@ -66,6 +70,12 @@ export default function App(){
         <Route path="/cajeroPrincipal" component={PrincipalCajero} ></Route>
         <Route path="/tablaIngreso" component={TablaIngreso} ></Route>
         <Route path="/tablaEgreso" component={TablaEgreso} ></Route>
+
+        {/* Rutas de MercadoPago: */}
+
+        <Route path="/mercadopago/success" component={success} ></Route>
+        <Route path="/mercadopago/failure" component={failure} ></Route>
+        <Route path="/mercadopago/pending" component={pending} ></Route>
         
         <ModuloAdministrador />
 

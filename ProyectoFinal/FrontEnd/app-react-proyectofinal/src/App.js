@@ -24,6 +24,9 @@ import HistorialCliente from './components/HistorialCliente/HistorialCliente';
 import success from './components/MercadoPago/Success';
 import failure from './components/MercadoPago/Failure';
 import pending from './components/MercadoPago/Pending';
+import AdminDueño from './components/AdminDueño/AdminDueño';
+import RankingComidas from './components/AdminDueño/RankingComidas';
+import MostrarRankingComidas from './components/AdminDueño/MostrarRankingComidas';
 
 
 
@@ -76,6 +79,12 @@ export default function App(){
         <Route path="/mercadopago/success" component={success} ></Route>
         <Route path="/mercadopago/failure" component={failure} ></Route>
         <Route path="/mercadopago/pending" component={pending} ></Route>
+
+         {/* Rutas de AdminDueño: */}
+
+         <Route path="/adminDueño" component={AdminDueño} ></Route>
+         <Route path="/rankingComidas" component={RankingComidas} ></Route>
+         <Route path="/mostrarRankingComidas" component={MostrarRankingComidas} ></Route>
         
         <ModuloAdministrador />
 

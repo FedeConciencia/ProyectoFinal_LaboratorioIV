@@ -38,8 +38,12 @@ export default function Navigation() {
       }else if(usuario["rol"] === "cajero"){
 
         return <Nav.Link href="/cajeroPrincipal">PRINCIPAL</Nav.Link>;
-      }  
 
+      }else if(usuario["rol"] === "dueno"){
+
+        return <Nav.Link href="/adminDueño">PRINCIPAL</Nav.Link>;  
+
+      }
       
     }else{
 

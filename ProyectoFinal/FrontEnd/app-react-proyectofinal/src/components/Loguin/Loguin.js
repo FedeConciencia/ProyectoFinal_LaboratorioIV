@@ -76,7 +76,7 @@ const Loguin = (props) => {
         console.log("Respuesta google: ",response);
         //Tener en cuenta que estas variables pueden ser modificadas por google:
         
-        if(response["profileObj"] != undefined){
+        if(response["profileObj"] !== undefined){
             const nombre = response["profileObj"]["givenName"]; 
             const apellido = response["profileObj"]["familyName"];
             const tokenId = response["tokenId"];
@@ -206,16 +206,39 @@ const Loguin = (props) => {
                 const usuarioActual = {usuario, contrasena, rol};
                 setUsuario(usuarioActual);
                 actualizarEstado(usuarioActual);
+
+            }else if((validarCliente === true) && (validarUsuario === true) && ((rol).toLowerCase() === "cajero")){    
                 
+                  //Direccionamos a la pagina admin principal cajero:
+                  const usuarioActual = {usuario, contrasena, rol};
+                  setUsuario(usuarioActual);
+                  actualizarEstado(usuarioActual);
 
-            }else if((validarCliente === true) && (validarUsuario === true)){
+            }else if((validarCliente === true) && (validarUsuario === true) && ((rol).toLowerCase() === "cocinero")){    
+                
+                //Direccionamos a la pagina admin principal cocinero:
+                const usuarioActual = {usuario, contrasena, rol};
+                setUsuario(usuarioActual);
+                actualizarEstado(usuarioActual);
+                
+            }else if((validarCliente === true) && (validarUsuario === true) && ((rol).toLowerCase() === "dueno")){    
+                
+                //Direccionamos a la pagina admin principal dueño:
+                const usuarioActual = {usuario, contrasena, rol};
+                setUsuario(usuarioActual);
+                actualizarEstado(usuarioActual);    
 
-                document.getElementById("mensaje").innerHTML  = "LOGUIN CORRECTO.";
-                document.getElementById("mensaje").style.color = "green";
+            }else if((validarCliente === true) && (validarUsuario === true) && ((rol).toLowerCase() === "cliente")){
+
+                //Direccionamos a la pagina cliente:
+
+                //document.getElementById("mensaje").innerHTML  = "LOGUIN CORRECTO.";
+                //document.getElementById("mensaje").style.color = "green";
                 //Despues implementar la accion de loguin valido
                 const usuarioActual = {usuario, contrasena, rol};
                 setUsuario(usuarioActual);
                 actualizarEstado(usuarioActual);
+
             }else{
 
                 //En caso de loguin invalido se muestra mensaje de ERROR personalizado:
@@ -232,17 +255,32 @@ const Loguin = (props) => {
     }
 
     function actualizarEstado(usuarioActual) {
+
         localStorage.setItem('usuario', JSON.stringify(usuarioActual));
+        
         if(usuarioActual["rol"] === "administrador"){
+
             history.push("/adminPrincipal");
+
         }
         else if (usuarioActual["rol"] === "cocinero"){
+
             history.push("/cocineroPrincipal");
+
         }else if (usuarioActual["rol"] === "cliente"){
+
             history.push("/productos");
+
         }else if (usuarioActual["rol"] === "cajero"){
+
             history.push("/cajeroPrincipal");
-        }    
+
+        }else if (usuarioActual["rol"] === "dueno"){
+
+            history.push("/adminDueño");
+
+        }
+
         window.location.reload();
     }
 

@@ -9,6 +9,8 @@ import { useHistory } from 'react-router-dom';
 import { jsPDF } from "jspdf";
 
 
+//const nodemailer = require("nodemailer");
+
 //Permite crear un random de numero hex, dec, etc
 var crypto = require("crypto");
 
@@ -17,7 +19,7 @@ var crypto = require("crypto");
 //Se aplica libreria moment a campo LocalTime y funciona correctamente:
 
 
-//Se pasan los props (parametros):
+//Actualizado con Axios con Async Await y Variables Globales =>
 const TablaEgreso = (props) => {
 
 //Redireccion de la Pagina:
@@ -51,7 +53,6 @@ const TablaEgreso = (props) => {
   //los corchetes permite que nuestro userEffect se ejecute una sola vez
   useEffect(() => {
 
-        
       //Se ejecuta el metodo getOne al cargar la pagina
       getPedido()
 
@@ -270,10 +271,7 @@ const crearPdf = async () => {
               action:'listar',
               idFactura: pruebaIdFactura, 
               
-  
-              //fechaAlta, fechaBaja, estado se crean x defecto:
-  
-  
+
           }
     })
 
@@ -281,6 +279,10 @@ const crearPdf = async () => {
     const resJson = await response.data;
       
     console.log("PDF => ", resJson)
+
+
+ 
+    //Genera el PDF desde REACT =>
     
     doc.text("Fecha: " + moment().format('YYYY-MM-DD'), 150, 10);
     doc.text("Codigo Factura: " + resJson[0].codigo , 10, 10);
@@ -323,51 +325,82 @@ const crearPdf = async () => {
     contador += 10;
     doc.text("Total: $" + resJson[0].total, 10, contador);
 
+    //Guarda el Documento =>
     //doc.save("factura.pdf");
 
     //Enviar Email:
 
-    //Se pasa el documento pdf a formato para email:
-    var pdfBase64 = doc.output('datauristring');
+    //Se pasa el documento pdf a formato base64:
+    let pdfBase64 = doc.output('datauristring');
 
-    let dataUri = "data:application/pdf;filename=generated.pdf;base64," + btoa(doc);
+    //var blob = doc.output();
+    //var dataUri = "data:" + "application/pdf" + ";base64," + btoa(blob);
+
 
     console.log(pdfBase64);
-    
+
     /*
 
-    window.Email.send({
-      Host : "smtp.gmail.com",
-      Username : "luciagonzalezmza2@gmail.com",
-      Password : "kolton11",
-      To : 'alumnosutn424@gmail.com',
-      From : "luciagonzalezmza2@gmail.com",
-      Subject : "EL BUEN SABOR => FACTURA",
-      Body : "Hola, El Buen Sabor le adjunta la Factura.\nGracias por elegirnos.\nSaludos"
-  }).then(
-    message => alert(message)
-  );
+    //Envio Mail con Nodemade =>
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.ethereal.email',
+      port: 587,
+      auth: {
+          user: 'mina.williamson96@ethereal.email',
+          pass: '9JqM9ZmEeFVjxjkRKx'
+      }
+    });
 
-  */
+    const mailOptions = {
+      from: 'mina.williamson96@ethereal.email',
+      to: 'federicosabatini@gmail.com',
+      subject: 'EL BUEN SABOR => FACTURA',
+      text: 'Hola, El Buen Sabor le adjunta la Factura.\nGracias por elegirnos.\nSaludos',
+      
+      attachments: [{
+        filename: 'Factura.pdf',
+        path: `${pdfBase64}`,
+        contentType: 'application/pdf',
+      }],
 
+      
+      
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    }); 
+
+    */
+
+    /*
+    //Envio Mail con SmtpJS =>
     window.Email.send({
-      SecureToken : "3c187a42-806b-4da7-80e3-16d8cdb458f8", //Se crea desde la pagina => https://smtpjs.com/ 
+      SecureToken : "2482a8b0-c4d5-4179-9600-558f70ea4ba3", //Se crea desde la pagina => https://smtpjs.com/ 
       To : `${email}`,
-      From : "martinargumedo2017@gmail.com",
+      From : "mina.williamson96@ethereal.email",
       Subject : "EL BUEN SABOR => FACTURA",
       Body : "Hola, El Buen Sabor le adjunta la Factura.\nGracias por elegirnos.\nSaludos",
-
+      
       Attachments : [
         {
-          name : "Factura.pdf",
-          path : `${dataUri}`
+          name : "generated.pdf", //El nombre debe ser el mismo de la generacion del pdf x doc.output
+          path : pdfBase64,
         }]
-  }).then(
-    message => alert(message)
-  );
+      
+    }).then(
+      message => alert(message)
+    );
 
     //Se debe crear el password para aplicaciones desde la cuenta de Gmail => https://www.youtube.com/watch?v=j70RVlA2rwU
+    
+    */
   
+
   }catch(error){
 
     console.log("ERROR =>", error)

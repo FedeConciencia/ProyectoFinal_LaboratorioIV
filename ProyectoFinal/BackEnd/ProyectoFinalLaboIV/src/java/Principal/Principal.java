@@ -3,6 +3,7 @@ package Principal;
 
 import Controlador.*;
 import Modelo.*;
+import SedEmail.SendEmail;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
@@ -14,6 +15,40 @@ public class Principal {
     //Gestionar las pruebas de los metodos:
     
     public static void main(String[] args) {
+        /*
+        //TESTEO SENDMAIL SERVIDOR => 
+        
+        SendEmail send = new SendEmail();
+        send.sendMail();
+        
+        */
+        
+        
+        /*
+        
+        //TESTEO AUXFACTURAPEDIDO => CREAR PDF DESDE EL SERVIDOR:
+        
+        ControladorAuxFacturaPedido controlador = new ControladorAuxFacturaPedido();
+        String respuesta = controlador.crearPDF(1L);
+        System.out.println(respuesta);
+        
+        */
+        /*
+        
+        //TESTEO AUXDUEÑO => OBTENER RANKING COMIDAS X FECHAS:
+        
+        ControladorAuxDueño controlador = new ControladorAuxDueño();
+        List<AuxDueño> lista = controlador.buscarRankingComidas("2021-09-23", "2021-09-27");
+        
+        for(AuxDueño item: lista){
+            
+            System.out.println("Producto => " + item.getDenominacionComidad() + " Cantidad => " + item.getCantidadComida());
+            System.out.println("");
+        }
+        
+        */
+        
+        /*
         
         //TESTEO FACTURA => OBTENER ALL_FACTURAS X EMAIL CLIENTE:
         
@@ -25,6 +60,8 @@ public class Principal {
               System.out.println(item.toString());  
             
         }
+        
+        */
         
         /*
         

@@ -1,11 +1,10 @@
 
 package Servlet;
 
-
+import Controlador.ControladorAuxDueño;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import Modelo.AuxFacturaPedido;
-import Controlador.ControladorAuxFacturaPedido;
+import Modelo.AuxDueño;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -23,10 +22,9 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.output.*;
 import java.time.LocalDate;
 
-
-//Se especifica el nombre y ruta de la clase: 'http://localhost:8080/ProyectoFinalLaboIV/AuxFacturaPedidoServlet?
-@WebServlet(name = "AuxFacturaPedidoServlet", urlPatterns = {"/AuxFacturaPedidoServlet"})
-public class AuxFacturaPedidoServlet extends HttpServlet {
+//Se especifica el nombre y ruta de la clase: 'http://localhost:8080/ProyectoFinalLaboIV/AuxDuenoServlet?
+@WebServlet(name = "AuxDuenoServlet", urlPatterns = {"/AuxDuenoServlet"})
+public class AuxDueñoServlet extends HttpServlet {
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -57,15 +55,15 @@ public class AuxFacturaPedidoServlet extends HttpServlet {
             mostrarElementos(request, response);
             if(request.getParameter("action") != null){
                 System.out.println("ACTION " + request.getParameter("action"));
-                if(request.getParameter("action").equals("listar")){
+                if(request.getParameter("action").equals("rankingComidas")){
                     
-                    ControladorAuxFacturaPedido controlador = new ControladorAuxFacturaPedido();
-                    //Se Ejecuta metodo que crea PDF desde servidor =>
-                    //String respuesta = controlador.crearPDF(Long.parseLong(request.getParameter("idFactura")));
-                    List<AuxFacturaPedido> lista = controlador.buscarAllAuxFacturaPedido(Long.parseLong(request.getParameter("idFactura")));
+                    ControladorAuxDueño controlador = new ControladorAuxDueño();
+                    String dateInicio = request.getParameter("dateInicio");
+                    String dateFin = request.getParameter("dateFin");
+                    List<AuxDueño> lista = controlador.buscarRankingComidas(dateInicio, dateFin);
                     Gson gsonBuilder = new GsonBuilder().create();
-                    String clienteJson = gsonBuilder.toJson(lista);
-                    respuestaServer = clienteJson;
+                    String auxDuenoJson = gsonBuilder.toJson(lista);
+                    respuestaServer = auxDuenoJson;
                     
                 }
             }
@@ -148,5 +146,6 @@ public class AuxFacturaPedidoServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
     
 }

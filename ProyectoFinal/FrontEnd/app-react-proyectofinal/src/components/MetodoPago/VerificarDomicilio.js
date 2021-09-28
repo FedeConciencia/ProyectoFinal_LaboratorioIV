@@ -12,11 +12,14 @@ import Button from "react-bootstrap/Button";
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 
-
+//Actualizado con Axios con Async Await y Variables Globales =>
 const VerificarDomicilio = (props) => {
 
     //Redireccion de la Pagina:
     let history = useHistory();
+
+    let idCliente = 0;
+    let idDomicilio = 0;
 
 
     //Usamos el useForm para la validacion del formulario y pasamos los defaultValue para pintar los input:
@@ -42,29 +45,25 @@ const VerificarDomicilio = (props) => {
         
     })
 
-    const [idCliente, setIdCliente] = useState("");
+    //Se aplica un metodo externo dentro del useEffect con Async-Await =>
 
-    const [idDomicilio, setIdDomicilio] = useState("");
+    useEffect( () => {
 
+        ejecutarUseEffect()
 
-    //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-    //los corchetes permite que nuestro userEffect se ejecute una sola vez
-    useEffect(() => {
+    }, []) 
 
-        getIdCliente();
-    
-        const timerDom = setTimeout(() => {
+    //Ejecutamos una funcion Async-Await dentro del use-effect
+    const ejecutarUseEffect = async () => {
 
-            //Se ejecuta el metodo obtener One al cargar la pagina
-            getDomicilio();
+        await getIdCliente();
 
-        }, 3000);    
-    
-    }, [idCliente, idDomicilio]) 
-    //IMPORTANTE PASO ESTADOS ENTRE PARENTESIS Y FRENA LA REPETICION EN LA ESCUCHA, DATOS NO DEBE ESTAR EN ESCUCHA
+        
+        await getDomicilio();
 
-    
-    
+    }
+   
+
     //METODOS:
 
     //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
@@ -81,10 +80,10 @@ const VerificarDomicilio = (props) => {
 
     //Metodo que se ejecuta en el evento onSubmit desde el formulario:
 
-    const enviarDatos = (datos, event) => {
+    const enviarDatos = async (datos, event) => {
 
     
-        getDatos(datos)
+        await getDatos(datos)
 
         //Limpia todos los input, pero no refresca la pagina:    
         event.target.reset()
@@ -92,49 +91,51 @@ const VerificarDomicilio = (props) => {
     }
 
     //Metodo para actualizar datos:
-    const getDatos = (datos) => {
+    const getDatos = async (datos) => {
 
-
-        axios.get("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet", {
-            params: {
-
-                action:'actualizar',
-                idDomicilio: idDomicilio, //Paso los Hooks
-                calle: datos.calle,
-                numero: datos.numero,
-                localidad: datos.localidad,
-                idCliente: idCliente, //Paso los Hooks
-                fechaAlta: moment().format('YYYY-MM-DD'), 
-                fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-                estado: "activo",
-
-                
-            }
-            })
-        .then(response => {
-
-            console.log(JSON.stringify(response))
-
-            //Redireccionar a la pagina:
-            history.push('/metodoPago');
+        try{
             
+           const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet", {
+                params: {
 
-        })
-        .catch(error =>{
-            console.log("Error");
-            console.log(error);
-        })
+                    action:'actualizar',
+                    idDomicilio: idDomicilio, //Paso los Hooks
+                    calle: datos.calle,
+                    numero: datos.numero,
+                    localidad: datos.localidad,
+                    idCliente: idCliente, //Paso los Hooks
+                    fechaAlta: moment().format('YYYY-MM-DD'), 
+                    fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
+                    estado: "activo",
 
+                    
+                }
+            })
+
+            const resJson = await response.data;
+
+            console.log("GET_DATOS => ", resJson)
+
+            //Redireccionar a la pagina pero espera antes de cambiar:
+            await history.push('/metodoPago');  
+
+        }catch(error){
+
+            console.log(error)
+
+        }    
+    
 
     }
 
 
     //Metodo Obtener los datos al Cargar la Pagina:
     const getDomicilio = async () => {
+
         try{
         
-            const id = idCliente;  
-            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet?action=buscarXIdCliente&idCliente="+id);
+             
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet?action=buscarXIdCliente&idCliente="+ idCliente);
             const resJson = await response.json();
             
             //Verificamos la obtencion de datos correcto:
@@ -149,10 +150,13 @@ const VerificarDomicilio = (props) => {
             
             //por medio del setDatos paso los datos recuperados a useState datos, modifico del servlet para solo pasar un objeto.jso
     
-            setIdDomicilio(resJson.idDomicilio); //Seteo el Hook con el valor obtenido
-            setIdCliente(resJson.idCliente);
+            idDomicilio = resJson.idDomicilio;
+            idCliente = resJson.idCliente;
 
-            
+            console.log("ID_CLIENTE => ", idCliente)
+
+            console.log("ID_DOMICILIO => ", idCliente)
+                        
     
         }catch(error){
 
@@ -163,41 +167,40 @@ const VerificarDomicilio = (props) => {
     }
 
      //Metodo que obtiene el idCliente a traves del mail buscando en la entidad cliente:
-     const getIdCliente = () => {
+     const getIdCliente = async () => {
 
         //Obtenemos el email desde el usuario en localStorage, tener en cuenta el valor en localStorage:
         let email = JSON.parse(localStorage.getItem("usuario")).usuario;
 
         console.log(email);
+
+        try{
+
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
+                params: {
         
+                    action:'idxEmail',
+                    email: email,
+                
+        
+                }
+            })
 
-        axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
-            params: {
-    
-                action:'idxEmail',
-                email: email,
-               
-    
-            }
-          })
-        .then(response => {
-    
+            const resJson = await response.data;
 
-            console.log(response.data)
+            idCliente = resJson;
 
-            //Guardo la respuesta en el hooks:
-            setIdCliente(response.data);
-
-            console.log("DATO IDCLIENTE =>", idCliente)
-            
-    
-        })
-        .catch(error =>{
-            console.log("Error");
-            console.log(error);
-        })
+            console.log("ID_CLIENTE => ", idCliente)
 
 
+            }catch(error){
+
+
+                console.log(error)
+
+            }  
+        
     }
 
     return(

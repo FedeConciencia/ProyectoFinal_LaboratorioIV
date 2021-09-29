@@ -15,14 +15,20 @@ public class Principal {
     //Gestionar las pruebas de los metodos:
     
     public static void main(String[] args) {
-        /*
+        
         //TESTEO SENDMAIL SERVIDOR => 
         
+        /*
         SendEmail send = new SendEmail();
         send.sendMail();
-        
         */
         
+        /*
+        
+        ControladorAuxFacturaPedido controlador = new ControladorAuxFacturaPedido();
+        String respuesta = controlador.crearPDF(1L, "federicosabatini@gmail.com");
+        
+        */
         
         /*
         

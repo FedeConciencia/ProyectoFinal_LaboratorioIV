@@ -27,20 +27,14 @@ const MetodoPago = (props) => {
 
     const {register, formState: { errors }, handleSubmit} = useForm();
 
-    //Estado Hook para almacenar el idCliente:
-    const [datoId, setDatoId] = useState("");
+    //Variables Globales =>
 
-    //Estado Hook para almacenar el idDomicilio:
-    const [datoIdDomicilio, setDatoIdDomicilio] = useState("");
+    let datoId  = "";
+    let datoIdDomicilio = "";
+    let cantidadCocinero = 0;
+    let artManfCocinaTiempo = 0;
+    let codigoPedido = "";
 
-    //Estado Hook para almacenar la cantidad cocinero:
-    const [cantidadCocinero, setCantidadCocinero] = useState(0);
-
-    //Estado Hook para almacenar artManuf en la Cocina:
-    const [artManfCocinaTiempo, setArtManfCocinaTiempo] = useState(0);
-
-    //Creo el estado de la variable modalCarrito:
-    const [modalPedido, setModalPedido] = useState();
 
 
     //Estado Hook para los componentes botones y select:
@@ -52,191 +46,183 @@ const MetodoPago = (props) => {
 
     })
 
+     //Creo el estado de la variable modalCarrito:
+     const [modalPedido, setModalPedido] = useState();
+
 
     useEffect(() => {
 
-        //Se ejecuta el metodo obtener idCliente al cargar la pagina:
-        getIdCliente();
-
-        //Se ejecuta una esperda de 5 segundos:
-        const timerDom = setTimeout(() => {
-
-            //La espera permite que guarde los datos ya insertado:
-            getIdDomicilio();
-            
-        }, 5000);
-
-        //Se llama metodo que obtiene la cantidad de cocineros consulta servidor:
-        artCocinaTiempo();
-
-        //Se llama metodo que obtiene la sumatoria de tiempo de art en cocina:
-        obtenerCocineros();
+        metodoUseEffect();
     
-    },[datoId, datoIdDomicilio, datos, cantidadCocinero, artManfCocinaTiempo, modalPedido]) //Importante pasar los estados de hooks al useEffect
+    },[datos, modalPedido]) //Importante pasar los estados de hooks al useEffect
 
+    //Creamos un metodo async-await que se ejecuta dentro del useEffect =>
+
+    const metodoUseEffect = async () => {
+
+        await getIdCliente();
+
+        await getIdDomicilio();
+
+        await artCocinaTiempo();
+
+        await obtenerCocineros();
+
+    }
 
 
      //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
-        const handleInputChange = (event) => {
+    const handleInputChange = (event) => {
 
-            setDatos({
+        setDatos({
 
-                ...datos,
-                [event.target.name] : event.target.value
+            ...datos,
+            [event.target.name] : event.target.value
 
-            })
+        })
 
-        }
+    }
 
-         //Metodo que se ejecuta en el evento onSubmit desde el formulario:
+    //Metodo que se ejecuta en el evento onSubmit desde el formulario:
+    const enviarDatos = async (event) => {
 
-        const enviarDatos = (event) => {
 
+        console.log("DATOS SELECT PAGO MERCADOPAGO =>", datos.selectPago)
 
-            console.log("DATOS SELECT PAGO MERCADOPAGO =>", datos.selectPago)
+        if(datos.selectPago === "2"){
 
-            if(datos.selectPago === "2"){
+            console.log("INGRESO A MERCADOPAGO")
 
-                console.log("INGRESO A MERCADOPAGO")
+            mercadoPago.apply()
 
-                mercadoPago.apply()
+        }else{
+            
+            alert(JSON.stringify(datos));
 
-            }else{
+            //Se ejecuta Metodo para guardar el pedido
+            await getDatos();
                 
-                alert(JSON.stringify(datos));
+           
+        }    
+            
+    }
 
-                const timerDom = setTimeout(() => {
-
-                    //Se ejecuta Metodo para guardar el pedido
-                    getDatos();
-                    
-                }, 3000);
-            }    
-             
-        }
-
-        //Metodo que obtiene el idDomicilio a traves del idCliente buscando en la entidad cliente:
-        const getIdDomicilio = async () => {
+    //Metodo Axios Async-Await que obtiene el idDomicilio a traves del idCliente buscando en la entidad cliente:
+    const getIdDomicilio = async () => {
 
 
-            console.log("GETDOMICILIO IDCLIENTE =>", datoId);
+        console.log("GETDOMICILIO IDCLIENTE =>", datoId);
 
-            axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
                 params: {
         
                     action:'idDomicilioXidCliente',
                     idCliente: datoId,
-                   
+                    
         
                 }
-              })
-            .then(response => {
-        
-               
-                console.log(response.data)
-
-                //Guardo la respuesta en el hooks:
-                setDatoIdDomicilio(response.data);
-
-                console.log("ID DOMICILIO =>", datoIdDomicilio)
-                
-        
-            })
-            .catch(error =>{
-                console.log("Error");
-                console.log(error);
             })
 
+            const resJson = await response.data;
 
-        }    
+            datoIdDomicilio = resJson;
 
-        //Metodo que obtiene el idCliente a traves del mail buscando en la entidad cliente:
-        const getIdCliente = () => {
+            console.log("ID DOMICILIO =>", datoIdDomicilio)
 
-            //Obtenemos el email desde el usuario en localStorage, tener en cuenta el valor en localStorage:
-            let email = JSON.parse(localStorage.getItem("usuario")).usuario;
 
-            console.log(email);
-            
+        }catch(error){
 
-            axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
+            console.log(error)
+
+        }        
+    
+    }    
+
+    //Metodo Axios Async-Await que obtiene el idCliente a traves del mail buscando en la entidad cliente:
+    const getIdCliente = async () => {
+
+        //Obtenemos el email desde el usuario en localStorage, tener en cuenta el valor en localStorage:
+        let email = await JSON.parse(localStorage.getItem("usuario")).usuario;
+
+        console.log(email);
+        
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
                 params: {
-        
+
                     action:'idxEmail',
                     email: email,
-                   
-        
+                    
+
                 }
-              })
-            .then(response => {
-        
-    
-                console.log(response.data)
-
-                //Guardo la respuesta en el hooks:
-                setDatoId(response.data);
-
-                console.log("DATO IDCLIENTE =>", datoId)
-                
-        
-            })
-            .catch(error =>{
-                console.log("Error");
-                console.log(error);
             })
 
+            const resJson = await response.data;
+
+            datoId = resJson;
+
+            console.log("DATO IDCLIENTE =>", datoId)
+
+        }catch(error){
+
+            console.log(error)
 
         }    
+        
+    }    
 
 
-        //Metodo que permite crear un Password Hexadecimal de 14 bytes Hexadecimal:
-        const passwordCodigo = () => {
+    //Metodo que permite crear un Password Hexadecimal de 14 bytes Hexadecimal:
+    const passwordCodigo = () => {
 
-            
-            var id = crypto.randomBytes(7).toString('hex');
+        
+        var id = crypto.randomBytes(7).toString('hex');
 
-            console.log("CODIGO PEDIDO => ", id)
+        console.log("CODIGO PEDIDO => ", id)
 
-            return id
+        return id
+
+    }
+
+        
+
+    //Metodo para ejecutar con el evento onSubmit:
+    const getDatos = async () => {
+
+        //Llamo al metodo que obtiene el tiempoFinal:
+        let time = await calculoFinalTiempoPedido();
+
+        let tipoEnvio = 1;
+
+        //Guardo el codigo generado Random:
+        codigoPedido = passwordCodigo();
+
+        //Guardo el total del carrito guardado en el localStorage:
+        let total = await JSON.parse(localStorage.getItem("totalCarrito"));
+        
+        console.log("FORMA DE PAGO FINAL =>", datos.selectPago)
+
+        //Si se selecciona el boton retiro en local 10% descuento:
+        if(datos.boton2 === true){
+
+            total = total * 0.90;
+            tipoEnvio = 2;
 
         }
 
-        
+        localStorage.setItem("totalCarritoFinal", JSON.stringify(total));
 
-        //Metodo para ejecutar con el evento onSubmit:
+        try{
 
-        const getDatos = async () => {
-
-            //Llamo al metodo que obtiene el tiempoFinal:
-            let time = calculoFinalTiempoPedido();
-
-            let tipoEnvio = 1;
-
-            //Guardo el codigo generado Random:
-            let codigo = passwordCodigo();
-
-            //Guardo el total del carrito guardado en el localStorage:
-            let total = JSON.parse(localStorage.getItem("totalCarrito"));
-         
-            console.log("FORMA DE PAGO FINAL =>", datos.selectPago)
-
-
-            //Si se selecciona el boton retiro en local 10% descuento:
-            if(datos.boton2 === true){
-
-                total = total * 0.90;
-                tipoEnvio = 2;
-
-            }
-
-            localStorage.setItem("totalCarritoFinal", JSON.stringify(total));
-
-            axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
                 params: {
 
         
                     action:'insertar',
-                    codigo: codigo, 
+                    codigo: codigoPedido, 
                     horaEstimadaFin: time,
                     estadoPedido:"0",
                     tipoEnvio: tipoEnvio,
@@ -249,38 +235,32 @@ const MetodoPago = (props) => {
         
                     //fechaAlta, fechaBaja, estado se crean x defecto:
         
-        
                 }
-              })
-            .then(response => {
-        
-                console.log(response.data)
-        
-            })
-            .catch(error =>{
-                console.log("Error");
-                console.log(error);
             })
 
-            
-            const timerDom = setTimeout(() => {
+            console.log(response.data)
 
-                guardarDetallePedido();
+        }catch(error){
 
-                //Ejecuto el modal de aviso Pedido;
-                modalPedidos(time); 
+            console.log(error)
 
-                
-            }, 7000);
-
+        }    
         
-        }
 
-        //Metodo para insertar detalle pedido:
-        const insertarDetallePedido = (articulo) => {
+        await guardarDetallePedido();
+
+        //Ejecuto el modal de aviso Pedido;
+        await modalPedidos(time); 
+    
+    }
 
 
-            axios.get("http://localhost:8080/ProyectoFinalLaboIV/DetallePedidoServlet", {
+    //Metodo para insertar detalle pedido:
+    const insertarDetallePedido = async (articulo) => {
+
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/DetallePedidoServlet", {
                 params: {
 
         
@@ -292,31 +272,30 @@ const MetodoPago = (props) => {
         
         
                 }
-              })
-            .then(response => {
-        
-                console.log(response.data)
-                
-        
-            })
-            .catch(error =>{
-                console.log("Error");
-                console.log(error);
             })
 
-        }
+            console.log(response.data)     
+
+        }catch(error){
+
+            console.log(error)
+
+        }        
+            
+    }
 
 
-        const guardarDetallePedido = () => {
+    const guardarDetallePedido = async () => {
 
-            //Obtengo todos los articulos manufacturados del localStorage:
-            let array = JSON.parse(localStorage.getItem("productos"));
+        //Obtengo todos los articulos manufacturados del localStorage:
+        let array = await JSON.parse(localStorage.getItem("productos"));
 
-            let ultimoId = 0;
+        let ultimoId = 0;
+
+        try{
 
             //Obtengo el ultimo idPedido, que se cargo:
-
-            axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
                 params: {
 
         
@@ -324,290 +303,279 @@ const MetodoPago = (props) => {
         
         
                 }
-              })
-            .then(response => {
-        
-                console.log(response.data)
-
-                console.log("ID PEDIDO =>", response.data)
-                
-                //Guardo el ultimo idPedido:
-                ultimoId = response.data;
-
-                console.log("VALOR ULTIMOID =>", ultimoId)
-
-                //Obtengo los datos de cada articuloManufacturado y lo guardo en un objeto:
-                for(let i = 0; i < array.length; i++){
-
-                    let articulo = {
-    
-                        cantidad: array[i].cantidad,
-                        subTotal: array[i].cantidad * array[i].precioVenta,
-                        idPedido: ultimoId,
-                        idArticulo: array[i].idArticulo,
-    
-                    }
-    
-                    //Inserto el objeto en articuloDetallePedido:
-                    insertarDetallePedido(articulo);
-    
-                }
-                
-        
             })
-            .catch(error =>{
-                console.log("Error");
-                console.log(error);
-            })
-  
 
-        }
+            const resJson = response.data;
 
-        //Metodo Calcular Sumatoria Articulos Carrito:
+            //Guardo el ultimo idPedido:
+            ultimoId = resJson;
 
-        const calcularTiempoArtCarrito = () => {
+            console.log("VALOR ULTIMOID =>", ultimoId)
 
-            //Obtengo todos los articulos manufacturados del localStorage:
-            let array = JSON.parse(localStorage.getItem("productos"));
+        }catch(error){
 
-            let tiempoTotalCarrito = 0;
+            console.log(error)
+        }        
+        
 
-            //Obtengo la sumatoria total de tiempo productos carrito:
-            for(let i = 0; i < array.length; i++){
+        //Obtengo los datos de cada articuloManufacturado y lo guardo en un objeto:
+        for(let i = 0; i < array.length; i++){
 
-                
-                tiempoTotalCarrito += array[i].tiempoEstimado * array[i].cantidad;
+            let articulo = {
 
+                cantidad: array[i].cantidad,
+                subTotal: array[i].cantidad * array[i].precioVenta,
+                idPedido: ultimoId,
+                idArticulo: array[i].idArticulo,
 
             }
 
-            console.log("TIEMPO TOTAL CARRITO => ", tiempoTotalCarrito);
+            //Inserto el objeto en articuloDetallePedido:
+            await insertarDetallePedido(articulo);
 
-            return tiempoTotalCarrito;
+        }
+             
+
+    }
+
+
+    //Metodo Calcular Sumatoria Articulos Carrito:
+    const calcularTiempoArtCarrito = async () => {
+
+        //Obtengo todos los articulos manufacturados del localStorage:
+        let array = await JSON.parse(localStorage.getItem("productos"));
+
+        let tiempoTotalCarrito = 0;
+
+        //Obtengo la sumatoria total de tiempo productos carrito:
+        for(let i = 0; i < array.length; i++){
+
+            
+            tiempoTotalCarrito += array[i].tiempoEstimado * array[i].cantidad;
 
 
         }
 
+        console.log("TIEMPO TOTAL CARRITO => ", tiempoTotalCarrito);
 
-        //Obtener cantidad de cocineros:
+        return tiempoTotalCarrito;
 
-        const obtenerCocineros = () => {
 
-            let cocineros = 0;
+    }
 
-            axios.get("http://localhost:8080/ProyectoFinalLaboIV/ConfiguracionServlet", {
+
+    //Obtener cantidad de cocineros:
+
+    const obtenerCocineros = async () => {
+
+        let cocineros = 0;
+
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/ConfiguracionServlet", {
                 params: {
 
                     action:'buscar',
                     idConfiguracion:"1",
-        
-        
+
+
                 }
-              })
-            .then(response => {
-        
-                console.log(response.data)
-
-                //Guardo la cantidad de cocineros:
-                let config = response.data;
-                cocineros = config.cantidadCocineros;
-
-                console.log("CANTIDAD COCINEROS => ", cocineros)
-
-                //Seteo el estado de hook:
-                setCantidadCocinero(cocineros);
-                
-        
-            })
-            .catch(error =>{
-                console.log("Error");
-                console.log(error);
             })
 
-            
+            const resJson = response.data;
 
+            cocineros = resJson.cantidadCocineros;
 
-        }
+            cantidadCocinero = cocineros;
 
-        //Metodo para obtener la sumatoria del tiempo de articulos en la cocina:
+            console.log("CANTIDAD COCINEROS => ", cantidadCocinero)
 
-        const artCocinaTiempo = () => {
+        }catch(error){
 
-            let array = new Array();
-            let sumatoriaTiempo = 0;
+            console.log(error)
 
+        }    
+        
 
-            axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxDatoPedidoServlet", {
+    }
+
+    //Metodo para obtener la sumatoria del tiempo de articulos en la cocina:
+    const artCocinaTiempo = async () => {
+
+        let array = new Array();
+        let sumatoriaTiempo = 0;
+
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxDatoPedidoServlet", {
                 params: {
 
                     action:'listar',
                 
         
                 }
-              })
-            .then(response => {
-        
-                console.log(response.data)
-
-                //Guardo el array de datos:
-                array = response.data;
-                
-                //Obtengo la sumatoria total de tiempo productos carrito:
-                 for(let i = 0; i < array.length; i++){
-
-                
-                    sumatoriaTiempo += array[i].tiempoEstimado * array[i].cantidad;
-
-
-                }
-
-                console.log("SUMATORIA TIEMPO => ", sumatoriaTiempo)
-
-                //Seteo el Hooks:
-                setArtManfCocinaTiempo(sumatoriaTiempo);
-                
-        
-            })
-            .catch(error =>{
-                console.log("Error");
-                console.log(error);
             })
 
-        }
+            const resJson = response.data;
 
-        //Metodo Final Para calcular tiempo de preparacion Pedido:
-        const calculoFinalTiempoPedido = () => {
+            //Guardo el array de datos:
+            array = resJson;
 
-            let totalCarrito = localStorage.getItem("totalCarrito");
+            //Obtengo la sumatoria total de tiempo productos carrito:
+            for(let i = 0; i < array.length; i++){
 
-            let tipoEnvio = "Retiro en Local";
+            
+                sumatoriaTiempo += array[i].tiempoEstimado * array[i].cantidad;
 
-            let sumatoriaFinal = 0;
-
-            let tiempoArt = calcularTiempoArtCarrito();
-                
-            console.log("TIEMPO ART CARRITO => ", tiempoArt);
-
-            console.log("TIEMPO ART COCINA => ", artManfCocinaTiempo);
-
-            console.log("CANTIDAD DE COCINEROS => ", cantidadCocinero);
-
-            sumatoriaFinal = tiempoArt + Math.round(artManfCocinaTiempo / cantidadCocinero);
-
-            console.log("SUMATORIA FINAL SIN ENVIO DOMICILIO => ", sumatoriaFinal)
-
-            //Si se selecciona el boton domicilio +10 minutos :
-            if(datos.boton1 === true){
-
-                sumatoriaFinal += 10;
-                
 
             }
 
-            console.log("TIEMPO FINAL CON ENVIO A DOMICILIO +10 M => ", sumatoriaFinal)
+            artManfCocinaTiempo = sumatoriaTiempo;
 
-            let time = convertMinutos(sumatoriaFinal);
+            console.log("SUMATORIA TIEMPO => ", sumatoriaTiempo)
 
-            console.log("VARIABLE TIME => ", time)
+        
+        }catch(error){
 
-            return time;
-         
-        }   
+            console.log(error)
+        }    
+        
+    }
 
-    
-        //Guardo en una constante el componente modalPedido y paso el props:
-        const modalPedidos = (time) => {
+    //Metodo Final Para calcular tiempo de preparacion Pedido:
+    const calculoFinalTiempoPedido = async () => {
 
-                //Guardo el total del carrito guardado en el localStorage:
-                let totalFinal = JSON.parse(localStorage.getItem("totalCarritoFinal"));
+        let totalCarrito = await localStorage.getItem("totalCarrito");
 
-                let tipoEnvio = "Retiro en Local";
+        let tipoEnvio = "Retiro en Local";
 
-                let formaPago = ""
+        let sumatoriaFinal = 0;
 
-                //Si se selecciona el boton domicilio +10 minutos :
-                if(datos.boton1 === true){
+        let tiempoArt = await calcularTiempoArtCarrito();
+            
+        console.log("TIEMPO ART CARRITO => ", tiempoArt);
 
-                    tipoEnvio = "Delivery Domicilio";
+        console.log("TIEMPO ART COCINA => ", artManfCocinaTiempo);
 
-                }
+        console.log("CANTIDAD DE COCINEROS => ", cantidadCocinero);
 
-                if(datos.selectPago === "1"){
+        sumatoriaFinal = tiempoArt + Math.round(artManfCocinaTiempo / cantidadCocinero);
 
-                    formaPago = "Pago Efectivo";
+        console.log("SUMATORIA FINAL SIN ENVIO DOMICILIO => ", sumatoriaFinal)
 
-                }else if(datos.selectPago === "2"){
+        //Si se selecciona el boton domicilio +10 minutos :
+        if(datos.boton1 === true){
 
-                    formaPago = "MercadoPago";
-                }
-                
-                const modal = () => {
-                    
-                    return (
-                    
-                        //Al componente ModalPedido le asigamos propiedades que luego son accedidas por el componente para mostrar.
-                    <ModalPedido
-                        pedido = { true }
-                        tiempo = { time }
-                        idCliente = { datoId }
-                        total = { totalFinal }
-                        tipoEnvio =  { tipoEnvio }
-                        formaPago = { formaPago }
-                    ></ModalPedido>
-
-                    );
-                }    
-                
-
-            //Guardo la constante en el estado:  
-            setModalPedido(modal);  
+            sumatoriaFinal += 10;
+            
 
         }
+
+        console.log("TIEMPO FINAL CON ENVIO A DOMICILIO +10 M => ", sumatoriaFinal)
+
+        let time = await convertMinutos(sumatoriaFinal);
+
+        console.log("VARIABLE TIME => ", time)
+
+        return time;
+        
+    }   
+
+    
+    //Guardo en una constante el componente modalPedido y paso el props:
+    const modalPedidos = async (time) => {
+
+        //Guardo el total del carrito guardado en el localStorage:
+        let totalFinal = await JSON.parse(localStorage.getItem("totalCarritoFinal"));
+
+        let tipoEnvio = "Retiro en Local";
+
+        let formaPago = ""
+
+        //Si se selecciona el boton domicilio +10 minutos :
+        if(datos.boton1 === true){
+
+            tipoEnvio = "Delivery Domicilio";
+
+        }
+
+        if(datos.selectPago === "1"){
+
+            formaPago = "Pago Efectivo";
+
+        }else if(datos.selectPago === "2"){
+
+            formaPago = "MercadoPago";
+        }
+        
+        const modal = () => {
+            
+            return (
+            
+                //Al componente ModalPedido le asigamos propiedades que luego son accedidas por el componente para mostrar.
+            <ModalPedido
+                pedido = { true }
+                tiempo = { time }
+                idCliente = { datoId }
+                codigoPedido = { codigoPedido }
+                total = { totalFinal }
+                tipoEnvio =  { tipoEnvio }
+                formaPago = { formaPago }
+            ></ModalPedido>
+
+            );
+        }    
+        
+
+        //Guardo la constante en el estado:  
+        setModalPedido(modal);  
+
+    }
 
         
 
-        //Funcion para convertir minutos en horas y minutos:
+    //Funcion para convertir minutos en horas y minutos:
 
-        function convertMinutos(mins) {
-            let h = Math.floor(mins / 60);
-            let m = mins % 60;
-            h = h < 10 ? '0' + h : h;
-            m = m < 10 ? '0' + m : m;
-            return `${h}:${m}:00`;
-          }
-
-
-
-        //Metodo para ejecutar el evento onclik boton1:
-
-        const eventoUno = () => {
-
-            
-            setDatos({...datos, boton1:true, boton2:false })
-            console.log("boton1 =>", datos.boton1)
-            console.log("boton2 =>", datos.boton2)
-            console.log("selectPago Domicilio =>", datos.selectPago)
-
+    function convertMinutos(mins) {
+        let h = Math.floor(mins / 60);
+        let m = mins % 60;
+        h = h < 10 ? '0' + h : h;
+        m = m < 10 ? '0' + m : m;
+        return `${h}:${m}:00`;
         }
 
-        //Metodo para ejecutar el evento onclik boton2:
 
-        const eventoDos = () => {
 
-            setDatos({...datos, boton1:false, boton2:true })
-            console.log("boton1 =>", datos.boton1)
-            console.log("boton2 =>", datos.boton2)
-            console.log("selectPago Local =>", datos.selectPago)
+    //Metodo para ejecutar el evento onclik boton1:
 
-        }
+    const eventoUno = () => {
 
-        const obtenerSelectPago = (e) => {
+        
+        setDatos({...datos, boton1:true, boton2:false })
+        console.log("boton1 =>", datos.boton1)
+        console.log("boton2 =>", datos.boton2)
+        console.log("selectPago Domicilio =>", datos.selectPago)
 
-            console.log("Evento  =>", e)
-            setDatos({...datos, selectPago: e })
-            console.log("selectPago => ", datos.selectPago)
+    }
 
-        }
+    //Metodo para ejecutar el evento onclik boton2:
+
+    const eventoDos = () => {
+
+        setDatos({...datos, boton1:false, boton2:true })
+        console.log("boton1 =>", datos.boton1)
+        console.log("boton2 =>", datos.boton2)
+        console.log("selectPago Local =>", datos.selectPago)
+
+    }
+
+    const obtenerSelectPago = (e) => {
+
+        console.log("Evento  =>", e)
+        setDatos({...datos, selectPago: e })
+        console.log("selectPago => ", datos.selectPago)
+
+    }
 
         
     return (

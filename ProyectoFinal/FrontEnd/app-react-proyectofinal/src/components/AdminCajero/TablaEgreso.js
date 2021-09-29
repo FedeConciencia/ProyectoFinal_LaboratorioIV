@@ -177,42 +177,7 @@ const TablaEgreso = (props) => {
 
   }
 
-  /*
-
-  //Metodo para crear la factura con setTimeOut (tiempo espera) =>
-
-  const crearFactura = (id, e) => {
-
-      
-      //Obtenemos el pedido buscado por idPedido =>
-      getPedidoId(id);
-      
-      
-      //Se ejecuta una esperda de 10 segundos:
-      const timerDos = setTimeout(() => {
-        //Insertamos la Factura Generada =>
-        setFactura(id);
-      }, 3000);
-
-      //Se ejecuta una esperda de 15 segundos:
-      const timerTres = setTimeout(() => {
-        //Listamos todos los detallesPedidos asociados al idPedido =>
-        getDetallePedido(id);
-      }, 5000);
-
-      //Se ejecuta una esperda de 20 segundos:
-      const timerCuatro = setTimeout(() => {
-        //Creamos los detalles_Facturas con los detalles_Pedidos asociados al idPedido =>
-        setDetalleFactura();
-      }, 10000);  
-
-         
-      //Creamos el PDF Factura:
-
-
-  }
-
-  */
+  
 
   //Metodo Crear Factura (Testeo) con Async-Await =>
 
@@ -269,7 +234,8 @@ const crearPdf = async () => {
 
   
               action:'listar',
-              idFactura: pruebaIdFactura, 
+              idFactura: pruebaIdFactura,
+              email: email,
               
 
           }
@@ -280,9 +246,9 @@ const crearPdf = async () => {
       
     console.log("PDF => ", resJson)
 
-
+    /*
  
-    //Genera el PDF desde REACT =>
+    //Genera el PDF desde REACT (Actualmente lo implementamos desde el Servidor)=>
     
     doc.text("Fecha: " + moment().format('YYYY-MM-DD'), 150, 10);
     doc.text("Codigo Factura: " + resJson[0].codigo , 10, 10);
@@ -336,8 +302,9 @@ const crearPdf = async () => {
     //var blob = doc.output();
     //var dataUri = "data:" + "application/pdf" + ";base64," + btoa(blob);
 
-
     console.log(pdfBase64);
+
+    */
 
     /*
 

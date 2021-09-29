@@ -62,9 +62,11 @@ public class AuxFacturaPedidoServlet extends HttpServlet {
                     ControladorAuxFacturaPedido controlador = new ControladorAuxFacturaPedido();
                     //Se Ejecuta metodo que crea PDF desde servidor =>
                     //String respuesta = controlador.crearPDF(Long.parseLong(request.getParameter("idFactura")));
-                    List<AuxFacturaPedido> lista = controlador.buscarAllAuxFacturaPedido(Long.parseLong(request.getParameter("idFactura")));
+                    String email = request.getParameter("email");
+                    long idFactura = Long.parseLong(request.getParameter("idFactura"));
+                    String respuesta = controlador.crearPDF(idFactura, email);
                     Gson gsonBuilder = new GsonBuilder().create();
-                    String clienteJson = gsonBuilder.toJson(lista);
+                    String clienteJson = gsonBuilder.toJson(respuesta);
                     respuestaServer = clienteJson;
                     
                 }

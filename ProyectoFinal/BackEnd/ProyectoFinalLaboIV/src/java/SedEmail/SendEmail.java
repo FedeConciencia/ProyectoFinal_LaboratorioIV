@@ -18,7 +18,7 @@ import java.io.File;
 
 public class SendEmail {
 
-	public void sendMail() {
+	public boolean sendMail(String ruta, String email) {
             
             /*
             //Enviar Mail sin Attachment =>
@@ -62,9 +62,9 @@ public class SendEmail {
             
             //authentication info
 		final String username = "alumnoutn424@yahoo.com";
-		final String password = "kviegoamvcxfnyhi";
+		final String password = "kviegoamvcxfnyhi"; //password account settings app
 		String fromEmail = "alumnoutn424@yahoo.com";
-		String toEmail = "federicosabatini@gmail.com";
+		String toEmail = email;
 		
 		Properties properties = new Properties();
 		properties.put("mail.smtp.auth", "true");
@@ -93,7 +93,7 @@ public class SendEmail {
 			//Attachment body part.
 			MimeBodyPart pdfAttachment = new MimeBodyPart();
                         //Ruta del Proyecto =>
-                        pdfAttachment.attachFile("C:/Users/fedsa/Desktop/Proyecto_Final_LaboIV/ProyectoFinal_LaboratorioIV/ProyectoFinal/BackEnd/ProyectoFinalLaboIV/Factura.pdf");
+                        pdfAttachment.attachFile(ruta);
                         
 			//Attach body parts
 			emailContent.addBodyPart(textBodyPart);
@@ -104,11 +104,18 @@ public class SendEmail {
 			Transport.send(msg);
 			System.out.println("Sent message");
                         
+                        //Borrar documento =>
+                        
+                        return true;
+                        
+                        
 		} catch (MessagingException e) {
 			e.printStackTrace();
+                        return false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+                        return false;
 		}
 
 	}

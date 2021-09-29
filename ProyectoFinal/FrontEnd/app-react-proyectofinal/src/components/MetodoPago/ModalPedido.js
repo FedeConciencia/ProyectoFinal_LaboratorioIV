@@ -34,12 +34,13 @@ const ModalPedido = (props) => {
             <Modal.Title>Datos Pedido Gestionado:</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+             El codigo de su pedido es : { props.codigoPedido }  
+            <br></br> 
              Le informamos el tiempo de su pedido es : { props.tiempo } 
              <br></br>
              Selecciono tipo de envio: { props.tipoEnvio}
              <br></br>
              Total de su Pedido: $ { props.total }
-
             </Modal.Body>
 
             <Modal.Footer>

@@ -12,8 +12,6 @@ import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.DatatypeConverter;
+import java.io.*;
 
 
 public class ControladorAuxFacturaPedido {
@@ -95,7 +94,7 @@ public class ControladorAuxFacturaPedido {
     
     //Crear documento PDF se importa librerias INTEX=>
     
-    public String crearPDF(long id){
+    public String crearPDF(long id, String email){
         
         try{
         
@@ -128,8 +127,11 @@ public class ControladorAuxFacturaPedido {
             //Creo el documento con un objeto Document (Libreria Itex), se asigna un tamaño y margenes:
             Document document = new Document(PageSize.A4, 30, 30, 50, 30);//float marginLeft, float marginRight, float marginTop, float marginBottom
             
+            //Se crea ruta propia del documento con el codigo del pedido Unico =>
+            String ruta = String.valueOf(lista[0].getCodigo()) + ".pdf";
+            
             //Permite mostar el archivo creado en formato PDF =>
-            FileOutputStream archivo = new FileOutputStream("Factura.pdf");
+            FileOutputStream archivo = new FileOutputStream(ruta);
             PdfWriter.getInstance(document, archivo);
             
             document.open(); //Abro el documento, para escribirlo (escribir se deben crear objetos)
@@ -334,11 +336,18 @@ public class ControladorAuxFacturaPedido {
             document.close();
             
                     
-            //Se envia PDF creado =>
+            //Se envia PDF creado se pasa ruta y mail =>
             SendEmail send = new SendEmail();
-            send.sendMail();
+            if(send.sendMail(ruta, email)){
+                
+                borrarDocument(ruta);
+                
+            }else{
+                
+                borrarDocument(ruta);
+                
+            }
             
- 
             return "Documento PDF creado con exito";
             
         }catch(Exception error){
@@ -348,6 +357,23 @@ public class ControladorAuxFacturaPedido {
             return "Error en la creacion del documento PDF";
         }
         
+        
+    }
+    
+    //Metodo para eliminar el Documento =>
+    private void borrarDocument(String ruta){
+        
+        try{
+        
+            File archivo = new File(ruta);
+
+            archivo.delete();
+        
+        }catch(Exception error){
+            
+            System.out.println("Error" + error.getMessage());
+            
+        }    
         
         
     }

@@ -65,6 +65,18 @@ public class AuxDueñoServlet extends HttpServlet {
                     String auxDuenoJson = gsonBuilder.toJson(lista);
                     respuestaServer = auxDuenoJson;
                     
+                }else if(request.getParameter("action").equals("comidas")){
+                    
+                    ControladorAuxDueño controlador = new ControladorAuxDueño();
+                    String email = request.getParameter("email");
+                    String dateInicio = request.getParameter("fechaInicio");
+                    String dateFin = request.getParameter("fechaFin");
+                    List<AuxDueño> lista = controlador.buscarRankingComidas(dateInicio, dateFin);
+                    String respuesta = controlador.sendMailandExcelRankingComidas(lista, email);
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String clienteJson = gsonBuilder.toJson(respuesta);
+                    respuestaServer = clienteJson;
+                    
                 }
             }
             out.write(respuestaServer);

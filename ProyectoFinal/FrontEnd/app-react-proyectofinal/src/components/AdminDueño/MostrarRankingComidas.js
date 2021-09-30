@@ -40,6 +40,47 @@ const MostrarRankingComidas = () => {
 
     }
 
+    const enviarExcel = async (e) => {
+
+        let fechaInicio = localStorage.getItem("fechaInicio");
+        let fechaFin = localStorage.getItem("fechaFin");
+
+        console.log("FECHA INICIO => ", fechaInicio)
+        console.log("FECHA FIN => ", fechaFin)
+
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxDuenoServlet", {
+
+                params: {
+
+                    action:'comidas',
+                    email: "federicosabatini@gmail.com", //Ingresa el mail inventado del usuario dueño, colocar uno real para testear
+                    fechaInicio: fechaInicio,
+                    fechaFin: fechaFin,
+                    
+
+                }
+            })
+
+            const resJson = await response.data;
+
+            console.log("RESPUESTA MAIL EXCEL =>", resJson)
+
+            await history.push("/adminDueño")
+
+            //localStorage.setItem("fechaInicio", JSON.stringify(""))
+            //localStorage.setItem("fechaFin", JSON.stringify(""))
+
+        }catch(error){
+
+            console.log(error)
+
+        }    
+
+
+    }
+
 
     return (
   
@@ -98,7 +139,7 @@ const MostrarRankingComidas = () => {
                         <Col ClassName='boton'>
                             <br></br>
                             <br></br>
-                            <Button type="button" className="btn btn-primary">EXPORTAR EXCEL</Button>&nbsp;&nbsp;
+                            <Button type="button" onClick={(e) => enviarExcel(e)} className="btn btn-primary">EXPORTAR EXCEL</Button>&nbsp;&nbsp;
                             <Button type="button" href={`/rankingComidas`} className="btn btn-danger">RETURN</Button>
 
                         </Col>

@@ -12,6 +12,7 @@ import moment from 'moment';
 import Table from 'react-bootstrap/Table'
 import { useHistory } from 'react-router-dom';
 
+
 const RankingComidas = () => {
 
     //Variable Global =>
@@ -67,6 +68,9 @@ const RankingComidas = () => {
 
         //Limpio todos los input
         event.target.reset()
+
+        localStorage.setItem("fechaInicio", JSON.stringify(datos.fechaInicio))
+        localStorage.setItem("fechaFin", JSON.stringify(datos.fechaFin))
 
         await history.push("/mostrarRankingComidas")
 

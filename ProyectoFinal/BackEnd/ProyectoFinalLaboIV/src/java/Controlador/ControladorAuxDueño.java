@@ -3,12 +3,29 @@ package Controlador;
 
 import Conexion.Conexion;
 import Modelo.AuxDueño;
+import SedEmail.SendEmail;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import org.apache.poi.xssf.streaming.SXSSFCell;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle; 
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 public class ControladorAuxDueño {
@@ -72,6 +89,184 @@ public class ControladorAuxDueño {
 
         return listaAuxDueño; //devolvemos la lista de alumnos encontrado
 
+    }
+    
+    //Metodo para enviar mail con documento excel Ranking Comidas: 
+    public String sendMailandExcelRankingComidas(List<AuxDueño> listaAuxDueño, String email){
+        
+        try{
+            
+            ////convertimos la coleccion de tipo AuxFacturaPedido a un array =>
+
+            AuxDueño[] lista = new AuxDueño[listaAuxDueño.size()];
+
+            lista = listaAuxDueño.toArray(lista);
+
+            String ruta = "RanKingComidas.xlsx";
+            
+             //Crear el DOCUMENTO EXCEL con Libreria POI de JAVA:
+            
+            //creo el libro excel
+            //El parametro especifica que cada 50 filas se escribe en el disco rigido y libera la memoria, asi sucesivamente:
+            XSSFWorkbook libro = new XSSFWorkbook();
+
+            //estilos, son los colores del documento (Stylos).
+            XSSFFont font = (XSSFFont) libro.createFont();
+            font.setBold(true);
+            XSSFCellStyle style = (XSSFCellStyle) libro.createCellStyle();
+            style.setFont(font);
+            XSSFCellStyle styleGris = (XSSFCellStyle) libro.createCellStyle();
+            styleGris.setFont(font);
+            styleGris.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.index);
+            styleGris.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            XSSFCellStyle styleGreen = (XSSFCellStyle) libro.createCellStyle();
+            styleGreen.setFont(font);
+            styleGreen.setFillForegroundColor(IndexedColors.SEA_GREEN.index);
+            styleGreen.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            XSSFCellStyle styleRed = (XSSFCellStyle) libro.createCellStyle();
+            styleRed.setFont(font);
+            styleRed.setFillForegroundColor(IndexedColors.RED.index);
+            styleRed.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            XSSFCellStyle styleNaranja = (XSSFCellStyle) libro.createCellStyle();
+            styleNaranja.setFont(font);
+            styleNaranja.setFillForegroundColor(IndexedColors.TAN.index);
+            styleNaranja.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            XSSFCellStyle styleTurquesa = (XSSFCellStyle) libro.createCellStyle();
+            styleTurquesa.setFont(font);
+            styleTurquesa.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.index);
+            styleTurquesa.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            XSSFCellStyle styleRosa = (XSSFCellStyle) libro.createCellStyle();
+            styleRosa.setFont(font);
+            styleRosa.setFillForegroundColor(IndexedColors.ROSE.index);
+            styleRosa.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            XSSFCellStyle styleAmarillo = (XSSFCellStyle) libro.createCellStyle();
+            styleAmarillo.setFont(font);
+            styleAmarillo.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.index);
+            styleAmarillo.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            XSSFCellStyle styleOro = (XSSFCellStyle) libro.createCellStyle();
+            styleOro.setFont(font);
+            styleOro.setFillForegroundColor(IndexedColors.GOLD.index);
+            styleOro.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            XSSFCellStyle styleOroObservado = (XSSFCellStyle) libro.createCellStyle();
+            styleOroObservado.setFont(font);
+            styleOroObservado.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            styleOroObservado.setBottomBorderColor(IndexedColors.RED.index);
+            styleOroObservado.setFillForegroundColor(IndexedColors.YELLOW.index);
+            XSSFCellStyle styleVerdeClaro = (XSSFCellStyle) libro.createCellStyle();
+            styleVerdeClaro.setFont(font);
+            styleVerdeClaro.setFillForegroundColor(IndexedColors.LIGHT_GREEN.index);
+            styleVerdeClaro.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            XSSFCellStyle styleVerdeObservacion = (XSSFCellStyle) libro.createCellStyle();
+            styleVerdeObservacion.setFont(font);
+            styleVerdeObservacion.setFillForegroundColor(IndexedColors.BRIGHT_GREEN.index);
+            styleVerdeObservacion.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            styleVerdeObservacion.setBottomBorderColor(IndexedColors.RED.index);
+            XSSFCellStyle styleAzul = (XSSFCellStyle) libro.createCellStyle();
+            styleAzul.setFont(font);
+            styleAzul.setFillForegroundColor(IndexedColors.PALE_BLUE.index);
+            styleAzul.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+
+            // Se crea una hoja dentro del libro
+            XSSFSheet hoja = libro.createSheet();
+
+            //A continuacion creamos el encabezado de la hoja excel:
+
+            int nroColumna = 0; // se inicializa el nro columnas en 0
+
+            //Encabezado Documento (primera FIla):
+
+            // Se crea una fila dentro de la hoja
+            XSSFRow row = hoja.createRow(0); //Se pasa en el parametro que corresponde a la fila 0
+
+            // Se crea una celda dentro de la fila
+            XSSFCell cell = row.createCell(nroColumna);
+            cell.setCellValue("RANKING POSICION"); //Se le da un valor a la celda
+            cell.setCellStyle(styleGris);
+            cell = row.createCell(++nroColumna); //se incrementa el nro
+            cell.setCellValue("PRODUCTO");
+            cell.setCellStyle(styleGris);
+            cell = row.createCell(++nroColumna);
+            cell.setCellValue("CANTIDAD DE VENTAS");
+            cell.setCellStyle(styleGris);
+            
+
+            //Creamos las siguientes filas y asignamos valores a las celdas:
+
+            int nroFila = 1;  //Se reinicia el valor de filas pero en 1, ya que el 0 (Encabezado del Documento)
+            nroColumna = 0;   //Se reinicia el valor de columnas en 0
+
+            
+            for(int i=0; i < lista.length; i++) {
+
+                nroColumna = 0; //Siguiente vuelta columnas se resetea a 0
+                row = hoja.createRow(nroFila);
+                ++nroFila; //Se incrementa el numero de Fila
+                cell = row.createCell(nroColumna);  
+                cell.setCellValue(i + 1);
+                cell.setCellStyle(styleAmarillo);
+                cell = row.createCell(++nroColumna); //Incrementamos el numero de columnas
+                cell.setCellValue(lista[i].getDenominacionComidad());
+                cell.setCellStyle(styleAzul);
+                cell = row.createCell(++nroColumna);
+                cell.setCellValue(lista[i].getCantidadComida());
+                cell.setCellStyle(styleNaranja);
+                
+            }
+            
+            
+           // Se crea el archivo =>
+           OutputStream fileOut = new FileOutputStream(ruta);
+           libro.write(fileOut);
+           
+           //Se envia Excel creado se pasa ruta y mail =>
+            SendEmail send = new SendEmail();
+            
+            boolean verificar = send.sendMailEstadisticasDueño(ruta, email);
+            
+            if(verificar){
+                
+                //Se borra Documento =>
+                borrarDocument(ruta);
+                
+            }else{
+                
+                borrarDocument(ruta);
+                
+            }
+         
+ 
+           return "Documento Excel creado con exito";
+            
+        }catch(Exception error){
+            
+             System.out.println("Error => " + error.getMessage());
+            
+             return "Error en la creacion del documento Excel";
+            
+            
+        }
+        
+        
+      
+    }
+    
+    //Metodo para eliminar el Documento =>
+    private void borrarDocument(String ruta){
+        
+        try{
+        
+            File archivo = new File(ruta);
+
+            archivo.delete();
+        
+        }catch(Exception error){
+            
+            System.out.println("Error" + error.getMessage());
+            
+        }    
+        
+        
     }
     
 }

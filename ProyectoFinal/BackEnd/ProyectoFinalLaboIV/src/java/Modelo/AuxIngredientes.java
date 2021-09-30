@@ -13,6 +13,7 @@ public class AuxIngredientes {
     private int tiempoEstimado;
     private double cantidad;
     private String unidadMedida;
+    private long idArticulo;
     private String denominacionArtInsumo;
     private double stockActual;
     private double stockMinimo;
@@ -22,12 +23,13 @@ public class AuxIngredientes {
     public AuxIngredientes() {
     }
 
-    public AuxIngredientes(String denominacionArtMan, double precioVenta, int tiempoEstimado, double cantidad, String unidadMedida, String denominacionArtInsumo, double stockActual, double stockMinimo) {
+    public AuxIngredientes(String denominacionArtMan, double precioVenta, int tiempoEstimado, double cantidad, String unidadMedida, long idArticulo, String denominacionArtInsumo, double stockActual, double stockMinimo) {
         this.denominacionArtMan = denominacionArtMan;
         this.precioVenta = precioVenta;
         this.tiempoEstimado = tiempoEstimado;
         this.cantidad = cantidad;
         this.unidadMedida = unidadMedida;
+        this.idArticulo = idArticulo;
         this.denominacionArtInsumo = denominacionArtInsumo;
         this.stockActual = stockActual;
         this.stockMinimo = stockMinimo;
@@ -100,6 +102,16 @@ public class AuxIngredientes {
     public void setStockMinimo(double stockMinimo) {
         this.stockMinimo = stockMinimo;
     }
+
+    public long getIdArticulo() {
+        return idArticulo;
+    }
+
+    public void setIdArticulo(long idArticulo) {
+        this.idArticulo = idArticulo;
+    }
+    
+    
     
     @Override
     public String toString(){

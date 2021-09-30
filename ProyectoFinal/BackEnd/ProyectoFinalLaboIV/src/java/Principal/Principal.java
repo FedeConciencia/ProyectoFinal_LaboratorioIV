@@ -16,6 +16,27 @@ public class Principal {
     
     public static void main(String[] args) {
         
+        
+        /*
+        
+        //TESTEO METODO CREAR EXCEL Y ENVIAR MAIL DUEÑO RANKIG COMIDAS => 
+        
+        ControladorAuxDueño controlador = new ControladorAuxDueño();
+        List<AuxDueño> lista = controlador.buscarRankingComidas("2021-09-23", "2021-09-27");
+        
+        for(AuxDueño item: lista){
+            
+            System.out.println("Producto => " + item.getDenominacionComidad() + " Cantidad => " + item.getCantidadComida());
+            System.out.println("");
+        }
+        
+        String response = controlador.sendMailandExcelRankingComidas(lista, "federicosabatini@gmail.com");
+        
+        System.out.println(response);
+        
+        */
+        
+        
         //TESTEO SENDMAIL SERVIDOR => 
         
         /*

@@ -50,6 +50,7 @@ export default function App(){
         {/* Rutas de Componentes-Vistas Home-Contacto-AdminPrincipal-Loguin-RegistroCliente: */}
 
         <Route exact path="/" component={Home} ></Route>
+        <Route exact path="/home" component={Home} ></Route>
         <Route path="/contacto" component={Contacto} ></Route>
         <Route path="/adminPrincipal" component={AdminPrincipal} ></Route>
         <Route path="/loguin" component={Loguin} ></Route>

@@ -338,7 +338,7 @@ public class ControladorAuxFacturaPedido {
                     
             //Se envia PDF creado se pasa ruta y mail =>
             SendEmail send = new SendEmail();
-            if(send.sendMail(ruta, email)){
+            if(send.sendMailFactura(ruta, email)){
                 
                 borrarDocument(ruta);
                 

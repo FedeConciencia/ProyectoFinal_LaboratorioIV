@@ -8,7 +8,14 @@ import ModalCarritoVacio from './ModalCarritoVacio';
 
 const Carrito = (props) => {
 
+    let ingredientes = new Array();
+    let productos = new Array();
+    let sinStock = true; //Se modifica por una variable global
+
+    //Estado para guardar los productos del localStorage =>
     const [datos, setDatos] = useState([])
+
+    const [ingred, setIngred] = useState([])
 
     //Estado que permite forzar una actualizacion con useEffect:
     const [recargar, setRecargar] = useState(false)
@@ -19,33 +26,46 @@ const Carrito = (props) => {
     // Hook cantidadTotal 
     const [cantidadTotal, setCantidadTotal] = useState(0)
 
-    // Hook sinStock 
-    const [sinStock, setSinStock] = useState(true)
 
     useEffect(() => {
+        
         //Guardamos en el estado datos los valores obtenidos del localStorage productos:
         setDatos(JSON.parse(localStorage.getItem("productos")))
-        activarModal()
+        productos = JSON.parse(localStorage.getItem("productos"))
+        console.log("VALOR PRODUCTOS => ", productos)
+        //Guardamos todos los ingredientes de los articulos que se encuentran en el carrito.
+        obtenerIngredientes(productos)
+        console.log("VALOR INGREDIENTES => ", ingredientes)
+        //Mantiene actualizado cantidad_Total y monto_Total
         obtenerCantidadesTotales()
+        //Activa el modal si no existen productos en el carrito
+        activarModal()
         //Fuerza la actualizacion del componente:
         setRecargar(false)
+
     }, [recargar, cantidadTotal])
+
+    
 
     //Metodo para incrementar cantidad desde el evento boton:
 
-    const sumar = (indice, event) => {
-        console.log(datos[indice].cantidad)
-        console.log(event) 
-        console.log("Bandera sinStock =>", sinStock) 
-        hayIngredientes(datos[indice].idArticulo, datos[indice].cantidad);
+    const sumar = (indice, e) => {
 
-        if(sinStock){
-            
-            datos[indice].cantidad++;
+        //Se cambia al ingresar el incremento, se muestra actualizado =>
+        datos[indice].cantidad++;
+
+        //Verifico el stock de ingredientes =>
+        verificarStockIngredientes(datos[indice].cantidad);
+
+        if(sinStock === true){
+        
             console.log(datos[indice].cantidad)
+            //Guardo la actualizacion de datos.
             localStorage.setItem("productos", JSON.stringify(datos))
         }
         else {
+             //Se decrementa manteniendo igual =>
+            datos[indice].cantidad--;
             console.log("Ingreso mensaje ?????")
             document.querySelector("#mensaje").innerHTML = "No hay suficientes ingredientes."
         }
@@ -53,38 +73,16 @@ const Carrito = (props) => {
         setRecargar(true)
     }
 
+     //Metodo para decrementar cantidad desde el evento boton:
 
-    const hayIngredientes = async (id, cantidad) => {
-        
-            const responseIngre = await fetch("http://localhost:8080/ProyectoFinalLaboIV/AuxIngredientesServlet?action=listar&idArticulo="+id); 
-            const resJsonIngre = await responseIngre.json();
-            console.log(resJsonIngre)
-            let cantidadAux = 0
-            
+     const restar = (indice, e) => {
 
-            for (let i = 0; i < resJsonIngre.length; i++) {
-                
-                cantidadAux = (cantidad * resJsonIngre[i].cantidad)
-                console.log("cantidadAux", cantidadAux)
-                console.log("sumaCantidad", cantidad)
-                console.log("resJsonIngre[i].cantidad", resJsonIngre[i].cantidad)
-                if(cantidadAux > resJsonIngre[i].stockActual){
-                    console.log("Condicion ingreso => ", cantidadAux > resJsonIngre[i].stockActual)
-                    setSinStock(false);
-                    
-                }
-                
-            }
-            console.log(sinStock)
-            
-       
-    }
+        //Libera si se bloquea el de sumar por falta de stock y disminuye:
+        sinStock = true;
 
-    //Metodo para decrementar cantidad desde el evento boton:
+        //No hace falta decrementar ingredientes ya que no se estan modificando ni en local, variables o BD solo como logica de eventos =>
 
-    const restar = (indice, event) => {
         console.log(datos[indice].cantidad)
-        console.log(event)
         datos[indice].cantidad--;
         console.log(datos[indice].cantidad)
 
@@ -100,6 +98,71 @@ const Carrito = (props) => {
         setRecargar(true)
     }
 
+
+    //Metodo para obtener los ingredientes del articulo seleccionado =>
+    const obtenerIngredientes = async (datos) => {
+
+        //Ahora podemos obtener todos los ingredientes y guardarlos en un estado =>
+
+        try{
+
+            for(let i = 0; i < datos.length; i++){
+        
+                const responseIngre = await fetch("http://localhost:8080/ProyectoFinalLaboIV/AuxIngredientesServlet?action=listar&idArticulo="+datos[i].idArticulo); 
+                const resJsonIngre = await responseIngre.json();
+                console.log(resJsonIngre)
+            
+
+                for (let i = 0; i < resJsonIngre.length; i++) {
+
+                    ingredientes.push(resJsonIngre[i])
+
+                }    
+
+            }    
+
+            setIngred(ingredientes)
+
+            console.log("INGREDIENTES = > ", ingredientes)
+
+        }catch(error){
+
+            console.log(error)
+
+        }    
+ 
+    }
+
+    //Metodo para verificar stock de ingredientes, producto seleccionado =>
+    const verificarStockIngredientes = (cantidad) => {
+
+        console.log("INGRESO VALIDAR STOCK=>")
+
+        let cantidadAux = 0
+
+        for (let i = 0; i < ingred.length; i++) {
+
+            //Ahora sumaCantidad = cantidad esta actualizado todo el tiempo:
+                
+            cantidadAux = (cantidad * ingred[i].cantidad)
+            console.log("cantidadAux", cantidadAux)
+            console.log("sumaCantidad", cantidad)
+            console.log("resJsonIngre[i].cantidad", ingred[i].cantidad)
+
+            if(cantidadAux > ingred[i].stockActual){
+                console.log("Condicion ingreso => ", cantidadAux > ingred[i].stockActual)
+                sinStock = false;
+                
+            }
+            
+        }
+
+        console.log(sinStock)
+        
+
+    }
+
+   
     //Metodo para borrar todos los datos desde el evento boton:
 
     const borrarTodo = (event) => {

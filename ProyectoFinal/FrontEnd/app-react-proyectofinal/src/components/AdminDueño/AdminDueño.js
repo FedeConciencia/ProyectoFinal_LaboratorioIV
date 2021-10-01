@@ -43,7 +43,7 @@ const AdminDueño = () =>  {
                     <tr>
 
                         <th><Button href="/rankingComidas" className="botones" variant="primary" size="lg">RANKING DE COMIDAS</Button></th>
-                        <th><Button href="/recaudacion" className="botones" variant="primary" size="lg">RECAUDACION</Button></th>
+                        <th><Button href="/ingresosrecaudacion" className="botones" variant="primary" size="lg">RECAUDACION</Button></th>
 
                     </tr>
 

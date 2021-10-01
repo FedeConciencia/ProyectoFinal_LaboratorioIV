@@ -65,19 +65,104 @@ public class AuxDueñoServlet extends HttpServlet {
                     String auxDuenoJson = gsonBuilder.toJson(lista);
                     respuestaServer = auxDuenoJson;
                     
-                }else if(request.getParameter("action").equals("comidas")){
+                }else if(request.getParameter("action").equals("rankingComidasMail")){
                     
                     ControladorAuxDueño controlador = new ControladorAuxDueño();
                     String email = request.getParameter("email");
                     String dateInicio = request.getParameter("fechaInicio");
                     String dateFin = request.getParameter("fechaFin");
                     List<AuxDueño> lista = controlador.buscarRankingComidas(dateInicio, dateFin);
-                    String respuesta = controlador.sendMailandExcelRankingComidas(lista, email);
+                    String respuesta = controlador.sendMailandExcelRankingComidas(lista, email, dateInicio, dateFin);
                     Gson gsonBuilder = new GsonBuilder().create();
                     String clienteJson = gsonBuilder.toJson(respuesta);
                     respuestaServer = clienteJson;
                     
-                }
+                }else if(request.getParameter("action").equals("recaudacion")){
+                    
+                    ControladorAuxDueño controlador = new ControladorAuxDueño();
+                    String dateInicio = request.getParameter("dateInicio");
+                    String dateFin = request.getParameter("dateFin");
+                    double recaudacionTotal = controlador.obtenerRecaudacion(dateInicio, dateFin);
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String auxDuenoJson = gsonBuilder.toJson(recaudacionTotal);
+                    respuestaServer = auxDuenoJson;
+                    
+                }else if(request.getParameter("action").equals("recaudacionMail")){
+                    
+                    ControladorAuxDueño controlador = new ControladorAuxDueño();
+                    String email = request.getParameter("email");
+                    String dateInicio = request.getParameter("fechaInicio");
+                    String dateFin = request.getParameter("fechaFin");
+                    String recaudacion = request.getParameter("recaudacion");
+                    System.out.println("RECAUDACION => " + recaudacion);
+                    String respuesta = controlador.sendMailandExcelRecaudacion(recaudacion, email, dateInicio, dateFin);
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String clienteJson = gsonBuilder.toJson(respuesta);
+                    respuestaServer = clienteJson;
+                    
+                }else if(request.getParameter("action").equals("pedidosCliente")){
+                    
+                    ControladorAuxDueño controlador = new ControladorAuxDueño();
+                    String dateInicio = request.getParameter("dateInicio");
+                    String dateFin = request.getParameter("dateFin");
+                    List<AuxDueño> lista = controlador.obtenerPedidosXCliente(dateInicio, dateFin);
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String auxDuenoJson = gsonBuilder.toJson(lista);
+                    respuestaServer = auxDuenoJson;
+                    
+                }else if(request.getParameter("action").equals("pedidosMail")){
+                    
+                    ControladorAuxDueño controlador = new ControladorAuxDueño();
+                    String email = request.getParameter("email");
+                    String dateInicio = request.getParameter("dateInicio");
+                    String dateFin = request.getParameter("dateFin");
+                    System.out.println("FECHA INICIO =>" + dateInicio);
+                    System.out.println("FECHA FIN =>" + dateFin);
+                    List<AuxDueño> listaPedidos = controlador.obtenerPedidosXCliente(dateInicio, dateFin);
+                    if(listaPedidos.size() > 0){
+                        
+                        for(AuxDueño item: listaPedidos){
+            
+                            System.out.println("CANTIDAD DE PEDIDOS => " + item.getCantidadPedidos() + "\nID_CLIENTE => " + item.getIdCliente()+
+                                                "\nNOMBRE => " + item.getNombreCliente() + "\nAPELLIDO => " + item.getApellidoCliente());
+                            System.out.println("");
+                        }
+        
+                        
+                    }else{
+                        
+                        System.out.println("NO TIENE ELEMENTOS");
+                        
+                    }
+                    String respuesta = controlador.sendMailandExcelPedidosXCliente(listaPedidos, email, dateInicio, dateFin);
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String clienteJson = gsonBuilder.toJson(respuesta);
+                    respuestaServer = clienteJson;
+                    
+                }else if(request.getParameter("action").equals("ganancias")){
+                    
+                    ControladorAuxDueño controlador = new ControladorAuxDueño();
+                    String dateInicio = request.getParameter("dateInicio");
+                    String dateFin = request.getParameter("dateFin");
+                    double ganancias = controlador.obtenerGanancia(dateInicio, dateFin);
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String auxDuenoJson = gsonBuilder.toJson(ganancias);
+                    respuestaServer = auxDuenoJson;
+                    
+                }else if(request.getParameter("action").equals("gananciasMail")){
+                    
+                    ControladorAuxDueño controlador = new ControladorAuxDueño();
+                    String email = request.getParameter("email");
+                    String dateInicio = request.getParameter("dateInicio");
+                    String dateFin = request.getParameter("dateFin");
+                    String ganancias = request.getParameter("ganancias");
+                    System.out.println("GANANCIAS => " + ganancias);
+                    String respuesta = controlador.sendMailandExcelGanancia(ganancias, email, dateInicio, dateFin);
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String clienteJson = gsonBuilder.toJson(respuesta);
+                    respuestaServer = clienteJson;
+                    
+                }    
             }
             out.write(respuestaServer);
         }catch(Exception ex){

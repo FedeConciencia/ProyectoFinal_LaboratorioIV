@@ -17,6 +17,50 @@ public class Principal {
     public static void main(String[] args) {
         
         
+        //TESTEO METODO CREAR EXCEL Y ENVIAR MAIL DUEÑO PEDIDOS X CLIENTE => 
+        
+        ControladorAuxDueño controlador = new ControladorAuxDueño();
+        double ganancia = controlador.obtenerGanancia("2021-09-23", "2021-09-29");
+        
+        System.out.println("GANANCIA => " + ganancia);
+        
+        /*
+        
+        //TESTEO METODO CREAR EXCEL Y ENVIAR MAIL DUEÑO PEDIDOS X CLIENTE => 
+        
+        ControladorAuxDueño controlador = new ControladorAuxDueño();
+        List<AuxDueño> listaPedidos = controlador.obtenerPedidosXCliente("2021-09-23", "2021-09-29");
+        
+        for(AuxDueño item: listaPedidos){
+            
+            System.out.println("CANTIDAD DE PEDIDOS => " + item.getCantidadPedidos() + "\nID_CLIENTE => " + item.getIdCliente()+
+                                "\nNOMBRE => " + item.getNombreCliente() + "\nAPELLIDO => " + item.getApellidoCliente());
+            System.out.println("");
+        }
+        
+        String response = controlador.sendMailandExcelPedidosXCliente(listaPedidos, "federicosabatini@gmail.com","2021-09-23", "2021-09-29" );
+        
+        System.out.println(response);
+        
+        */
+        
+        
+        
+        /*
+        //TESTEO METODO OBTENER RECAUDACION =>
+        
+        ControladorAuxDueño controlador = new ControladorAuxDueño();
+        
+        double recaudacionTotal = controlador.obtenerRecaudacion("2021-09-23", "2021-09-29");
+        
+        System.out.println("RECAUDACION: " + recaudacionTotal);
+        
+        String response = controlador.sendMailandExcelRecaudacion(recaudacionTotal, "federicosabatini@gmail.com", "2021-09-23", "2021-09-29");
+        
+        System.out.println("RESPONSE: " + response);
+        
+        */
+        
         /*
         
         //TESTEO METODO CREAR EXCEL Y ENVIAR MAIL DUEÑO RANKIG COMIDAS => 

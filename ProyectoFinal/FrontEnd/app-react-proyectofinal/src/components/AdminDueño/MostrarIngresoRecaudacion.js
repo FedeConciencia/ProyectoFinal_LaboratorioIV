@@ -12,12 +12,12 @@ import moment from 'moment';
 import Table from 'react-bootstrap/Table'
 import { useHistory } from 'react-router-dom';
 
-const MostrarRankingComidas = () => {
+const MostrarIngresosRecaudacion = () => {
 
     //Redireccion de la Pagina:
     let history = useHistory();
 
-    const [datos, setDatos] = useState([])
+    const [datos, setDatos] = useState(0)
 
 
     useEffect(() => {
@@ -31,7 +31,7 @@ const MostrarRankingComidas = () => {
 
     const getDatos = async () =>{
 
-        let response = await JSON.parse(localStorage.getItem("rankingComidas"));
+        let response = await JSON.parse(localStorage.getItem("recaudacion"));
 
         console.log(response)
 
@@ -54,10 +54,11 @@ const MostrarRankingComidas = () => {
 
                 params: {
 
-                    action:'rankingComidasMail',
+                    action:'recaudacionMail',
                     email: "federicosabatini@gmail.com", //Ingresa el mail inventado del usuario dueño, colocar uno real para testear
                     fechaInicio: fechaInicio,
                     fechaFin: fechaFin,
+                    recaudacion: datos,
                     
 
                 }
@@ -96,42 +97,26 @@ const MostrarRankingComidas = () => {
             <Alert variant="success" className="body">
     
                
-                <Alert.Heading className="titulo">RANKING DE COMIDAS MAS PEDIDAS</Alert.Heading>
+                <Alert.Heading className="titulo">INGRESOS-RECAUDACION</Alert.Heading>
                 <br></br>
                 <br></br>
 
                 <Table className="tabla" striped bordered hover variant="dark">
                     <thead>
                         <tr>
-                            <th>Ranking Posicion</th>
-                            <th>Producto</th>
-                            <th>Cantidad de Ventas</th>
-             
+                            <th>Recaudacion</th>
+                
                         </tr>
                     </thead>
 
                     <tbody>
 
-                        {
-       
-                        datos.map((producto, i)=> (
+                        <tr>
 
-                        
-                        <tr key={i}>
-
-                            <td>{i + 1}</td>
-                            <td>{producto.denominacionComidad}</td>
-                            <td>{producto.cantidadComida}</td>
-                           
-                        </tr>
-
-                        ))
-
-                       
-
-                        }
-
+                            <td>$ {datos}</td>
                             
+                           
+                        </tr>   
                     </tbody>
                     
                 </Table>
@@ -142,7 +127,7 @@ const MostrarRankingComidas = () => {
                             <br></br>
                             <br></br>
                             <Button type="button" onClick={(e) => enviarExcel(e)} className="btn btn-primary">EXPORTAR EXCEL</Button>&nbsp;&nbsp;
-                            <Button type="button" href={`/rankingComidas`} className="btn btn-danger">RETURN</Button>
+                            <Button type="button" href={`/ingresosRecaudacion`} className="btn btn-danger">RETURN</Button>
 
                         </Col>
 
@@ -160,4 +145,4 @@ const MostrarRankingComidas = () => {
 }
 
 
-export default MostrarRankingComidas;
+export default MostrarIngresosRecaudacion;

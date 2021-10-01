@@ -12,7 +12,7 @@ import moment from 'moment';
 import Table from 'react-bootstrap/Table'
 import { useHistory } from 'react-router-dom';
 
-const MostrarRankingComidas = () => {
+const MostrarPedidosCliente = () => {
 
     //Redireccion de la Pagina:
     let history = useHistory();
@@ -28,10 +28,10 @@ const MostrarRankingComidas = () => {
 
     }, [])
 
-
+    //Ejecuto con un Metodo Asyn-Await dentro del UseEffect =>
     const getDatos = async () =>{
 
-        let response = await JSON.parse(localStorage.getItem("rankingComidas"));
+        let response = await JSON.parse(localStorage.getItem("pedidosCliente"));
 
         console.log(response)
 
@@ -42,7 +42,7 @@ const MostrarRankingComidas = () => {
 
     const enviarExcel = async (e) => {
 
-        let fechaInicio = JSON.parse(localStorage.getItem("fechaInicio"));
+        let fechaInicio = JSON.parse(localStorage.getItem("fechaInicio")); //Importante pasarlo como JSON.parse (si no deja las "" dentro del String)
         let fechaFin = JSON.parse(localStorage.getItem("fechaFin"));
 
         console.log("FECHA INICIO => ", fechaInicio)
@@ -54,10 +54,12 @@ const MostrarRankingComidas = () => {
 
                 params: {
 
-                    action:'rankingComidasMail',
+
+                    action:'pedidosMail',
                     email: "federicosabatini@gmail.com", //Ingresa el mail inventado del usuario dueño, colocar uno real para testear
-                    fechaInicio: fechaInicio,
-                    fechaFin: fechaFin,
+                    dateInicio: fechaInicio, //Importante no colocar el mismo nombre entre variable y valor que se pasa GENERA CONFLICTO
+                    dateFin: fechaFin, 
+                    
                     
 
                 }
@@ -96,16 +98,18 @@ const MostrarRankingComidas = () => {
             <Alert variant="success" className="body">
     
                
-                <Alert.Heading className="titulo">RANKING DE COMIDAS MAS PEDIDAS</Alert.Heading>
+                <Alert.Heading className="titulo">PEDIDOS X CLIENTE</Alert.Heading>
                 <br></br>
                 <br></br>
 
                 <Table className="tabla" striped bordered hover variant="dark">
                     <thead>
                         <tr>
-                            <th>Ranking Posicion</th>
-                            <th>Producto</th>
-                            <th>Cantidad de Ventas</th>
+                            <th>Posicion</th>
+                            <th>Cantidad de Pedidos</th>
+                            <th>Id_Cliente</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
              
                         </tr>
                     </thead>
@@ -120,8 +124,10 @@ const MostrarRankingComidas = () => {
                         <tr key={i}>
 
                             <td>{i + 1}</td>
-                            <td>{producto.denominacionComidad}</td>
-                            <td>{producto.cantidadComida}</td>
+                            <td>{producto.cantidadPedidos}</td>
+                            <td>{producto.idCliente}</td>
+                            <td>{producto.nombreCliente}</td>
+                            <td>{producto.apellidoCliente}</td>
                            
                         </tr>
 
@@ -142,7 +148,7 @@ const MostrarRankingComidas = () => {
                             <br></br>
                             <br></br>
                             <Button type="button" onClick={(e) => enviarExcel(e)} className="btn btn-primary">EXPORTAR EXCEL</Button>&nbsp;&nbsp;
-                            <Button type="button" href={`/rankingComidas`} className="btn btn-danger">RETURN</Button>
+                            <Button type="button" href={`/pedidosCliente`} className="btn btn-danger">RETURN</Button>
 
                         </Col>
 
@@ -160,4 +166,4 @@ const MostrarRankingComidas = () => {
 }
 
 
-export default MostrarRankingComidas;
+export default MostrarPedidosCliente;

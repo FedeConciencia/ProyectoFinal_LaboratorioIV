@@ -27,6 +27,12 @@ import pending from './components/MercadoPago/Pending';
 import AdminDueño from './components/AdminDueño/AdminDueño';
 import RankingComidas from './components/AdminDueño/RankingComidas';
 import MostrarRankingComidas from './components/AdminDueño/MostrarRankingComidas';
+import IngresosRecaudacion from './components/AdminDueño/IngresosRecaudacion';
+import MostrarIngresosRecaudacion from './components/AdminDueño/MostrarIngresoRecaudacion';
+import PedidosCliente from './components/AdminDueño/PedidosCliente';
+import MostrarPedidosCliente from './components/AdminDueño/MostrarPedidosCliente';
+import Ganancias from './components/AdminDueño/Ganancias';
+import MostrarGanancias from './components/AdminDueño/MostrarGanancias';
 
 
 
@@ -86,6 +92,12 @@ export default function App(){
          <Route path="/adminDueño" component={AdminDueño} ></Route>
          <Route path="/rankingComidas" component={RankingComidas} ></Route>
          <Route path="/mostrarRankingComidas" component={MostrarRankingComidas} ></Route>
+         <Route path="/ingresosRecaudacion" component={IngresosRecaudacion} ></Route>
+         <Route path="/mostrarIngresosRecaudacion" component={MostrarIngresosRecaudacion} ></Route>
+         <Route path="/pedidosCliente" component={PedidosCliente} ></Route>
+         <Route path="/mostrarPedidosCliente" component={MostrarPedidosCliente} ></Route>
+         <Route path="/ganancias" component={Ganancias} ></Route>
+         <Route path="/mostrarGanancias" component={MostrarGanancias} ></Route>
         
         <ModuloAdministrador />
 

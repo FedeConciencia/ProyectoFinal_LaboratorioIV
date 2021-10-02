@@ -73,6 +73,8 @@ const TablaIngreso = (props) => {
 
         console.log(response)
 
+        //Actualizar Stock =>
+
          //Redireccionar a la pagina form cliente:
          history.push('/returnTablaIngreso');
 
@@ -87,7 +89,23 @@ const TablaIngreso = (props) => {
 
   }
 
+ //Metodo para descontar stock =>
+ const decrementarStock = async() => {
 
+
+    try{
+
+
+
+
+
+    }catch(error){
+
+      console.log(error)
+    }
+
+
+ }
 
    
   //la logica la hacemos antes de pasar la informacion a la vista:

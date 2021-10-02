@@ -57,7 +57,7 @@ public class AuxFacturaPedidoServlet extends HttpServlet {
             mostrarElementos(request, response);
             if(request.getParameter("action") != null){
                 System.out.println("ACTION " + request.getParameter("action"));
-                if(request.getParameter("action").equals("listar")){
+                if(request.getParameter("action").equals("pdfMail")){
                     
                     ControladorAuxFacturaPedido controlador = new ControladorAuxFacturaPedido();
                     //Se Ejecuta metodo que crea PDF desde servidor =>
@@ -68,6 +68,16 @@ public class AuxFacturaPedidoServlet extends HttpServlet {
                     Gson gsonBuilder = new GsonBuilder().create();
                     String clienteJson = gsonBuilder.toJson(respuesta);
                     respuestaServer = clienteJson;
+                    
+                }else if(request.getParameter("action").equals("listar")){
+                    
+                    ControladorAuxFacturaPedido controlador = new ControladorAuxFacturaPedido();
+                    long idFactura = Long.parseLong(request.getParameter("idFactura"));
+                    List<AuxFacturaPedido> lista = controlador.buscarAllAuxFacturaPedido(idFactura);
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String clienteJson = gsonBuilder.toJson(lista);
+                    respuestaServer = clienteJson;
+                      
                     
                 }
             }

@@ -66,8 +66,7 @@ const Carrito = (props) => {
         else {
              //Se decrementa manteniendo igual =>
             datos[indice].cantidad--;
-            console.log("Ingreso mensaje ?????")
-            document.querySelector("#mensaje").innerHTML = "No hay suficientes ingredientes."
+            document.querySelector("#mensaje").innerHTML = "No hay suficientes ingredientes: " + datos[indice].denominacion + " !!!"
         }
         //Fuerza la actualizacion del componente:
         setRecargar(true)
@@ -316,6 +315,9 @@ const Carrito = (props) => {
                 </Table>
 
                 <h3 id="mensaje"></h3>
+
+                <br></br>
+                <br></br>
 
                 <Button href={`/verificarDomicilio`} className="boton" variant="success" size="lg">CONFIRMAR</Button>&nbsp;&nbsp;&nbsp;
                 

@@ -334,7 +334,7 @@ const ActualizarArtInsumo = (props) => {
                                     onChange={handleInputChange}
                                     placeholder="Ingrese el Precio de Compra"
                                     className="form-control"
-                                    min="1"
+                                    min="0"
                                     step="0.01"
                                     {...register("precioCompra", { 
 
@@ -380,7 +380,7 @@ const ActualizarArtInsumo = (props) => {
                                     onChange={handleInputChange}
                                     placeholder="Ingrese el Precio Venta"
                                     className="form-control"
-                                    min="1"
+                                    min="0"
                                     step="0.01"
                                     {...register("precioVenta", { 
 

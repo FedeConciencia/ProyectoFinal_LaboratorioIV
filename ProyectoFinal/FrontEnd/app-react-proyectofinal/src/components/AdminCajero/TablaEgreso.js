@@ -233,7 +233,7 @@ const crearPdf = async () => {
           params: {
 
   
-              action:'listar',
+              action:'pdfMail',
               idFactura: pruebaIdFactura,
               email: email,
               
@@ -488,7 +488,7 @@ const getEmail = async () => {
       console.log("INGRESO A CARGA FACTURA")
 
 
-      if(pruebaPedido.tipoEnvio === 1){
+      if(pruebaPedido.tipoEnvio === 2){
 
           montoDescuento = (pruebaPedido.total / 0.9) - pruebaPedido.total;  
 

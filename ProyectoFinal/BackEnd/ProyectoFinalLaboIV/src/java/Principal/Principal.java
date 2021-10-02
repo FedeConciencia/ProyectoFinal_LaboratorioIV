@@ -17,12 +17,18 @@ public class Principal {
     public static void main(String[] args) {
         
         
+        
+        /*
+        
+        
         //TESTEO METODO CREAR EXCEL Y ENVIAR MAIL DUEÑO PEDIDOS X CLIENTE => 
         
         ControladorAuxDueño controlador = new ControladorAuxDueño();
         double ganancia = controlador.obtenerGanancia("2021-09-23", "2021-09-29");
         
         System.out.println("GANANCIA => " + ganancia);
+        
+        */
         
         /*
         

@@ -155,16 +155,22 @@ public class ControladorAuxDueño {
 
             conexion = con.getConnection(); //metodo getConnection, logueamos el usuario.
 
-            ps = conexion.prepareStatement("SELECT (sum(detalleArt.cantidad * insumo.precioVenta) - sum(detalleArt.cantidad * insumo.precioCompra)) AS Ganancia\n" +
-                                            "FROM factura AS factura INNER JOIN detalle_factura AS detalleFactura ON factura.idFactura = detalleFactura.idFactura\n" +
+            ps = conexion.prepareStatement("SELECT\n" +
+                                            "(SELECT sum(factura.totalVenta) FROM \n" +
+                                            "factura AS factura WHERE factura.fechaAlta BETWEEN ? AND ?)\n" +
+                                            "-\n" +
+                                            "(SELECT sum(detalleArt.cantidad * insumo.precioCompra) FROM \n" +
+                                            "factura AS factura INNER JOIN detalle_factura AS detalleFactura ON factura.idFactura = detalleFactura.idFactura\n" +
                                             "INNER JOIN articulo_manufacturado AS artManf ON detalleFactura.idArticulo = artManf.idArticulo INNER JOIN\n" +
                                             "articulo_manufacturado_detalle AS detalleArt ON detalleArt.idArticuloManufacturado = artManf.idArticulo\n" +
                                             "INNER JOIN articulo_insumo AS insumo ON detalleArt.idArticuloInsumo = insumo.idArticulo\n" +
-                                            "WHERE factura.fechaAlta BETWEEN ? AND ?;");
+                                            "WHERE factura.fechaAlta BETWEEN ? AND ?);");
             
             
             ps.setString(1, date1); 
-            ps.setString(2, date2); 
+            ps.setString(2, date2);
+            ps.setString(3, date1);
+            ps.setString(4, date2);
 
             rs = ps.executeQuery();
 

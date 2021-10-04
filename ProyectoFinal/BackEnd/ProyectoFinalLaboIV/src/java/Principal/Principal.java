@@ -16,13 +16,13 @@ public class Principal {
     
     public static void main(String[] args) {
         
-        /*
+       
         
         //TESTEO METODO OBTENER DATOS ACTUALIZAR STOCK => 
         
         
         ControladorAuxActualizarStock controlador = new ControladorAuxActualizarStock();
-        List<AuxActualizarStock> lista = controlador.actualizarStock(1L);
+        List<AuxActualizarStock> lista = controlador.actualizarStock(3L);
         
         
         for(AuxActualizarStock item: lista){
@@ -31,7 +31,7 @@ public class Principal {
             System.out.println("");
         }
         
-        */
+        
        
         
         /*

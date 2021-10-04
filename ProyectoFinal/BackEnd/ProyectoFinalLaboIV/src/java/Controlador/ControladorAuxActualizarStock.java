@@ -57,8 +57,13 @@ public class ControladorAuxActualizarStock {
 
 
             }
+           
             
             conexion.close();
+            
+            //Actualizar Stock =>
+            lista = descontarStock(lista);
+            
 
         } catch (Exception ex) {
 
@@ -76,8 +81,27 @@ public class ControladorAuxActualizarStock {
             }
 
         }
-
+        
         return lista; //devolvemos el alumno encontrado
+    }
+    
+    public List<AuxActualizarStock> descontarStock(List<AuxActualizarStock> lista){
+        
+        double stockActualizado = 0;
+        ControladorArticuloInsumo controlador = new ControladorArticuloInsumo();
+        
+        
+        
+        for(AuxActualizarStock item: lista){
+            
+            stockActualizado = item.getStockActual() - (item.getCantidadArticulo() * item.getCantidadInsumo());
+            controlador.actualizarArtInsumoStock(stockActualizado, item.getIdInsumo());
+            item.setStockActual(stockActualizado);
+                
+        }
+        
+        return lista;
+        
     }
     
 }

@@ -19,7 +19,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 //Se especifica el nombre y ruta de la clase: 'http://localhost:8080/ProyectoFinalLaboIV/AuxActualizarStockServlet?
 @WebServlet(name = "AuxActualizarStockServlet", urlPatterns = {"/AuxActualizarStockServlet"})
-public class AuxActualizarStockServlet {
+public class AuxActualizarStockServlet extends HttpServlet{
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -50,12 +50,13 @@ public class AuxActualizarStockServlet {
             if(request.getParameter("action") != null){
                 System.out.println("ACTION " + request.getParameter("action"));
                 
-                if(request.getParameter("action").equals("listar")){
+                if(request.getParameter("action").equals("actualizar")){
                     
                     //Obtenemos la lista de insumos por idPedido:
                     
                     ControladorAuxActualizarStock controlador = new ControladorAuxActualizarStock();
                     long idPedido = Long.valueOf(request.getParameter("idPedido"));
+                    System.out.println("ID_PEDIDO=>"+idPedido);
                     List<AuxActualizarStock> lista = controlador.actualizarStock(idPedido);
                     Gson gsonBuilder = new GsonBuilder().create();
                     String cadenaJson = gsonBuilder.toJson(lista);
@@ -108,6 +109,45 @@ public class AuxActualizarStockServlet {
               System.out.println(ex);
            }
     }
+    
+     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
     
 }
 

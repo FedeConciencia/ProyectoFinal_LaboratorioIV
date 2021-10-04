@@ -16,6 +16,7 @@ import { useHistory } from 'react-router-dom';
 //Se pasan los props (parametros):
 const TablaIngreso = (props) => {
 
+ let array = new Array(); 
 
  const [datos, setDatos] = useState([])
 
@@ -57,9 +58,11 @@ const TablaIngreso = (props) => {
       
   }
 
-  const cambiarEstado = (id, e) => {
+  const cambiarEstado = async (id, e) => {
 
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
+    try{
+
+    const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
         params: {
 
             action:'actualizarEstado',
@@ -69,34 +72,100 @@ const TablaIngreso = (props) => {
 
         }
       })
-    .then(response => {
 
-        console.log(response)
+      let resJson = await response;
 
-        //Actualizar Stock =>
+      console.log(resJson)
 
-         //Redireccionar a la pagina form cliente:
-         history.push('/returnTablaIngreso');
+        //Actualizar Stock, se pasa el idPedido =>
+      await decrementarStock(id);
 
+      //Redireccionar a la pagina form cliente:
+      history.push('/returnTablaIngreso');
 
-    })
-    .catch(error =>{
-        console.log("Error");
-        console.log(error);
-    })
+    }catch(error){
 
-    
+      console.log(error)
+
+    }  
+  
 
   }
 
- //Metodo para descontar stock =>
- const decrementarStock = async() => {
+ //Metodo para decrementar stock =>
+ const decrementarStock = async(id) => {
 
 
     try{
 
+      const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxActualizarStockServlet", {
+        params: {
+
+            action:'listar',
+            idPedido: id,
+        
+
+        }
+
+      }) 
+
+      //Obtenemos el array de datos AuxActualizarStock =>
+      array = await response.data;
+      
+      console.log("DATOS INSUMOS => ", array)
+
+      let cantidadProducto = 0;
+
+      let stockObtenido = 0;
+
+      let stockActualizado = 0;
+
+      //Logica para gestionar la actualizacion de stock con ctualizarArtInsumoStock (Insumo) =>
+
+      for(let i = 0; i < array.length; i++){
 
 
+          cantidadProducto = array[i].cantidadArticulo;
+
+          if(array[i].articulo !== array[i+1]){
+
+             cantidadProducto = array[i].cantidadArticulo;
+
+
+          }
+
+          stockObtenido = cantidadProducto * array[i].cantidadInsumo;
+
+          stockActualizado = array[i].stockActual - stockObtenido;
+
+
+          try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet", {
+              params: {
+      
+                  action:'actualizarStock',
+                  idArticulo: array[i].idInsumo,
+              
+      
+              }
+      
+            })
+
+            //Obtenemos el array de datos AuxActualizarStock =>
+            let resJson = await response.data;
+
+            console.log("Actualizado insumo Stock => ", resJson)
+
+          }catch(error){
+
+            console.log(error)
+
+          }  
+
+
+
+      }
 
 
     }catch(error){

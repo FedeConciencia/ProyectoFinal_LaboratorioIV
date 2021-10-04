@@ -111,6 +111,19 @@ public class ArticuloInsumoServlet extends HttpServlet {
                     String cadenaJson = gsonBuilder.toJson(articuloInsumo);
                     respuestaServer = cadenaJson;
                     
+                }else if(request.getParameter("action").equals("actualizarStock")){
+                    
+                    // parametros
+                    long idArticulo = Long.valueOf(request.getParameter("idArticulo"));
+                    double stockActual = Double.valueOf(request.getParameter("stockActual"));
+                    
+                    ControladorArticuloInsumo controlador = new ControladorArticuloInsumo();
+                    controlador.actualizarArtInsumoStock(stockActual, idArticulo);
+                    List<ArticuloInsumo> lista = controlador.buscarAllArtInsumo();
+                    Gson gsonBuilder = new GsonBuilder().create();
+                    String cadenaJson = gsonBuilder.toJson(lista);
+                    respuestaServer = cadenaJson;
+                    
                 }else if(request.getParameter("action").equals("eliminar")){
                     
                     ControladorArticuloInsumo controlador = new ControladorArticuloInsumo();

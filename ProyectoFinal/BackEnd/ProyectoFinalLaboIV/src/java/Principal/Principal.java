@@ -16,7 +16,23 @@ public class Principal {
     
     public static void main(String[] args) {
         
+        /*
         
+        //TESTEO METODO OBTENER DATOS ACTUALIZAR STOCK => 
+        
+        
+        ControladorAuxActualizarStock controlador = new ControladorAuxActualizarStock();
+        List<AuxActualizarStock> lista = controlador.actualizarStock(1L);
+        
+        
+        for(AuxActualizarStock item: lista){
+            
+            System.out.println(item.toString());
+            System.out.println("");
+        }
+        
+        */
+       
         
         /*
         

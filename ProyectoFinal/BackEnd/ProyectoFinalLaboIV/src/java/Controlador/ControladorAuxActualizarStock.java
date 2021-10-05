@@ -85,6 +85,7 @@ public class ControladorAuxActualizarStock {
         return lista; //devolvemos el alumno encontrado
     }
     
+    //Metodo que permite descontar el Stock =>
     public List<AuxActualizarStock> descontarStock(List<AuxActualizarStock> lista){
         
         double stockActualizado = 0;

@@ -91,9 +91,31 @@ const MetodoPago = (props) => {
 
         if(datos.selectPago === "2"){
 
+            //Cargar Pedido =>
+            await getDatos();
+
+            let precio = JSON.parse(localStorage.getItem("totalCarritoFinal"));
+            let codigo = JSON.parse(localStorage.getItem("codigoPedido"));
+            let respuestaMercado = {"precio":precio, "codigo":codigo}
+
             console.log("INGRESO A MERCADOPAGO")
 
-            mercadoPago.apply()
+            try{
+
+                const response = await axios.post("http://localhost:8080/ProyectoFinalLaboIV/AuxMercadoPagoServlet", respuestaMercado) 
+    
+                const resJson = await response.data;
+
+                console.log("RESPUESTA MERCADO PAGO =>", resJson)
+    
+    
+            }catch(error){
+    
+                console.log(error)
+    
+            }        
+
+            
 
         }else{
             
@@ -214,6 +236,7 @@ const MetodoPago = (props) => {
         }
 
         localStorage.setItem("totalCarritoFinal", JSON.stringify(total));
+        localStorage.setItem("codigoPedido", JSON.stringify(codigoPedido));
 
         try{
 

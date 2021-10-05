@@ -8,6 +8,9 @@ import Form from "react-bootstrap/Form";
 import { GoogleLogout } from 'react-google-login';
 import './../assets/css/navigation.css';
 import { ContextoUsuario } from "./ContextoUsuario";
+import NavHome from "./Navigation/NavHome";
+import NavCarrito from "./Navigation/NavCarrito";
+import NavHamburguer from "./Navigation/NavHamburguer";
 
 export default function Navigation() {
 
@@ -26,11 +29,12 @@ export default function Navigation() {
         
       }else if(usuario["rol"] === "cliente"){
 
-        return <><Nav.Link href="/productos">PRODUCTOS</Nav.Link>
+        return <>
+                <Nav.Link href="/productos">PRODUCTOS</Nav.Link>
                 <Nav.Link href="/contacto">CONTACTO</Nav.Link>
-                <Nav.Link href="/carrito">CARRITO</Nav.Link>
-                <Nav.Link href="/historialCliente">HISTORIAL</Nav.Link></>;
-
+                <Nav.Link href="/historialCliente">HISTORIAL</Nav.Link>
+                <NavCarrito />
+              </>;
       }else if(usuario["rol"] === "cocinero"){
 
         return <Nav.Link href="/cocineroPrincipal">PRINCIPAL</Nav.Link>;
@@ -66,14 +70,11 @@ export default function Navigation() {
   return (
     <Fragment>
       <Navbar bg="primary" variant="dark" className="navbar-parent">
-        <Navbar.Brand href="/">INICIO</Navbar.Brand>
+        <NavHome />
+        <NavHamburguer />
         <Nav className="mr-auto">
           <VerificarRolUsuario />
           
-          <Form inline className="search-box">
-            <FormControl type="text" placeholder="Search" className="mr-sm-2 box" />
-            <Button variant="outline-light">BUSCAR</Button>
-          </Form>
           {console.log(usuario)}
           { usuario === null
           ? <Nav.Link href="/loguin" className="log-btn">LOGIN</Nav.Link>

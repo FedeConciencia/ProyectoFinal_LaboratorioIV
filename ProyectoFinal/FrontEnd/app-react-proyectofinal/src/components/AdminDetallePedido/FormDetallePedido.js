@@ -94,10 +94,8 @@ const FormDetallePedido = (props) => {
                             <Button href={`actualizarDetallePedido/${detallePedido.idDetallePedido}`} className="boton" variant="primary" size="sm">UPDATE</Button>
                             <br></br>
                             <br></br>
-                            <Button href={`eliminarLogicDetallePedido/${detallePedido.idDetallePedido}`} className="boton" variant="warning" size="sm">DELETE.LOGIC</Button>
-                            <br></br>
-                            <br></br>
-                            <Button href={`eliminarDetallePedido/${detallePedido.idDetallePedido}`} className="boton" variant="danger" size="sm">DELETE.PHYSICAL</Button>
+                            <Button href={`eliminarLogicDetallePedido/${detallePedido.idDetallePedido}`} className="boton" variant="danger" size="sm">DELETE</Button>
+                            
 
                             </td>
                            

@@ -95,10 +95,8 @@ const FormRubroGeneral = (props) => {
                             <Button href={`actualizarRubroGeneral/${rubro.idRubro}`} className="boton" variant="primary" size="sm">UPDATE</Button>
                             <br></br>
                             <br></br>
-                            <Button href={`eliminarLogicRubroGeneral/${rubro.idRubro}`} className="boton" variant="warning" size="sm">DELETE.LOGIC</Button>
-                            <br></br>
-                            <br></br>
-                            <Button href={`eliminarRubroGeneral/${rubro.idRubro}`} className="boton" variant="danger" size="sm">DELETE.PHYSICAL</Button>
+                            <Button href={`eliminarLogicRubroGeneral/${rubro.idRubro}`} className="boton" variant="danger" size="sm">DELETE</Button>
+                            
 
                             </td>
                            

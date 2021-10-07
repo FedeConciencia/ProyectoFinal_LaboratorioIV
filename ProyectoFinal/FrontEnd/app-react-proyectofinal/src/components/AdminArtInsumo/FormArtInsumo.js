@@ -127,10 +127,7 @@ const FormArtInsumo = (props) => {
                             <Button href={`actualizarArtInsumo/${articulo.idArticulo}`} className="boton" variant="primary" size="sm">UPDATE</Button>
                             <br></br>
                             <br></br>
-                            <Button href={`eliminarLogicArtInsumo/${articulo.idArticulo}`} className="boton" variant="warning" size="sm">DELETE.LOGIC</Button>
-                            <br></br>
-                            <br></br>
-                            <Button href={`eliminarArtInsumo/${articulo.idArticulo}`} className="boton" variant="danger" size="sm">DELETE.PHYSICAL</Button>
+                            <Button href={`eliminarLogicArtInsumo/${articulo.idArticulo}`} className="boton" variant="danger" size="sm">DELETE</Button>
 
                             </td>
                            

@@ -98,10 +98,8 @@ const FormConfiguracion = (props) => {
                             <Button href={`actualizarConfiguracion/${configuracion.idConfiguracion}`} className="boton" variant="primary" size="sm">UPDATE</Button>
                             <br></br>
                             <br></br>
-                            <Button href={`eliminarLogicConfiguracion/${configuracion.idConfiguracion}`} className="boton" variant="warning" size="sm">DELETE.LOGIC</Button>
-                            <br></br>
-                            <br></br>
-                            <Button href={`eliminarConfiguracion/${configuracion.idConfiguracion}`} className="boton" variant="danger" size="sm">DELETE.PHYSICAL</Button>
+                            <Button href={`eliminarLogicConfiguracion/${configuracion.idConfiguracion}`} className="boton" variant="danger" size="sm">DELETE</Button>
+                            
 
                             </td>
                            

@@ -16,7 +16,10 @@ public class Principal {
     
     public static void main(String[] args) {
         
-       
+        
+        System.out.println(System.getProperty("catalina.base"));
+        
+        /*
         
         //TESTEO METODO OBTENER DATOS ACTUALIZAR STOCK => 
         
@@ -32,7 +35,7 @@ public class Principal {
         }
         
         
-       
+       */
         
         /*
         

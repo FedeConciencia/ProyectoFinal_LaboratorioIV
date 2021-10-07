@@ -113,10 +113,8 @@ const FormArtManDetalle = (props) => {
                             <Button href={`actualizarArtManDetalle/${articulo.idArticuloDetalle}`} className="boton" variant="primary" size="sm">UPDATE</Button>
                             <br></br>
                             <br></br>
-                            <Button href={`eliminarLogicArtManDetalle/${articulo.idArticuloDetalle}`} className="boton" variant="warning" size="sm">DELETE.LOGIC</Button>
-                            <br></br>
-                            <br></br>
-                            <Button href={`eliminarArtManDetalle/${articulo.idArticuloDetalle}`} className="boton" variant="danger" size="sm">DELETE.PHYSICAL</Button>
+                            <Button href={`eliminarLogicArtManDetalle/${articulo.idArticuloDetalle}`} className="boton" variant="danger" size="sm">DELETE</Button>
+
 
                             </td>
                            

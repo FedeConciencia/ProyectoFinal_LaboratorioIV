@@ -33,6 +33,7 @@ import PedidosCliente from './components/AdminDueño/PedidosCliente';
 import MostrarPedidosCliente from './components/AdminDueño/MostrarPedidosCliente';
 import Ganancias from './components/AdminDueño/Ganancias';
 import MostrarGanancias from './components/AdminDueño/MostrarGanancias';
+import AuxMercadoPago from './components/MetodoPago/AuxMercadoPago';
 
 
 
@@ -66,6 +67,7 @@ export default function App(){
         <Route path="/detallePlato/:id" component={DetallePlato} ></Route>
         <Route path="/carrito" component={Carrito} />
         <Route path="/metodoPago" component={MetodoPago} />
+        <Route path="/auxMercadoPago" component={AuxMercadoPago} />
         <Route path="/verificarDomicilio" component={VerificarDomicilio} />
         <Route path="/historialCliente" component={HistorialCliente} />
 

@@ -123,10 +123,8 @@ const FormArtManufacturado = (props) => {
                             <Button href={`actualizarArtManufacturado/${articulo.idArticulo}`} className="boton" variant="primary" size="sm">UPDATE</Button>
                             <br></br>
                             <br></br>
-                            <Button href={`eliminarLogicArtManufacturado/${articulo.idArticulo}`} className="boton" variant="warning" size="sm">DELETE.LOGIC</Button>
-                            <br></br>
-                            <br></br>
-                            <Button href={`eliminarArtManufacturado/${articulo.idArticulo}`} className="boton" variant="danger" size="sm">DELETE.PHYSICAL</Button>
+                            <Button href={`eliminarLogicArtManufacturado/${articulo.idArticulo}`} className="boton" variant="danger" size="sm">DELETE</Button>
+                            
 
                             </td>
                            

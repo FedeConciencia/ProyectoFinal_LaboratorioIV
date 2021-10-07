@@ -2,72 +2,58 @@ import { Route} from 'react-router-dom';
 import FormCliente from './AdminCliente/FormCliente';
 import RegistrarCliente from './AdminCliente/RegistrarCliente';
 import ActualizarCliente from './AdminCliente/ActualizarCliente';
-import EliminarCliente from './AdminCliente/EliminarCliente';
 import EliminarLogicCliente from './AdminCliente/EliminarLogicCliente';
 import FormDomicilio from './AdminDomicilio/FormDomicilio';
 import RegistrarDomicilio from './AdminDomicilio/RegistrarDomicilio';
 import ActualizarDomicilio from './AdminDomicilio/ActualizarDomicilio';
-import EliminarDomicilio from './AdminDomicilio/EliminarDomicilio';
 import EliminarLogicDomicilio from './AdminDomicilio/EliminarLogicDomicilio';
 import FormUsuario from './AdminUsuario/FormUsuario';
 import RegistrarUsuario from './AdminUsuario/RegistrarUsuario';
 import ActualizarUsuario from './AdminUsuario/ActualizarUsuario';
-import EliminarUsuario from './AdminUsuario/EliminarUsuario';
 import EliminarLogicUsuario from './AdminUsuario/EliminarLogicUsuario';
 import FormPedido from './AdminPedido/FormPedido';
 import RegistrarPedido from './AdminPedido/RegistrarPedido';
 import ActualizarPedido from './AdminPedido/ActualizarPedido';
-import EliminarPedido from './AdminPedido/EliminarPedido';
 import EliminarLogicPedido from './AdminPedido/EliminarLogicPedido';
 import FormMercadoPago from './AdminMercadoPago/FormMercadoPago';
 import RegistrarMercadoPago from './AdminMercadoPago/RegistrarMercadoPago';
 import ActualizarMercadoPago from './AdminMercadoPago/ActualizarMercadoPago';
-import EliminarMercadoPago from './AdminMercadoPago/EliminarMercadoPago';
 import EliminarLogicMercadoPago from './AdminMercadoPago/EliminarLogicMercadoPago';
 import FormFactura from './AdminFactura/FormFactura';
 import RegistrarFactura from './AdminFactura/RegistrarFactura';
 import ActualizarFactura from './AdminFactura/ActualizarFactura';
-import EliminarFactura from './AdminFactura/EliminarFactura';
 import EliminarLogicFactura from './AdminFactura/EliminarLogicFactura';
 import FormDetalleFactura from './AdminDetalleFactura/FormDetalleFactura';
 import RegistrarDetalleFactura from './AdminDetalleFactura/RegistrarDetalleFactura';
 import ActualizarDetalleFactura from './AdminDetalleFactura/ActualizarDetalleFactura';
-import EliminarDetalleFactura from './AdminDetalleFactura/EliminarDetalleFactura';
 import EliminarLogicDetalleFactura from './AdminDetalleFactura/EliminarLogicDetalleFactura';
 import FormDetallePedido from './AdminDetallePedido/FormDetallePedido';
 import RegistrarDetallePedido from './AdminDetallePedido/RegistrarDetallePedido';
 import ActualizarDetallePedido from './AdminDetallePedido/ActualizarDetallePedido';
-import EliminarDetallePedido from './AdminDetallePedido/EliminarDetallePedido';
 import EliminarLogicDetallePedido from './AdminDetallePedido/EliminarLogicDetallePedido';
 import FormConfiguracion from './AdminConfiguracion/FormConfiguracion';
 import RegistrarConfiguracion from './AdminConfiguracion/RegistrarConfiguracion';
 import ActualizarConfiguracion from './AdminConfiguracion/ActualizarConfiguracion';
-import EliminarConfiguracion from './AdminConfiguracion/EliminarConfiguracion';
 import EliminarLogicConfiguracion from './AdminConfiguracion/EliminarLogicConfiguracion';
 import FormRubroGeneral from './AdminRubroGeneral/FormRubroGeneral';
 import RegistrarRubroGeneral from './AdminRubroGeneral/RegistrarRubroGeneral';
 import ActualizarRubroGeneral from './AdminRubroGeneral/ActualizarRubroGeneral';
-import EliminarRubroGeneral from './AdminRubroGeneral/EliminarRubroGeneral';
 import EliminarLogicRubroGeneral from './AdminRubroGeneral/EliminarLogicRubroGeneral';
 import FormRubroArticulo from './AdminRubroArticulo/FormRubroArticulo';
 import RegistrarRubroArticulo from './AdminRubroArticulo/RegistrarRubroArticulo';
 import ActualizarRubroArticulo from './AdminRubroArticulo/ActualizarRubroArticulo';
-import EliminarRubroArticulo from './AdminRubroArticulo/EliminarRubroArticulo';
 import EliminarLogicRubroArticulo from './AdminRubroArticulo/EliminarLogicRubroArticulo';
 import FormArtManufacturado from './AdminArtManufacturado/FormArtManufacturado';
 import RegistrarArtManufacturado from './AdminArtManufacturado/RegistrarArtManufacturado';
 import ActualizarArtManufacturado from './AdminArtManufacturado/ActualizarArtManufacturado';
-import EliminarArtManufacturado from './AdminArtManufacturado/EliminarArtManufacturado';
 import EliminarLogicArtManufacturado from './AdminArtManufacturado/EliminarLogicArtManufacturado';
 import FormArtInsumo from './AdminArtInsumo/FormArtInsumo';
 import RegistrarArtInsumo from './AdminArtInsumo/RegistrarArtInsumo';
 import ActualizarArtInsumo from './AdminArtInsumo/ActualizarArtInsumo';
-import EliminarArtInsumo from './AdminArtInsumo/EliminarArtInsumo';
 import EliminarLogicArtInsumo from './AdminArtInsumo/EliminarLogicArtInsumo';
 import FormArtManDetalle from './AdminArtManDetalle/FormArtManDetalle';
 import RegistrarArtManDetalle from './AdminArtManDetalle/RegistrarArtManDetalle';
 import ActualizarArtManDetalle from './AdminArtManDetalle/ActualizarArtManDetalle';
-import EliminarArtManDetalle from './AdminArtManDetalle/EliminarArtManDetalle';
 import EliminarLogicArtManDetalle from './AdminArtManDetalle/EliminarLogicArtManDetalle';
 import ReturnTablaIngreso from './AdminCajero/ReturnTablaIngreso';
 import ReturnTablaEgreso from './AdminCajero/ReturnTablaEgreso';
@@ -82,7 +68,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminCliente" component={FormCliente} ></Route>
             <Route path="/registrarCliente" component={RegistrarCliente} ></Route>
             <Route path="/actualizarCliente/:id" component={ActualizarCliente} ></Route>
-            <Route path="/eliminarCliente/:id" component={EliminarCliente} ></Route>
             <Route path="/eliminarLogicCliente/:id" component={EliminarLogicCliente} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminDomicilio CRUD: */}
@@ -90,7 +75,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminDomicilio" component={FormDomicilio} ></Route>
             <Route path="/registrarDomicilio" component={RegistrarDomicilio} ></Route>
             <Route path="/actualizarDomicilio/:id" component={ActualizarDomicilio} ></Route>
-            <Route path="/eliminarDomicilio/:id" component={EliminarDomicilio} ></Route>
             <Route path="/eliminarLogicDomicilio/:id" component={EliminarLogicDomicilio} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminUsuario CRUD: */}
@@ -98,7 +82,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminUsuario" component={FormUsuario} ></Route>
             <Route path="/registrarUsuario" component={RegistrarUsuario} ></Route>
             <Route path="/actualizarUsuario/:id" component={ActualizarUsuario} ></Route>
-            <Route path="/eliminarUsuario/:id" component={EliminarUsuario} ></Route>
             <Route path="/eliminarLogicUsuario/:id" component={EliminarLogicUsuario} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminPedido CRUD: */}
@@ -106,7 +89,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminPedido" component={FormPedido} ></Route>
             <Route path="/registrarPedido" component={RegistrarPedido} ></Route>
             <Route path="/actualizarPedido/:id" component={ActualizarPedido} ></Route>
-            <Route path="/eliminarPedido/:id" component={EliminarPedido} ></Route>
             <Route path="/eliminarLogicPedido/:id" component={EliminarLogicPedido} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminMercadoPago CRUD: */}
@@ -114,7 +96,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminMercadoPago" component={FormMercadoPago} ></Route>
             <Route path="/registrarMercadoPago" component={RegistrarMercadoPago} ></Route>
             <Route path="/actualizarMercadoPago/:id" component={ActualizarMercadoPago} ></Route>
-            <Route path="/eliminarMercadoPago/:id" component={EliminarMercadoPago} ></Route>
             <Route path="/eliminarLogicMercadoPago/:id" component={EliminarLogicMercadoPago} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminFactura CRUD: */}
@@ -122,7 +103,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminFactura" component={FormFactura} ></Route>
             <Route path="/registrarFactura" component={RegistrarFactura} ></Route>
             <Route path="/actualizarFactura/:id" component={ActualizarFactura} ></Route>
-            <Route path="/eliminarFactura/:id" component={EliminarFactura} ></Route>
             <Route path="/eliminarLogicFactura/:id" component={EliminarLogicFactura} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminDetalleFactura CRUD: */}
@@ -130,7 +110,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminDetalleFactura" component={FormDetalleFactura} ></Route>
             <Route path="/registrarDetalleFactura" component={RegistrarDetalleFactura} ></Route>
             <Route path="/actualizarDetalleFactura/:id" component={ActualizarDetalleFactura} ></Route>
-            <Route path="/eliminarDetalleFactura/:id" component={EliminarDetalleFactura} ></Route>
             <Route path="/eliminarLogicDetalleFactura/:id" component={EliminarLogicDetalleFactura} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminDetallePedido CRUD: */}
@@ -138,7 +117,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminDetallePedido" component={FormDetallePedido} ></Route>
             <Route path="/registrarDetallePedido" component={RegistrarDetallePedido} ></Route>
             <Route path="/actualizarDetallePedido/:id" component={ActualizarDetallePedido} ></Route>
-            <Route path="/eliminarDetallePedido/:id" component={EliminarDetallePedido} ></Route>
             <Route path="/eliminarLogicDetallePedido/:id" component={EliminarLogicDetallePedido} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminConfiguracion CRUD: */}
@@ -146,7 +124,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminConfiguracion" component={FormConfiguracion} ></Route>
             <Route path="/registrarConfiguracion" component={RegistrarConfiguracion} ></Route>
             <Route path="/actualizarConfiguracion/:id" component={ActualizarConfiguracion} ></Route>
-            <Route path="/eliminarConfiguracion/:id" component={EliminarConfiguracion} ></Route>
             <Route path="/eliminarLogicConfiguracion/:id" component={EliminarLogicConfiguracion} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminRubroGeneral CRUD: */}
@@ -154,7 +131,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminRubroGeneral" component={FormRubroGeneral} ></Route>
             <Route path="/registrarRubroGeneral" component={RegistrarRubroGeneral} ></Route>
             <Route path="/actualizarRubroGeneral/:id" component={ActualizarRubroGeneral} ></Route>
-            <Route path="/eliminarRubroGeneral/:id" component={EliminarRubroGeneral} ></Route>
             <Route path="/eliminarLogicRubroGeneral/:id" component={EliminarLogicRubroGeneral} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminRubroArticulo CRUD: */}
@@ -162,7 +138,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminRubroArticulo" component={FormRubroArticulo} ></Route>
             <Route path="/registrarRubroArticulo" component={RegistrarRubroArticulo} ></Route>
             <Route path="/actualizarRubroArticulo/:id" component={ActualizarRubroArticulo} ></Route>
-            <Route path="/eliminarRubroArticulo/:id" component={EliminarRubroArticulo} ></Route>
             <Route path="/eliminarLogicRubroArticulo/:id" component={EliminarLogicRubroArticulo} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminArticuloManufacturado CRUD: */}
@@ -170,7 +145,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminArtManufacturado" component={FormArtManufacturado} ></Route>
             <Route path="/registrarArtManufacturado" component={RegistrarArtManufacturado} ></Route>
             <Route path="/actualizarArtManufacturado/:id" component={ActualizarArtManufacturado} ></Route>
-            <Route path="/eliminarArtManufacturado/:id" component={EliminarArtManufacturado} ></Route>
             <Route path="/eliminarLogicArtManufacturado/:id" component={EliminarLogicArtManufacturado} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminArticuloInsumo CRUD: */}
@@ -178,7 +152,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminArtInsumo" component={FormArtInsumo} ></Route>
             <Route path="/registrarArtInsumo" component={RegistrarArtInsumo} ></Route>
             <Route path="/actualizarArtInsumo/:id" component={ActualizarArtInsumo} ></Route>
-            <Route path="/eliminarArtInsumo/:id" component={EliminarArtInsumo} ></Route>
             <Route path="/eliminarLogicArtInsumo/:id" component={EliminarLogicArtInsumo} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminArticuloManufacturadoDetalle CRUD: */}
@@ -186,7 +159,6 @@ export default function ModuloAdministrador() {
             <Route path="/adminArtManDetalle" component={FormArtManDetalle} ></Route>
             <Route path="/registrarArtManDetalle" component={RegistrarArtManDetalle} ></Route>
             <Route path="/actualizarArtManDetalle/:id" component={ActualizarArtManDetalle} ></Route>
-            <Route path="/eliminarArtManDetalle/:id" component={EliminarArtManDetalle} ></Route>
             <Route path="/eliminarLogicArtManDetalle/:id" component={EliminarLogicArtManDetalle} ></Route>
 
             {/* Componentes para Retornar a los componentes TablaIngreso, TablaEgreso, : */}

@@ -103,11 +103,8 @@ const FormMercadoPago = (props) => {
                             <Button href={`actualizarMercadoPago/${mercado.idMercadoPago}`} className="boton" variant="primary" size="sm">UPDATE</Button>
                             <br></br>
                             <br></br>
-                            <Button href={`eliminarLogicMercadoPago/${mercado.idMercadoPago}`} className="boton" variant="warning" size="sm">DELETE.LOGIC</Button>
-                            <br></br>
-                            <br></br>
-                            <Button href={`eliminarMercadoPago/${mercado.idMercadoPago}`} className="boton" variant="danger" size="sm">DELETE.PHYSICAL</Button>
-
+                            <Button href={`eliminarLogicMercadoPago/${mercado.idMercadoPago}`} className="boton" variant="danger" size="sm">DELETE</Button>
+                            
                             </td>
                            
 

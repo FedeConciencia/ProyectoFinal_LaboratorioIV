@@ -5,9 +5,13 @@ import Controlador.ControladorAuxMercadoPago;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import Modelo.AuxMercadoPago;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mercadopago.resources.Preference;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.net.Proxy.Type.HTTP;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,35 +26,16 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.output.*;
 import java.time.LocalDate;
+import java.util.Map;
+import javax.servlet.http.HttpSession;
+import jdk.internal.org.objectweb.asm.TypeReference;
+import org.apache.commons.io.IOUtils;
 
 
 
 //Se especifica el nombre y ruta de la clase: 'http://localhost:8080/ProyectoFinalLaboIV/AuxMercadoPagoServlet?
 @WebServlet(name = "AuxMercadoPagoServlet", urlPatterns = {"/AuxMercadoPagoServlet"})
 public class AuxMercadoPagoServlet extends HttpServlet{
-    
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-        
-                    ControladorAuxMercadoPago controlador = new ControladorAuxMercadoPago();
-                    String codigo = req.getParameter("codigo");
-                    double precio = Double.parseDouble(req.getParameter("precio"));
-                    Preference preference = controlador.mercadoPago(codigo, precio);
-                    Gson gsonBuilder = new GsonBuilder().create();
-                    String mercadoJson = gsonBuilder.toJson(preference);
-                    resp.setContentType("text/html");
-                    PrintWriter printWriter = resp.getWriter();
-                    printWriter.print("<html>");
-                    printWriter.print("<div>"+ mercadoJson + "</div>");
-                    printWriter.print("</html>");
-                    printWriter.close();
-                    System.out.println(mercadoJson);
-                    resp.sendRedirect("http://localhost:3000/metodoPago");
-                    
-                    
-		
-    }
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -61,39 +46,7 @@ public class AuxMercadoPagoServlet extends HttpServlet{
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        //Modificando el response.setContentType y agregando charset=UTF-8 soluciona problema de caracteres como ñ en react:
-        //https://blog.continuum.cl/generar-una-respuesta-json-desde-java-en-utf-8-e68392ae4587
-        
-        response.setContentType("application/json;charset=UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
-        
-        PrintWriter out = response.getWriter();
-        String respuestaServer = "";
-        try {
-            
-            mostrarElementos(request, response);
-            if(request.getParameter("action") != null){
-                System.out.println("ACTION " + request.getParameter("action"));
-                if(request.getParameter("action").equals("mercadoPago")){
-                    
-                    
-                    
-                }
-            }
-            out.write(respuestaServer);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        } finally {
-            out.close();
-        }
-    }
+    
     
     private void mostrarElementos(HttpServletRequest request, HttpServletResponse response) throws ServletException, java.io.IOException{
         try { 
@@ -140,7 +93,10 @@ public class AuxMercadoPagoServlet extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+                   
+                    
+           
     }
 
     /**
@@ -151,7 +107,76 @@ public class AuxMercadoPagoServlet extends HttpServlet{
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+                    System.out.println(request.getContentType());
+        
+                    System.out.println("INGRESO METODO POST");
+                    
+                   
+                    response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000/");
+                    response.setHeader("Access-Control-Allow-Credentials", "true");
+                    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+                    response.setHeader("Access-Control-Max-Age", "3600");
+                    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Origin, Accept, X-Requested-With, Access-Control-Request-Method, Access-Control-Request-Headers");
+                    response.setContentType("multipart/form-data");
+                    
+                    
+                    
+                    PrintWriter out = response.getWriter();
+                    String respuestaServer = "";
+                    StringBuffer jb = new StringBuffer(); 
+                    String line = null;
+
+
+                    try {
+            
+                        
+                        
+                        BufferedReader reader = request.getReader(); 
+                        
+                        while ((line = reader.readLine()) != null){
+                            jb.append(line);
+                        }
+                        
+                        JsonObject jsonObject = new Gson().fromJson(jb.toString(), JsonObject.class);
+
+                        JsonElement codeJson = jsonObject.get("codigo");
+                        JsonElement priceJson = jsonObject.get("precio");
+                        
+                        System.out.println("JSON codeJson =>" + codeJson);
+                        System.out.println("JSON priceJson =>" + priceJson);
+                        
+                        String codigo = codeJson.getAsString();
+                        String precioString = priceJson.getAsString();
+                        double precio = Double.parseDouble(precioString);
+                        
+                        System.out.println("Codigo =>" + codigo);
+                        System.out.println("Precio =>" + precio);
+                        
+
+                        ControladorAuxMercadoPago controlador = new ControladorAuxMercadoPago();
+                        Preference preference = controlador.mercadoPago(codigo, precio);
+                        Gson gsonBuilder = new GsonBuilder().create();
+                        String mercadoJson = gsonBuilder.toJson(preference);
+                        System.out.println(mercadoJson);
+                        respuestaServer = mercadoJson;
+                    
+
+                
+                    
+                        out.write(respuestaServer);
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    } finally {
+                        out.close();
+                    }
+            
+                    
+            
+    }
 
     /**
      * Returns a short description of the servlet.
@@ -162,7 +187,7 @@ public class AuxMercadoPagoServlet extends HttpServlet{
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
- 
+    
     
 }
 

@@ -100,10 +100,8 @@ const FormDomicilio = (props) => {
                             <Button href={`actualizarDomicilio/${domicilio.idDomicilio}`} className="boton" variant="primary" size="sm">UPDATE</Button>
                             <br></br>
                             <br></br>
-                            <Button href={`eliminarLogicDomicilio/${domicilio.idDomicilio}`} className="boton" variant="warning" size="sm">DELETE.LOGIC</Button>
-                            <br></br>
-                            <br></br>
-                            <Button href={`eliminarDomicilio/${domicilio.idDomicilio}`} className="boton" variant="danger" size="sm">DELETE.PHYSICAL</Button>
+                            <Button href={`eliminarLogicDomicilio/${domicilio.idDomicilio}`} className="boton" variant="danger" size="sm">DELETE</Button>
+                           
 
                             </td>
                            

@@ -104,10 +104,8 @@ const FormCliente = (props) => {
                             <Button href={`actualizarCliente/${cliente.idCliente}`} className="boton" variant="primary" size="sm">UPDATE</Button>
                             <br></br>
                             <br></br>
-                            <Button href={`eliminarLogicCliente/${cliente.idCliente}`} className="boton" variant="warning" size="sm">DELETE.LOGIC</Button>
-                            <br></br>
-                            <br></br>
-                            <Button href={`eliminarCliente/${cliente.idCliente}`} className="boton" variant="danger" size="sm">DELETE.PHYSICAL</Button>
+                            <Button href={`eliminarLogicCliente/${cliente.idCliente}`} className="boton" variant="danger" size="sm">DELETE</Button>
+                            
 
                             </td>
                            

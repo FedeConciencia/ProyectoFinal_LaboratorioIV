@@ -103,10 +103,8 @@ const FormFactura = (props) => {
                             <Button href={`actualizarFactura/${factura.idFactura}`} className="boton" variant="primary" size="sm">UPDATE</Button>
                             <br></br>
                             <br></br>
-                            <Button href={`eliminarLogicFactura/${factura.idFactura}`} className="boton" variant="warning" size="sm">DELETE.LOGIC</Button>
-                            <br></br>
-                            <br></br>
-                            <Button href={`eliminarFactura/${factura.idFactura}`} className="boton" variant="danger" size="sm">DELETE.PHYSICAL</Button>
+                            <Button href={`eliminarLogicFactura/${factura.idFactura}`} className="boton" variant="danger" size="sm">DELETE</Button>
+                           
 
                             </td>
                            

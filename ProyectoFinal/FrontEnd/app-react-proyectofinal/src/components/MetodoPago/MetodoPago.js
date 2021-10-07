@@ -13,7 +13,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import axios from "axios";
 import moment from 'moment';
 import ModalPedido from "./ModalPedido.js";
-import mercadoPago from '../MercadoPago/MercadoPago.js';
+import { useHistory } from 'react-router-dom';
 
 
 //Permite crear un random de numero hex, dec, etc
@@ -22,6 +22,8 @@ var crypto = require("crypto");
 
 const MetodoPago = (props) => {
 
+    //Redireccion de la Pagina:
+    let history = useHistory();
 
     //Usamos el useForm para la validacion del formulario:
 
@@ -94,6 +96,14 @@ const MetodoPago = (props) => {
             //Cargar Pedido =>
             await getDatos();
 
+            //Redireccionar a la pagina form cliente:
+            await history.push('/auxMercadoPago');
+
+            /*
+
+            //Cargar Pedido =>
+            await getDatos();
+
             let precio = JSON.parse(localStorage.getItem("totalCarritoFinal"));
             let codigo = JSON.parse(localStorage.getItem("codigoPedido"));
             let respuestaMercado = {"precio":precio, "codigo":codigo}
@@ -115,7 +125,7 @@ const MetodoPago = (props) => {
     
             }        
 
-            
+            */
 
         }else{
             

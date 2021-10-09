@@ -13,13 +13,13 @@ import moment from 'moment';
 
 const RegistrarMercadoPago = () => {
 
-   //Usamos el useForm para la validacion del formulario:
+   
 
-   const {register, formState: { errors }, handleSubmit} = useForm()
+    const {register, formState: { errors }, handleSubmit} = useForm()
 
-  //Creamos nuestro Hook inicializando como objeto del Form:  
+   
 
-  const [datos, setDatos] = useState({
+    const [datos, setDatos] = useState({
 
         codigo:'',
         fechaApro:'',
@@ -27,10 +27,10 @@ const RegistrarMercadoPago = () => {
         numeroTarjeta:'',
         idPedido:'',
 
-  })
+    })
 
-  //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
-  const handleInputChange = (event) => {
+    
+    const handleInputChange = (event) => {
 
         setDatos({
 
@@ -39,145 +39,128 @@ const RegistrarMercadoPago = () => {
 
         })
 
-  }
+    }
 
-  //Metodo que se ejecuta en el evento onSubmit desde el formulario:
 
-  const enviarDatos = (datos, event) => {
+    const enviarDatos = (datos, event) => {
 
-        
-        alert(JSON.stringify(datos))
 
         getDatos(datos)
 
-        //Limpio todos los input
+
         event.target.reset()
 
-        
-  }
-
-  const getDatos = (datos) => {
-
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/MercadoPagoServlet", {
-        params: {
-
-            action:'insertar',
-            codigo: datos.codigo,
-            fechaAprobacion: datos.fechaAprobacion,
-            metodoPago: datos.metodoPago,
-            numeroTarjeta: datos.numeroTarjeta,
-            idPedido: datos.idPedido,
-            fechaAlta: moment().format('YYYY-MM-DD'), 
-            fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-            estado: "activo"
-
-            //fechaAlta, fechaBaja, estado se crean x defecto:
-
-
-        }
-      })
-    .then(response => {
-
-        console.log(JSON.stringify(response))
-        
-
-    })
-    .catch(error =>{
-        console.log("Error");
-        console.log(error);
-    })
-
-
-  }
-
-  //Validacion personalizada que valida que el idPedido Ingresado exista en la BD:
-
-  const validarPedido = async (idPedido) => {
-
-    try{
-
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaPedido =   resJson;
-      let validar = false;
-
-      //alert(JSON.stringify(listaCliente))
-
-      
-      for(let i = 0; i < listaPedido.length; i++){
-
-            //Se verifica que el .Json idCliente era un numero y el input devuelve un String, si encuentra existencia devuelve true,
-            //caso contrario false y lanza el error personalizado.
-
-            if((listaPedido[i].idPedido).toString() === (idPedido).toString() && (listaPedido[i].estado).toString() === "activo"){
-
-                return validar = true;
-                break;
-
-
-            }
-        
-
-      }
-
-      return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
+            
     }
-      
-  }
+
+    const getDatos = async (datos) => {
+
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/MercadoPagoServlet", {
+                params: {
+
+                    action:'insertar',
+                    codigo: datos.codigo,
+                    fechaAprobacion: datos.fechaAprobacion,
+                    metodoPago: datos.metodoPago,
+                    numeroTarjeta: datos.numeroTarjeta,
+                    idPedido: datos.idPedido,
+                    fechaAlta: moment().format('YYYY-MM-DD'), 
+                    fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
+                    estado: "activo"
 
 
-  //Validacion personalizada que valida que el codigo Ingresado no exista en la BD y este Inactivo (baja Logica):
+                }
+            })
 
-  const validarCodigo = async (codigo) => {
+            const resJson = await response.data;
+            console.log(resJson)
 
-    try{
+        }catch(error){
 
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/MercadoPagoServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaMercadoPago =   resJson;
-      let validar = true;
+            console.log(error)
+        }    
+       
+    }
 
-      //alert(JSON.stringify(listaCliente))
+    //Validacion personalizada que valida que el idPedido Ingresado exista en la BD:
+    const validarPedido = async (idPedido) => {
 
-      
-      for(let i = 0; i < listaMercadoPago.length; i++){
+        try{
 
-            //Si el codigo existe y esta activo (retorna false) y no valida ya que debe ser unico:
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaPedido =   resJson;
+            let validar = false;
 
-            if((listaMercadoPago[i].codigo).toString() === (codigo).toString() && ((listaMercadoPago[i].estado).toString() === "activo")){
+
+            
+            for(let i = 0; i < listaPedido.length; i++){
 
                 
-                return validar = false;
-                break;
+                if((listaPedido[i].idPedido).toString() === (idPedido).toString() && (listaPedido[i].estado).toString() === "activo"){
 
+                    return validar = true;
+                    break;
+
+
+                }
+                
 
             }
+
+            return validar;
+
+        }catch(error){
+
+            console.log("Error: " + error);
+
+        }
         
-
-      }
-
-      return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
     }
-      
-  }
 
 
+    //Validacion personalizada que valida que el codigo Ingresado no exista en la BD y este Inactivo (baja Logica):
+    const validarCodigo = async (codigo) => {
+
+        try{
+
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/MercadoPagoServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaMercadoPago =   resJson;
+            let validar = true;
+
+            
+            for(let i = 0; i < listaMercadoPago.length; i++){
+
+                    
+                if((listaMercadoPago[i].codigo).toString() === (codigo).toString() && ((listaMercadoPago[i].estado).toString() === "activo")){
+
+                    
+                    return validar = false;
+                    break;
 
 
+                }
+                
 
-  return (
+            }
+
+            return validar;
+
+        }catch(error){
+
+            console.log("Error: " + error);
+
+        }
+        
+    }
+
+
+    return (
   
     <Fragment>
 
@@ -212,12 +195,11 @@ const RegistrarMercadoPago = () => {
                 <Col>
                     
                     <input 
-                        type="number"
+                        type="text"
                         name="codigo"
                         onChange={handleInputChange}
                         placeholder="Ingrese el Codigo"
                         className="form-control my-2"
-                        min="1000"
                         {...register("codigo", { 
 
                             required:{

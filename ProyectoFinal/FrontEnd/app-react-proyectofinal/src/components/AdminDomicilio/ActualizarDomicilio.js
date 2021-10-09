@@ -11,58 +11,45 @@ import Button from 'react-bootstrap/Button';
 import Alert from "react-bootstrap/Alert";
 import moment from 'moment';
 
-//Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
-//Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
 
-
-//Paso el props por parametro a la funcion principal del componente para obtener los parametros const idDinosaurio = props.match.params.id
 const ActualizarDomicilio = (props) => {
 
-    //Usamos el useForm para la validacion del formulario y pasamos los defaultValue para pintar los input:
-    //SetValue sumamente importante para actualizar los valores obtenidos en el metodo obtenerOne y pintar los input
+    
 
-   const {register, formState: { errors }, handleSubmit, setValue} = useForm({
+    const {register, formState: { errors }, handleSubmit, setValue} = useForm({
+
+    
+
+    })
+
+
+    const [datos, setDatos] = useState({
+
+            
+            calle:'',
+            numero:'',
+            localidad:'',
+            idCliente:'',
+            fechaAlta:'',
+            fechaBaja:'',
+            estado:''
+
+            
+    })
+
 
    
-
-   })
-
-   
-
-   //Creamos nuestro Hook inicializando como objeto del Form:  
- 
-   const [datos, setDatos] = useState({
-
-        
-        calle:'',
-        numero:'',
-        localidad:'',
-        idCliente:'',
-        fechaAlta:'',
-        fechaBaja:'',
-        estado:''
-
-        
-   })
-
-
-   //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-    //los corchetes permite que nuestro userEffect se ejecute una sola vez
     useEffect(() => {
 
+    
         
-        
-        //Se ejecuta el metodo obtener One al cargar la pagina
         getDomicilio();
        
 
+    },[])
 
-    }, [])
 
-
-    //METODOS:
-
-    //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
+    
     const handleInputChange = (event) => {
 
         setDatos({
@@ -74,215 +61,184 @@ const ActualizarDomicilio = (props) => {
 
     }
 
-    //Metodo que se ejecuta en el evento onSubmit desde el formulario:
-
+    
     const enviarDatos = (datos, event) => {
 
         
         getDatos(datos)
 
-        //Limpia todos los input, pero no refresca la pagina:    
+        
         event.target.reset()
     
     }
 
-    //Metodo para actualizar datos:
-    const getDatos = (datos) => {
+    //Metodo para actualizar datos domicilio =>
+    const getDatos = async (datos) => {
 
         const id = props.match.params.id
 
-        axios.get("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet", {
-            params: {
-    
-                action:'actualizar',
-                idDomicilio: id,
-                calle: datos.calle,
-                numero: datos.numero,
-                localidad: datos.localidad,
-                idCliente: datos.idCliente,
-                fechaAlta: datos.fechaAlta,
-                fechaBaja: datos.fechaBaja,
-                estado: datos.estado
-    
-                
-            }
-          })
-        .then(response => {
-    
-            console.log(JSON.stringify(response))
-        
-
-        })
-        .catch(error =>{
-            console.log("Error");
-            console.log(error);
-        })
-    
-    
-      }
-
-
-      //Metodo Obtener los datos al Cargar la Pagina:
-      const getDomicilio = async () => {
         try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet", {
+                params: {
+        
+                    action:'actualizar',
+                    idDomicilio: id,
+                    calle: datos.calle,
+                    numero: datos.numero,
+                    localidad: datos.localidad,
+                    idCliente: datos.idCliente,
+                    fechaAlta: datos.fechaAlta,
+                    fechaBaja: datos.fechaBaja,
+                    estado: datos.estado
+        
+                    
+                }
+            })
+
             
-          const id = props.match.params.id;  
-          const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet?action=buscar&idDomicilio="+id);
-          const resJson = await response.json();
-          
-          //Verificamos la obtencion de datos correcto:
-          alert(JSON.stringify(resJson));
-          
+            const resJson = await response.data;
 
-          //por medio del setDatos paso los datos recuperados a useState datos, modifico del servlet para solo pasar un objeto.json
+            console.log(resJson)
 
-          setDatos(resJson);
-
-          //Modificamos con setValue los input que recibimos:
-          //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).format('YYYY-MM-DD')}
-
-          setValue('calle', resJson.calle);
-          setValue('numero', resJson.numero);
-          setValue('localidad', resJson.localidad);
-          setValue('idCliente', (resJson.idCliente).toString()); //parseo a String
-          setValue('fechaAlta', moment(resJson.fechaAlta).subtract(1, 'M').format('YYYY-MM-DD'));
-          setValue('fechaBaja', moment(resJson.fechaBaja).subtract(1, 'M').format('YYYY-MM-DD'));
-          setValue('estado', resJson.estado);
-          
         }catch(error){
-    
-          console.log("Error: " + error);
-    
-        }
-          
-      }
 
-  //Validacion personalizada que valida que el idCliente Ingresado exista en la BD y si esta inactivo baja logica no existe:
+            console.log(error)
+        }    
+        
+    
+    }
 
-  const validarCliente = async (id) => {
+
+    //Metodo Obtener los datos al Cargar la Pagina:
+    const getDomicilio = async () => {
 
     try{
-
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaCliente =   resJson;
-      let validar = false;
-
-      //alert(JSON.stringify(listaCliente))
-
-      
-      for(let i = 0; i < listaCliente.length; i++){
-
-            //Se verifica que el .Json idCliente era un numero y el input devuelve un String, si encuentra existencia devuelve true,
-            //caso contrario false y lanza el error personalizado.
-
-            
-
-             if(((listaCliente[i].idCliente).toString() === (id).toString()) && ((listaCliente[i].estado).toString() === "activo")  ){
-
-                    return validar = true;
-                    break;
-
-
-            }
-
-             
         
+        const id = props.match.params.id;  
+        const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet?action=buscar&idDomicilio="+id);
+        const resJson = await response.json();
+        
+    
+        setDatos(resJson);
 
-      }
-
-      return validar;
-
+        
+        setValue('calle', resJson.calle);
+        setValue('numero', resJson.numero);
+        setValue('localidad', resJson.localidad);
+        setValue('idCliente', (resJson.idCliente).toString()); 
+        setValue('fechaAlta', moment(resJson.fechaAlta).subtract(1, 'M').format('YYYY-MM-DD'));
+        setValue('fechaBaja', moment(resJson.fechaBaja).subtract(1, 'M').format('YYYY-MM-DD'));
+        setValue('estado', resJson.estado);
+        
     }catch(error){
 
-      console.log("Error: " + error);
+        console.log("Error: " + error);
 
     }
-      
-  }
+        
+    }
 
-  //Validacion personalizada que valida que el idCliente Ingresado exista en la BD y si esta inactivo baja logica no existe:
+    //Validacion personalizada que valida que el idCliente Ingresado exista en la BD y si esta inactivo baja logica no existe:
+    const validarCliente = async (id) => {
 
-  const validarDomicilio = async (id) => {
+        try{
 
-    try{
-
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaDomicilio =   resJson;
-      let validar = true;
-
-       //Obtenemos el id pasado por parametro:
-       const idDomicilio = props.match.params.id;
-
-      //alert(JSON.stringify(listaCliente))
-
-      
-      for(let i = 0; i < listaDomicilio.length; i++){
+        const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=listar");
+        const resJson = await response.json();
+        
+        const listaCliente =   resJson;
+        let validar = false;
 
 
-            //Si el idDomicilio es distinto al id pasado por parametro:
-            if((listaDomicilio[i].idDomicilio).toString() !== (idDomicilio).toString()){
+        for(let i = 0; i < listaCliente.length; i++){
 
-                //Se verifica que el .Json idCliente era un numero y el input devuelve un String, si encuentra existencia devuelve true,
-                //caso contrario false y lanza el error personalizado.
+                
+                if(((listaCliente[i].idCliente).toString() === (id).toString()) && ((listaCliente[i].estado).toString() === "activo")  ){
 
-                if(((listaDomicilio[i].idCliente).toString() === (id).toString()) && ((listaDomicilio[i].estado).toString() === "activo")  ){
-
-                    return validar = false;
-                    break;
+                        return validar = true;
+                        break;
 
 
                 }
-            }    
+
+        }
+
+        return validar;
+
+        }catch(error){
+
+        console.log("Error: " + error);
+
+        }
+        
+    }
+
+    //Validacion personalizada que valida que el idCliente Ingresado exista en la BD y si esta inactivo baja logica no existe:
+    const validarDomicilio = async (id) => {
+
+        try{
+
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaDomicilio =   resJson;
+            let validar = true;
+
+            //Obtenemos el id pasado por parametro:
+            const idDomicilio = props.match.params.id;
+
+
+            for(let i = 0; i < listaDomicilio.length; i++){
+                
+                if((listaDomicilio[i].idDomicilio).toString() !== (idDomicilio).toString()){
+
+                
+                    if(((listaDomicilio[i].idCliente).toString() === (id).toString()) && ((listaDomicilio[i].estado).toString() === "activo")  ){
+
+                        return validar = false;
+                        break;
+
+
+                    }
+                }    
+            
+
+        }
+
+        return validar;
+
+        }catch(error){
+
+        console.log("Error: " + error);
+
+        }
+        
+    }
+
+    //Validar activo-inactivo en actualizacion datos input estado:
+    const validarEstado = (estado) => {
+
+        let validar = false;
+
+        if(estado === "activo"){
+
+            return validar = true;
         
 
-      }
+        }else if(estado === "inactivo"){
 
-      return validar;
+            return validar = true;
 
-    }catch(error){
+        }
 
-      console.log("Error: " + error);
-
-    }
-      
-  }
-
-  //Validar activo-inactivo en actualizacion datos input estado:
-
-  const validarEstado = (estado) => {
-
-    let validar = false;
-
-    if(estado === "activo"){
-
-        return validar = true;
-       
-
-
-    }else if(estado === "inactivo"){
-
-        return validar = true;
+        return validar;
 
     }
 
-    return validar;
-
-  }
-
-
-     
     return (  
 
-        
-
         <Fragment>
-
-        
-       
 
         <Container>
 

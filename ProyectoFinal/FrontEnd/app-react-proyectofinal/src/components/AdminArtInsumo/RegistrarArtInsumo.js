@@ -12,13 +12,12 @@ import moment from 'moment';
 
 const RegistrarArtInsumo = () => {
 
-   //Usamos el useForm para la validacion del formulario:
 
-   const {register, formState: { errors }, handleSubmit} = useForm()
+    const {register, formState: { errors }, handleSubmit} = useForm()
 
-  //Creamos nuestro Hook inicializando como objeto del Form:  
 
-  const [datos, setDatos] = useState({
+
+    const [datos, setDatos] = useState({
 
         denominacion:'',
         precioCompra:'',
@@ -28,13 +27,11 @@ const RegistrarArtInsumo = () => {
         unidadMedida:'',
         esInsumo:'',
         idRubro:'',
-        
+            
+    })
 
 
-  })
-
-  //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
-  const handleInputChange = (event) => {
+    const handleInputChange = (event) => {
 
         setDatos({
 
@@ -43,110 +40,103 @@ const RegistrarArtInsumo = () => {
 
         })
 
-  }
+    }
 
-  //Metodo que se ejecuta en el evento onSubmit desde el formulario:
 
-  const enviarDatos = (datos, event) => {
 
-        
-        alert(JSON.stringify(datos))
+    const enviarDatos = (datos, event) => {
 
         getDatos(datos)
 
-        //Limpio todos los input
+
         event.target.reset()
 
-        
-  }
+            
+    }
 
-  const getDatos = (datos) => {
-
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet", {
-        params: {
-
-            action:'insertar',
-            denominacion: datos.denominacion,
-            precioCompra: datos.precioCompra,
-            precioVenta: datos.precioVenta,
-            stockActual: datos.stockActual,
-            stockMinimo: datos.stockMinimo,
-            unidadMedida: datos.unidadMedida,
-            esInsumo: datos.esInsumo,
-            idRubro: datos.idRubro,
-            fechaAlta: moment().format('YYYY-MM-DD'), 
-            fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-            estado: "activo"
-
-            //fechaAlta, fechaBaja, estado se crean x defecto:
+    const getDatos = async (datos) => {
 
 
-        }
-      })
-    .then(response => {
+        try{
 
-        console.log(JSON.stringify(response))
-        
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet", {
+                params: {
 
-    })
-    .catch(error =>{
-        console.log("Error");
-        console.log(error);
-    })
+                    action:'insertar',
+                    denominacion: datos.denominacion,
+                    precioCompra: datos.precioCompra,
+                    precioVenta: datos.precioVenta,
+                    stockActual: datos.stockActual,
+                    stockMinimo: datos.stockMinimo,
+                    unidadMedida: datos.unidadMedida,
+                    esInsumo: datos.esInsumo,
+                    idRubro: datos.idRubro,
+                    fechaAlta: moment().format('YYYY-MM-DD'), 
+                    fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
+                    estado: "activo"
 
 
-  }
 
-  //Validacion personalizada que valida que el idRubro Ingresado exista en la BD y si esta inactivo baja logica no existe:
+                }
+            })
 
-  const validarRubro = async (idRubro) => {
+            const resJson = await response.data
 
-    try{
+            console.log(resJson)
 
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/RubroArticuloServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaRubro =   resJson;
-      let validar = false;
+        }catch(error){
 
-      //alert(JSON.stringify(listaCliente))
-
-      
-      for(let i = 0; i < listaRubro.length; i++){
-
-            //Se verifica que el .Json idCliente era un numero y el input devuelve un String, si encuentra existencia devuelve true,
-            //caso contrario false y lanza el error personalizado.
-
-            if((listaRubro[i].idRubro).toString() === (idRubro).toString() && ((listaRubro[i].estado).toString() === "activo")){
-
-                return validar = true;
-            }
-        
-      }
-
-      return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
+            console.log(error)
+        }    
+    
 
     }
-      
-  }
 
-  //Validar esInsumo - noInsumo en registro datos input esInsumo:
+    //Validacion personalizada que valida que el idRubro Ingresado exista en la BD y si esta inactivo baja logica no existe:
+    const validarRubro = async (idRubro) => {
 
-  const validarEsInsumo = (estado) => {
+        try{
+
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/RubroArticuloServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaRubro =   resJson;
+            let validar = false;
+
+
+            for(let i = 0; i < listaRubro.length; i++){
+
+                    
+                if((listaRubro[i].idRubro).toString() === (idRubro).toString() && ((listaRubro[i].estado).toString() === "activo")){
+
+                    return validar = true;
+                }
+            
+            }
+
+            return validar;
+
+        }catch(error){
+
+            console.log("Error: " + error);
+
+        }
+        
+    }
+
+
+    //Validar esInsumo - noInsumo en registro datos input esInsumo:
+    const validarEsInsumo = (esInsumo) => {
 
     let validar = false;
 
-    if(estado === "esInsumo"){
+    if(esInsumo === "esInsumo"){
 
         return validar = true;
-       
+        
 
 
-    }else if(estado === "noInsumo"){
+    }else if(esInsumo === "noInsumo"){
 
         return validar = true;
 
@@ -154,7 +144,7 @@ const RegistrarArtInsumo = () => {
 
     return validar;
 
-  }
+    }
 
 
 

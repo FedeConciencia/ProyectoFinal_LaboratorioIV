@@ -12,13 +12,13 @@ import moment from 'moment';
 
 const RegistrarPedido = () => {
 
-   //Usamos el useForm para la validacion del formulario:
+  
 
    const {register, formState: { errors }, handleSubmit} = useForm()
 
-  //Creamos nuestro Hook inicializando como objeto del Form:  
+  
 
-  const [datos, setDatos] = useState({
+    const [datos, setDatos] = useState({
 
         codigo:'',
         horaEstimadaFin:'',
@@ -28,10 +28,10 @@ const RegistrarPedido = () => {
         idCliente:'',
         idDomicilio:'',
 
-  })
+    })
 
-  //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
-  const handleInputChange = (event) => {
+  
+    const handleInputChange = (event) => {
 
         setDatos({
 
@@ -40,176 +40,157 @@ const RegistrarPedido = () => {
 
         })
 
-  }
+    }
 
-  //Metodo que se ejecuta en el evento onSubmit desde el formulario:
 
-  const enviarDatos = (datos, event) => {
+    const enviarDatos = (datos, event) => {
 
+
+            getDatos(datos)
+
+            event.target.reset()
+
+            
+    }
+
+    const getDatos = async (datos) => {
+
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
+                params: {
+
+                    action:'insertar',
+                    codigo: datos.codigo,
+                    horaEstimadaFin: datos.horaEstimadaFin,
+                    estadoPedido: datos.estadoPedido,
+                    tipoEnvio: datos.tipoEnvio,
+                    total: datos.total,
+                    idCliente: datos.idCliente,
+                    idDomicilio: datos.idDomicilio,
+                    fechaAlta: moment().format('YYYY-MM-DD'), 
+                    fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
+                    estado: "activo"
+
+
+                }
+            })
+
+            const resJson = await response.data;
+            console.log(resJson)
+
+        }catch(error){
+
+            console.log(error)
+        }    
         
-        alert(JSON.stringify(datos))
 
-        getDatos(datos)
+    }
 
-        //Limpio todos los input
-        event.target.reset()
+    //Validacion personalizada que valida que el idCliente Ingresado exista en la BD y este Activo (No baja Logica):
+    const validarCliente = async (idCliente) => {
 
-        
-  }
+        try{
 
-  const getDatos = (datos) => {
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaCliente =   resJson;
+            let validar = false;
 
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
-        params: {
+            for(let i = 0; i < listaCliente.length; i++){
 
-            action:'insertar',
-            codigo: datos.codigo,
-            horaEstimadaFin: datos.horaEstimadaFin,
-            estadoPedido: datos.estadoPedido,
-            tipoEnvio: datos.tipoEnvio,
-            total: datos.total,
-            idCliente: datos.idCliente,
-            idDomicilio: datos.idDomicilio,
-            fechaAlta: moment().format('YYYY-MM-DD'), 
-            fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-            estado: "activo"
+                   
+                if((listaCliente[i].idCliente).toString() === (idCliente).toString() && ((listaCliente[i].estado).toString() === "activo")){
 
-            //fechaAlta, fechaBaja, estado se crean x defecto:
+                    return validar = true;
 
+                }
+                
+
+            }
+
+            return validar;
+
+        }catch(error){
+
+            console.log("Error: " + error);
 
         }
-      })
-    .then(response => {
-
-        console.log(JSON.stringify(response))
         
-
-    })
-    .catch(error =>{
-        console.log("Error");
-        console.log(error);
-    })
-
-
-  }
-
-  //Validacion personalizada que valida que el idCliente Ingresado exista en la BD y este Activo (No baja Logica):
-
-  const validarCliente = async (idCliente) => {
-
-    try{
-
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaCliente =   resJson;
-      let validar = false;
-
-      //alert(JSON.stringify(listaCliente))
-
-      
-      for(let i = 0; i < listaCliente.length; i++){
-
-            //Si el idCliente existe y esta activo (retorna true) y valida, caso contrario false:
-
-            if((listaCliente[i].idCliente).toString() === (idCliente).toString() && ((listaCliente[i].estado).toString() === "activo")){
-
-                return validar = true;
-
-            }
-        
-
-      }
-
-      return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
     }
-      
-  }
 
 
-  //Validacion personalizada que valida que el idDomicilio Ingresado exista en la BD y este Activo (No baja Logica):
+    //Validacion personalizada que valida que el idDomicilio Ingresado exista en la BD y este Activo (No baja Logica):
+    const validarDomicilio = async (idDomicilio) => {
 
-  const validarDomicilio = async (idDomicilio) => {
+        try{
 
-    try{
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaDomicilio =   resJson;
+            let validar = false;
 
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaDomicilio =   resJson;
-      let validar = false;
+            
+            for(let i = 0; i < listaDomicilio.length; i++){
 
-      //alert(JSON.stringify(listaCliente))
+                    
 
-      
-      for(let i = 0; i < listaDomicilio.length; i++){
+                if((listaDomicilio[i].idDomicilio).toString() === (idDomicilio).toString() && ((listaDomicilio[i].estado).toString() === "activo")){
 
-            //Si el idDomicilio existe y esta activo (retorna true) y valida, caso contrario false:
+                    return validar = true;
 
-            if((listaDomicilio[i].idDomicilio).toString() === (idDomicilio).toString() && ((listaDomicilio[i].estado).toString() === "activo")){
-
-                return validar = true;
-
-            }
-        
-
-      }
-
-      return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
-    }
-      
-  }
-
-
-  //Validacion personalizada que valida que el codigo Ingresado no exista en la BD y este Inactivo (baja Logica):
-
-  const validarCodigo = async (codigo) => {
-
-    try{
-
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaPedido =   resJson;
-      let validar = true;
-
-      //alert(JSON.stringify(listaCliente))
-
-      
-      for(let i = 0; i < listaPedido.length; i++){
-
-            //Si el codigo existe y esta activo (retorna false) y no valida ya que debe ser unico:
-
-            if((listaPedido[i].codigo).toString() === (codigo).toString() && ((listaPedido[i].estado).toString() === "activo")){
-
+                }
                 
-                return validar = false;
 
             }
+
+            return validar;
+
+        }catch(error){
+
+            console.log("Error: " + error);
+
+        }
         
-
-      }
-
-      return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
     }
-      
-  }
 
+
+    //Validacion personalizada que valida que el codigo Ingresado no exista en la BD y este Inactivo (baja Logica):
+    const validarCodigo = async (codigo) => {
+
+        try{
+
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaPedido =   resJson;
+            let validar = true;
+
+
+            for(let i = 0; i < listaPedido.length; i++){
+
+                   
+                if((listaPedido[i].codigo).toString() === (codigo).toString() && ((listaPedido[i].estado).toString() === "activo")){
+
+                    
+                    return validar = false;
+
+                }
+                
+
+            }
+
+            return validar;
+
+        }catch(error){
+
+            console.log("Error: " + error);
+
+        }
+        
+    }
 
 
 

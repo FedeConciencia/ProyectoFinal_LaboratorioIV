@@ -13,13 +13,13 @@ import moment from 'moment';
 
 const RegistrarDomicilio = () => {
 
-   //Usamos el useForm para la validacion del formulario:
+  
 
-   const {register, formState: { errors }, handleSubmit} = useForm()
+    const {register, formState: { errors }, handleSubmit} = useForm()
 
-  //Creamos nuestro Hook inicializando como objeto del Form:  
+  
 
-  const [datos, setDatos] = useState({
+    const [datos, setDatos] = useState({
 
         calle:'',
         numero:'',
@@ -28,10 +28,10 @@ const RegistrarDomicilio = () => {
         
 
 
-  })
+    })
 
-  //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
-  const handleInputChange = (event) => {
+    
+    const handleInputChange = (event) => {
 
         setDatos({
 
@@ -40,138 +40,126 @@ const RegistrarDomicilio = () => {
 
         })
 
-  }
+    }
 
-  //Metodo que se ejecuta en el evento onSubmit desde el formulario:
-
-  const enviarDatos = (datos, event) => {
+  
+    const enviarDatos = (datos, event) => {
 
         
-        alert(JSON.stringify(datos))
-
         getDatos(datos)
 
-        //Limpio todos los input
+        
         event.target.reset()
 
         
-  }
+    }
 
-  const getDatos = (datos) => {
+    const getDatos = async (datos) => {
 
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet", {
-        params: {
+        try{
 
-            action:'insertar',
-            calle: datos.calle,
-            numero: datos.numero,
-            localidad: datos.localidad,
-            idCliente: datos.id,
-            fechaAlta: moment().format('YYYY-MM-DD'), 
-            fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-            estado: "activo"
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet", {
+                params: {
 
-            //fechaAlta, fechaBaja, estado se crean x defecto:
+                    action:'insertar',
+                    calle: datos.calle,
+                    numero: datos.numero,
+                    localidad: datos.localidad,
+                    idCliente: datos.id,
+                    fechaAlta: moment().format('YYYY-MM-DD'), 
+                    fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
+                    estado: "activo"
 
+                }
+            })
+
+            const resJson = await response.data;
+
+            console.log(resJson);
+
+        }catch(error){
+
+            console.log(error)
 
         }
-      })
-    .then(response => {
+    
 
-        console.log(JSON.stringify(response))
-        
-
-    })
-    .catch(error =>{
-        console.log("Error");
-        console.log(error);
-    })
-
-
-  }
-
-  //Validacion personalizada que valida que el idCliente Ingresado exista en la BD y si esta inactivo baja logica no existe:
-
-  const validarCliente = async (id) => {
-
-    try{
-
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaCliente =   resJson;
-      let validar = false;
-
-      //alert(JSON.stringify(listaCliente))
-
-      
-      for(let i = 0; i < listaCliente.length; i++){
-
-            //Se verifica que el .Json idCliente era un numero y el input devuelve un String, si encuentra existencia devuelve true,
-            //caso contrario false y lanza el error personalizado.
-
-            if(((listaCliente[i].idCliente).toString() === (id).toString()) && ((listaCliente[i].estado).toString() === "activo")  ){
-
-                return validar = true;
-                break;
-
-
-            }
-        
-
-      }
-
-      return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
 
     }
-      
-  }
+
+    //Validacion personalizada que valida que el idCliente Ingresado exista en la BD y si esta inactivo baja logica no existe:
+    const validarCliente = async (id) => {
+
+        try{
+
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaCliente =   resJson;
+            let validar = false;
+
+  
+            for(let i = 0; i < listaCliente.length; i++){
+
+                
+                    if(((listaCliente[i].idCliente).toString() === (id).toString()) && ((listaCliente[i].estado).toString() === "activo")  ){
+
+                        return validar = true;
+                        break;
+
+
+                    }
+                
+
+            }
+
+            return validar;
+
+        }catch(error){
+
+            console.log("Error: " + error);
+
+        }
+        
+    }
   
 
-  //Validacion personalizada que valida que el idCliente Ingresado exista en la BD y si esta inactivo baja logica no existe:
+    //Validacion personalizada que valida que el idCliente Ingresado exista en la entidad domicilio y no este asociado y activo:
+    const validarDomicilio = async (id) => {
 
-  const validarDomicilio = async (id) => {
+        try{
 
-    try{
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaDomicilio =   resJson;
+            let validar = true;
 
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaDomicilio =   resJson;
-      let validar = true;
+        
+            for(let i = 0; i < listaDomicilio.length; i++){
 
-      //alert(JSON.stringify(listaCliente))
+                   
 
-      
-      for(let i = 0; i < listaDomicilio.length; i++){
+                    if(((listaDomicilio[i].idCliente).toString() === (id).toString()) && ((listaDomicilio[i].estado).toString() === "activo")  ){
 
-            //Se verifica que el .Json idCliente era un numero y el input devuelve un String, si encuentra existencia devuelve true,
-            //caso contrario false y lanza el error personalizado.
+                        return validar = false;
+                        break;
 
-            if(((listaDomicilio[i].idCliente).toString() === (id).toString()) && ((listaDomicilio[i].estado).toString() === "activo")  ){
 
-                return validar = false;
-                break;
-
+                    }
+                
 
             }
+
+            return validar;
+
+        }catch(error){
+
+            console.log("Error: " + error);
+
+        }
         
-
-      }
-
-      return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
     }
-      
-  }
 
 
 

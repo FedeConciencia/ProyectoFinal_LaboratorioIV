@@ -6,73 +6,60 @@ import '../../assets/css/form.css';
 import moment from 'moment';
 import { ContextoUsuario } from "../ContextoUsuario";
 
-//Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
-//Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
-
-
-//Se pasan los props (parametros):
 const FormArtInsumo = (props) => {
 
 
- const [datos, setDatos] = useState([])
+    const [datos, setDatos] = useState([])
 
-  // Hook con el estado actual
-  const {usuario, setUsuario} = useContext(ContextoUsuario);
 
- function VerificarRolUsuario() {
-  if(usuario != null && usuario !== undefined) {
-    if(usuario["rol"] !== undefined && usuario["rol"] === "administrador"){
-        
-      return <Button type="button" href={`/adminPrincipal`}  className="boton" variant="danger" size="lg">RETURN</Button>;
-      
-    }else if(usuario["rol"] !== undefined && usuario["rol"] === "cocinero"){
+    const {usuario, setUsuario} = useContext(ContextoUsuario);
 
-      return <Button type="button" href={`/cocineroPrincipal`}  className="boton" variant="danger" size="lg">RETURN</Button>;
 
+    function VerificarRolUsuario() {
+      if(usuario != null && usuario !== undefined) {
+        if(usuario["rol"] !== undefined && usuario["rol"] === "administrador"){
+            
+          return <Button type="button" href={`/adminPrincipal`}  className="boton" variant="danger" size="lg">RETURN</Button>;
+          
+        }else if(usuario["rol"] !== undefined && usuario["rol"] === "cocinero"){
+
+          return <Button type="button" href={`/cocineroPrincipal`}  className="boton" variant="danger" size="lg">RETURN</Button>;
+
+        }
+      }
+
+      return <span/>;
     }
-  }
-
-  return <span/>;
-}
     
-  //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-  //los corchetes permite que nuestro userEffect se ejecute una sola vez
-  useEffect(() => {
 
+    useEffect(() => {
+
+          
+        getArtInsumo()
+      
         
-      //Se ejecuta el metodo getOne al cargar la pagina
-      getArtInsumo()
-    
-      
-
-  }, [])
+    }, [])
 
 
-  //Si se usa JavaWebAplications Tomcast ver de colocar localhost:8080
 
-  const getArtInsumo = async () => {
+    const getArtInsumo = async () => {
 
-    try{
+      try{
 
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet?action=listar");
-      const resJson = await response.json();
-      alert(JSON.stringify(resJson));
+        const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet?action=listar");
+        const resJson = await response.json();
+  
+        setDatos(resJson)
 
-      //Este metodo .setState permite asignar a la variable de estado db el .JSON
-      setDatos(resJson)
+      }catch(error){
 
-    }catch(error){
+        console.log("Error: " + error);
 
-      console.log("Error: " + error);
-
+      }
+        
     }
-      
-  }
 
 
-
-   
-  //la logica la hacemos antes de pasar la informacion a la vista:
     return (
 
       <Fragment>

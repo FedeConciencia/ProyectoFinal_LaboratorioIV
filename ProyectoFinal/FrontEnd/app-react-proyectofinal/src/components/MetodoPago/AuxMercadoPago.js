@@ -53,7 +53,7 @@ const AuxMercadoPago = (props) => {
 
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "Content-Type",
-                    "Content-Type": "application/json",
+                    "Content-Type": "multipart/form-data",
             }
             
 
@@ -65,7 +65,7 @@ const AuxMercadoPago = (props) => {
 
             try{
 
-                const response = await axios.post("http://localhost:8080/ProyectoFinalLaboIV/AuxMercadoPagoServlet",
+                const response = await axios.post("https://cors-anywhere.herokuapp.com/http://localhost:8080/ProyectoFinalLaboIV/AuxMercadoPagoServlet",
                  respuestaMercado, { headers })
     
                 const resJson = await response.data;

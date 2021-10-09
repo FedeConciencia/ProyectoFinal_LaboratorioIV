@@ -11,15 +11,11 @@ import Button from 'react-bootstrap/Button';
 import Alert from "react-bootstrap/Alert";
 import moment from 'moment';
 
-//Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
-//Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
 
 
-//Paso el props por parametro a la funcion principal del componente para obtener los parametros const idDinosaurio = props.match.params.id
 const ActualizarCliente = (props) => {
 
-    //Usamos el useForm (npm install react-hook-form) para la validacion del formulario y pasamos los defaultValue para pintar los input:
-    //SetValue sumamente importante para actualizar los valores obtenidos en el metodo obtenerOne y pintar los input
+    
 
    const {register, formState: { errors }, handleSubmit, setValue} = useForm({
 
@@ -27,9 +23,7 @@ const ActualizarCliente = (props) => {
 
    })
 
-   
-
-   //Creamos nuestro Hook inicializando como objeto del Form:  
+    
  
    const [datos, setDatos] = useState({
 
@@ -48,23 +42,17 @@ const ActualizarCliente = (props) => {
    })
 
 
-   //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-    //los corchetes permite que nuestro userEffect se ejecute una sola vez
+   
     useEffect(() => {
 
         
-        
-        //Se ejecuta el metodo obtener One al cargar la pagina
         getCliente();
        
-
 
     }, [])
 
 
-    //METODOS:
-
-    //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
+    
     const handleInputChange = (event) => {
 
         setDatos({
@@ -76,75 +64,69 @@ const ActualizarCliente = (props) => {
 
     }
 
-    //Metodo que se ejecuta en el evento onSubmit desde el formulario:
-
+   
     const enviarDatos = (datos, event) => {
 
         
         getDatos(datos)
 
-        //Limpia todos los input, pero no refresca la pagina:    
+           
         event.target.reset()
     
     }
 
-    //Metodo para actualizar datos:
-    const getDatos = (datos) => {
+    //Metodo para actualizar cliente =>
+    const getDatos = async (datos) => {
 
         const id = props.match.params.id
 
-        axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
-            params: {
-    
-                action:'actualizar',
-                idCliente: id,
-                nombre: datos.nombre,
-                apellido: datos.apellido,
-                dni: datos.dni,
-                fechaNacimiento: datos.fechaNacimiento,
-                telefono: datos.telefono,
-                email: datos.email,
-                fechaAlta: datos.fechaAlta,
-                fechaBaja: datos.fechaBaja,
-                estado: datos.estado
-    
-                
-            }
-          })
-        .then(response => {
-    
-            console.log(JSON.stringify(response))
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
+                params: {
         
+                    action:'actualizar',
+                    idCliente: id,
+                    nombre: datos.nombre,
+                    apellido: datos.apellido,
+                    dni: datos.dni,
+                    fechaNacimiento: datos.fechaNacimiento,
+                    telefono: datos.telefono,
+                    email: datos.email,
+                    fechaAlta: datos.fechaAlta,
+                    fechaBaja: datos.fechaBaja,
+                    estado: datos.estado
+        
+                    
+                }
+            })
 
-        })
-        .catch(error =>{
-            console.log("Error");
-            console.log(error);
-        })
+            const resJson = await response.data;
+
+            console.log(resJson)
+
+        }catch(error){
+
+            console.log(error)
+
+        }    
     
-    
-      }
+    }
 
 
-      //Metodo Obtener los datos al Cargar la Pagina:
+      //Metodo Obtener los datos del cliente al cargar la pagina=>
       const getCliente = async () => {
+
         try{
             
           const id = props.match.params.id;  
           const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=buscar&idCliente="+id);
           const resJson = await response.json();
           
-          //Verificamos la obtencion de datos correcto:
-          alert(JSON.stringify(resJson));
-          
-
-          //por medio del setDatos paso los datos recuperados a useState datos, modifico del servlet para solo pasar un objeto.json
-
+    
           setDatos(resJson);
 
-          //Modificamos con setValue los input que recibimos:
-          //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).format('YYYY-MM-DD')}
-
+        
           setValue('nombre', resJson.nombre);
           setValue('apellido', resJson.apellido);
           setValue('dni', resJson.dni);
@@ -161,43 +143,38 @@ const ActualizarCliente = (props) => {
     
         }
           
-      }
+    }
 
     //Validacion personalizada que valida que el DNI Ingresado no exista en la BD si es de otro cliente:
-
     const validarDni = async (dni) => {
 
         try{
 
-        const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=listar");
-        const resJson = await response.json();
-        
-        const listaCliente =   resJson;
-        let validar = true;
-        
-        //Obtenemos el id pasado por parametro:
-        const id = props.match.params.id;
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaCliente =   resJson;
+            let validar = true;
+            
+            const id = props.match.params.id;
 
-        //alert(JSON.stringify(listaCliente))
+            for(let i = 0; i < listaCliente.length; i++){
 
-        
-        for(let i = 0; i < listaCliente.length; i++){
+                    //Si el idCliente es distinto al id pasado por parametro:
+                    if((listaCliente[i].idCliente).toString() !== (id).toString()){
 
-                //Si el idCliente es distinto al id pasado por parametro:
-                if((listaCliente[i].idCliente).toString() !== (id).toString()){
+                        //Verifica si ya existe en la BD:
+                        if((listaCliente[i].dni).toString() === (dni).toString()){ 
 
-                    //Verifica si ya existe en la BD:
-                    if((listaCliente[i].dni).toString() === (dni).toString()){ 
+                            return validar = false;
 
-                        return validar = false;
+                            break;
 
-                        break;
-
-                    }
-                }    
+                        }
+                    }    
 
 
-        }
+            }
 
 
         }catch(error){
@@ -209,7 +186,6 @@ const ActualizarCliente = (props) => {
     }
 
     //Validar activo-inactivo en actualizacion datos input estado:
-
     const validarEstado = (estado) => {
 
         let validar = false;
@@ -235,11 +211,7 @@ const ActualizarCliente = (props) => {
     return (  
 
         
-
         <Fragment>
-
-        
-       
 
         <Container>
 

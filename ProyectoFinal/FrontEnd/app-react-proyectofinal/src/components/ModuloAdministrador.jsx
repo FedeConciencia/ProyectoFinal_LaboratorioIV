@@ -54,10 +54,12 @@ import EliminarLogicArtInsumo from './AdminArtInsumo/EliminarLogicArtInsumo';
 import FormArtManDetalle from './AdminArtManDetalle/FormArtManDetalle';
 import RegistrarArtManDetalle from './AdminArtManDetalle/RegistrarArtManDetalle';
 import ActualizarArtManDetalle from './AdminArtManDetalle/ActualizarArtManDetalle';
-import EliminarLogicArtManDetalle from './AdminArtManDetalle/EliminarLogicArtManDetalle';
+import EliminarArtManDetalle from './AdminArtManDetalle/EliminarArtManDetalle';
 import ReturnTablaIngreso from './AdminCajero/ReturnTablaIngreso';
 import ReturnTablaEgreso from './AdminCajero/ReturnTablaEgreso';
 import ReturnConfirmarPedido from './AdminCocinero/ReturnConfirmarPedido';
+import EliminarDetallePedido from './AdminDetallePedido/EliminarDetallePedido';
+import EliminarDetalleFactura from './AdminDetalleFactura/EliminarDetalleFactura';
 
 export default function ModuloAdministrador() {
 
@@ -110,14 +112,14 @@ export default function ModuloAdministrador() {
             <Route path="/adminDetalleFactura" component={FormDetalleFactura} ></Route>
             <Route path="/registrarDetalleFactura" component={RegistrarDetalleFactura} ></Route>
             <Route path="/actualizarDetalleFactura/:id" component={ActualizarDetalleFactura} ></Route>
-            <Route path="/eliminarLogicDetalleFactura/:id" component={EliminarLogicDetalleFactura} ></Route>
+            <Route path="/eliminarDetalleFactura/:id" component={EliminarDetalleFactura} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminDetallePedido CRUD: */}
 
             <Route path="/adminDetallePedido" component={FormDetallePedido} ></Route>
             <Route path="/registrarDetallePedido" component={RegistrarDetallePedido} ></Route>
             <Route path="/actualizarDetallePedido/:id" component={ActualizarDetallePedido} ></Route>
-            <Route path="/eliminarLogicDetallePedido/:id" component={EliminarLogicDetallePedido} ></Route>
+            <Route path="/eliminarDetallePedido/:id" component={EliminarDetallePedido} ></Route>
 
             {/* Rutas de Componentes-Vistas AdminConfiguracion CRUD: */}
 
@@ -159,7 +161,7 @@ export default function ModuloAdministrador() {
             <Route path="/adminArtManDetalle" component={FormArtManDetalle} ></Route>
             <Route path="/registrarArtManDetalle" component={RegistrarArtManDetalle} ></Route>
             <Route path="/actualizarArtManDetalle/:id" component={ActualizarArtManDetalle} ></Route>
-            <Route path="/eliminarLogicArtManDetalle/:id" component={EliminarLogicArtManDetalle} ></Route>
+            <Route path="/eliminarArtManDetalle/:id" component={EliminarArtManDetalle} ></Route>
 
             {/* Componentes para Retornar a los componentes TablaIngreso, TablaEgreso, : */}
             <Route path="/returnTablaIngreso" component={ReturnTablaIngreso} ></Route>

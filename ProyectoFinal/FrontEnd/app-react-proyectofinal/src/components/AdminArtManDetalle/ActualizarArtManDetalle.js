@@ -8,55 +8,39 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from "react-bootstrap/Alert";
 
-//Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
-//Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
-
-
-//Paso el props por parametro a la funcion principal del componente para obtener los parametros const idDinosaurio = props.match.params.id
 const ActualizarArtManDetalle = (props) => {
 
-    //Usamos el useForm para la validacion del formulario y pasamos los defaultValue para pintar los input:
-    //SetValue sumamente importante para actualizar los valores obtenidos en el metodo obtenerOne y pintar los input
+    
+    const {register, formState: { errors }, handleSubmit, setValue} = useForm({
 
-   const {register, formState: { errors }, handleSubmit, setValue} = useForm({
+    
 
-   
+    })
 
-   })
 
-   
-
-   //Creamos nuestro Hook inicializando como objeto del Form:  
  
-   const [datos, setDatos] = useState({
+    const [datos, setDatos] = useState({
 
-        
-        cantidad:'',
-        unidadMedida:'',
-        idArtManufacturado:'',
-        idArtInsumo:'',
+            
+            cantidad:'',
+            unidadMedida:'',
+            idArtManufacturado:'',
+            idArtInsumo:'',
 
-        
-   })
+            
+    })
 
 
-   //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-    //los corchetes permite que nuestro userEffect se ejecute una sola vez
+   
     useEffect(() => {
 
-        
-        
-        //Se ejecuta el metodo obtener One al cargar la pagina
+
         getArtManDetalle();
        
 
+    },[])
 
-    }, [])
 
-
-    //METODOS:
-
-    //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
     const handleInputChange = (event) => {
 
         setDatos({
@@ -68,160 +52,142 @@ const ActualizarArtManDetalle = (props) => {
 
     }
 
-    //Metodo que se ejecuta en el evento onSubmit desde el formulario:
 
     const enviarDatos = (datos, event) => {
 
         
         getDatos(datos)
-
-        //Limpia todos los input, pero no refresca la pagina:    
+  
         event.target.reset()
     
     }
 
     //Metodo para actualizar datos:
-    const getDatos = (datos) => {
+    const getDatos = async (datos) => {
 
         const id = props.match.params.id
 
-        axios.get("http://localhost:8080/ProyectoFinalLaboIV/ArtManDetalleServlet", {
-            params: {
-    
-                action:'actualizar',
-                idArticuloDetalle: id,
-                cantidad: datos.cantidad,
-                unidadMedida: datos.unidadMedida,
-                idArticuloManufacturado: datos.idArtManufacturado,
-                idArticuloInsumo: datos.idArtInsumo,
-                
-               
-    
-                
-            }
-          })
-        .then(response => {
-    
-            console.log(JSON.stringify(response))
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/ArtManDetalleServlet", {
+                params: {
         
+                    action:'actualizar',
+                    idArticuloDetalle: id,
+                    cantidad: datos.cantidad,
+                    unidadMedida: datos.unidadMedida,
+                    idArticuloManufacturado: datos.idArtManufacturado,
+                    idArticuloInsumo: datos.idArtInsumo,
+                    
+                
+                }
+            })
 
-        })
-        .catch(error =>{
-            console.log("Error");
-            console.log(error);
-        })
+            const resJson = await response.data
+
+            console.log(resJson)
+        
+        }catch(error){
+
+            console.log(error)
+
+        }
     
     
-      }
+    }
 
 
-      //Metodo Obtener los datos al Cargar la Pagina:
-      const getArtManDetalle = async () => {
+    //Metodo Obtener los datos al Cargar la Pagina:
+    const getArtManDetalle = async () => {
+
         try{
             
-          const id = props.match.params.id;  
-          const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtManDetalleServlet?action=buscar&idArticuloDetalle="+id);
-          const resJson = await response.json();
-          
-          //Verificamos la obtencion de datos correcto:
-          alert(JSON.stringify(resJson));
-          
+            const id = props.match.params.id;  
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtManDetalleServlet?action=buscar&idArticuloDetalle="+id);
+            const resJson = await response.json();
+            
+            
+            setDatos(resJson);
 
-          //por medio del setDatos paso los datos recuperados a useState datos, modifico del servlet para solo pasar un objeto.json
-
-          setDatos(resJson);
-
-          //Modificamos con setValue los input que recibimos:
-          //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).format('YYYY-MM-DD')}
-
-          setValue('cantidad', resJson.cantidad);
-          setValue('unidadMedida', resJson.unidadMedida);
-          setValue('idArtManufacturado', (resJson.idArticuloManufacturado).toString()); //parseo a String
-          setValue('idArtInsumo', (resJson.idArticuloInsumo).toString()); //parseo a String
+            
+            setValue('cantidad', resJson.cantidad);
+            setValue('unidadMedida', resJson.unidadMedida);
+            setValue('idArtManufacturado', (resJson.idArticuloManufacturado).toString()); 
+            setValue('idArtInsumo', (resJson.idArticuloInsumo).toString()); 
         
-          //setValue('fechaAlta', moment(resJson.fechaAlta).subtract(1, 'M').format('YYYY-MM-DD'));
-          //setValue('fechaBaja', moment(resJson.fechaBaja).subtract(1, 'M').format('YYYY-MM-DD'));
-          //setValue('estado', resJson.estado);
-          
+            
+            
         }catch(error){
-    
-          console.log("Error: " + error);
-    
+
+            console.log("Error: " + error);
+
         }
-          
-      }
-
-
- //Validacion personalizada que valida que el idPedido Ingresado exista en la BD y este Activo:
-
- const validarArtInsumo = async (idArtInsumo) => {
-
-    try{
-
-        const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet?action=listar");
-        const resJson = await response.json();
         
-        const listaInsumo =   resJson;
-        let validar = false;
-
-        //alert(JSON.stringify(listaCliente))
-
-        
-        for(let i = 0; i < listaInsumo.length; i++){
-
-            //Se verifica que el idFactura ingresado exista en la BD y este activo(devuelve true) caso contrario false:
-
-            if((listaInsumo[i].idArticulo).toString() === (idArtInsumo).toString() && ((listaInsumo[i].estado).toString() === "activo")){
-
-                return validar = true;
-            }
-        
-        }
-
-        return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
     }
-      
-  }
+
+
+    //Validacion personalizada que valida que el idPedido Ingresado exista en la BD y este Activo:
+    const validarArtInsumo = async (idArtInsumo) => {
+
+        try{
+
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaInsumo =   resJson;
+            let validar = false;
+
+       
+            for(let i = 0; i < listaInsumo.length; i++){
+
+
+                if((listaInsumo[i].idArticulo).toString() === (idArtInsumo).toString() && ((listaInsumo[i].estado).toString() === "activo")){
+
+                    return validar = true;
+                }
+            
+            }
+
+            return validar;
+
+        }catch(error){
+
+        console.log("Error: " + error);
+
+        }
+        
+    }
 
 
    //Validacion personalizada que valida que el idArticuloManufacturado Ingresado exista en la BD y este Activo:
-
    const validarArtManufacturado = async (idArtManufacturado) => {
 
-    try{
+        try{
 
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtManufacturadoServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaArticulo =  resJson;
-      let validar = false;
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtManufacturadoServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaArticulo =  resJson;
+            let validar = false;
 
-      //alert(JSON.stringify(listaArticulo))
+            
+            for(let i = 0; i < listaArticulo.length; i++){
 
-      
-      for(let i = 0; i < listaArticulo.length; i++){
+                
+                    if((listaArticulo[i].idArticulo).toString() === (idArtManufacturado).toString() && ((listaArticulo[i].estado).toString() === "activo")){
 
-            //Se verifica que el idArticuloManufacturado ingresado exista en la BD y este activo(devuelve true) caso contrario false:
+                        return validar = true;
+                    }
 
-            if((listaArticulo[i].idArticulo).toString() === (idArtManufacturado).toString() && ((listaArticulo[i].estado).toString() === "activo")){
-
-                return validar = true;
             }
 
-      }
+            return validar;
 
-      return validar;
+        }catch(error){
 
-    }catch(error){
+            console.log("Error: " + error);
 
-      console.log("Error: " + error);
-
-    }
+        }
       
   }
 

@@ -37,6 +37,7 @@ import org.apache.commons.io.IOUtils;
 @WebServlet(name = "AuxMercadoPagoServlet", urlPatterns = {"/AuxMercadoPagoServlet"})
 public class AuxMercadoPagoServlet extends HttpServlet{
     
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -121,7 +122,7 @@ public class AuxMercadoPagoServlet extends HttpServlet{
                     response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
                     response.setHeader("Access-Control-Max-Age", "3600");
                     response.setHeader("Access-Control-Allow-Headers", "Content-Type, Origin, Accept, X-Requested-With, Access-Control-Request-Method, Access-Control-Request-Headers");
-                    response.setContentType("multipart/form-data");
+                    response.setContentType("text/html");
                     
                     
                     
@@ -187,6 +188,7 @@ public class AuxMercadoPagoServlet extends HttpServlet{
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
     
     
 }

@@ -10,17 +10,12 @@ import Button from 'react-bootstrap/Button';
 import { ContextoUsuario } from './ContextoUsuario';
 
 
-
-
 export default function Home(){    
 
     return (
 
         <div className="body">
-
-
             
-
                 <Container>
 
                 <br></br>

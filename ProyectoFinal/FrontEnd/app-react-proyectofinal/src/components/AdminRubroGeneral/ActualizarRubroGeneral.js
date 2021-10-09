@@ -11,55 +11,38 @@ import Button from 'react-bootstrap/Button';
 import Alert from "react-bootstrap/Alert";
 import moment from 'moment';
 
-//Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
-//Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
 
-
-//Paso el props por parametro a la funcion principal del componente para obtener los parametros const idDinosaurio = props.match.params.id
 const ActualizarRubroGeneral = (props) => {
 
-    //Usamos el useForm para la validacion del formulario y pasamos los defaultValue para pintar los input:
-    //SetValue sumamente importante para actualizar los valores obtenidos en el metodo obtenerOne y pintar los input
+    
 
-   const {register, formState: { errors }, handleSubmit, setValue} = useForm({
+    const {register, formState: { errors }, handleSubmit, setValue} = useForm({
 
-   
+    
 
-   })
-
-   
-
-   //Creamos nuestro Hook inicializando como objeto del Form:  
+    })
  
-   const [datos, setDatos] = useState({
+    
+    const [datos, setDatos] = useState({
 
-        
+            
         denominacion:'',
         fechaAlta:'',
         fechaBaja:'',
         estado:'',
 
-        
-   })
+            
+    })
 
 
-   //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-    //los corchetes permite que nuestro userEffect se ejecute una sola vez
     useEffect(() => {
 
-        
-        
-        //Se ejecuta el metodo obtener One al cargar la pagina
+   
         getRubro();
        
+    },[])
 
 
-    }, [])
-
-
-    //METODOS:
-
-    //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
     const handleInputChange = (event) => {
 
         setDatos({
@@ -71,105 +54,96 @@ const ActualizarRubroGeneral = (props) => {
 
     }
 
-    //Metodo que se ejecuta en el evento onSubmit desde el formulario:
 
     const enviarDatos = (datos, event) => {
 
         
         getDatos(datos)
-
-        //Limpia todos los input, pero no refresca la pagina:    
+   
         event.target.reset()
     
     }
 
     //Metodo para actualizar datos:
-    const getDatos = (datos) => {
+    const getDatos = async (datos) => {
 
         const id = props.match.params.id
 
-        axios.get("http://localhost:8080/ProyectoFinalLaboIV/RubroGeneralServlet?", {
-            params: {
-    
-                action:'actualizar',
-                idRubro: id,
-                denominacion:datos.denominacion,
-                fechaAlta: datos.fechaAlta,
-                fechaBaja: datos.fechaBaja,
-                estado: datos.estado
-    
-                
-            }
-          })
-        .then(response => {
-    
-            console.log(JSON.stringify(response))
-        
-
-        })
-        .catch(error =>{
-            console.log("Error");
-            console.log(error);
-        })
-    
-    
-      }
-
-
-      //Metodo Obtener los datos al Cargar la Pagina:
-      const getRubro = async () => {
         try{
-            
-          const id = props.match.params.id;  
-          const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/RubroGeneralServlet?action=buscar&idRubro="+id);
-          const resJson = await response.json();
-          
-          //Verificamos la obtencion de datos correcto:
-          alert(JSON.stringify(resJson));
-          
 
-          //por medio del setDatos paso los datos recuperados a useState datos, modifico del servlet para solo pasar un objeto.json
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/RubroGeneralServlet?", {
+                params: {
+        
+                    action:'actualizar',
+                    idRubro: id,
+                    denominacion:datos.denominacion,
+                    fechaAlta: datos.fechaAlta,
+                    fechaBaja: datos.fechaBaja,
+                    estado: datos.estado
+        
+                    
+                }
+            })
 
-          setDatos(resJson);
+            const resJson = await response.data
 
-          //Modificamos con setValue los input que recibimos:
-          //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).format('YYYY-MM-DD')}
+            console.log(resJson)
 
-          setValue('denominacion', resJson.denominacion);
-          setValue('fechaAlta', moment(resJson.fechaAlta).subtract(1, 'M').format('YYYY-MM-DD'));
-          setValue('fechaBaja', moment(resJson.fechaBaja).subtract(1, 'M').format('YYYY-MM-DD'));
-          setValue('estado', resJson.estado);
-          
         }catch(error){
-    
-          console.log("Error: " + error);
-    
-        }
-          
-      }
 
+            console.log(error)
 
-  //Validar activo-inactivo en actualizacion datos input estado:
+        }    
 
-  const validarEstado = (estado) => {
-
-    let validar = false;
-
-    if(estado === "activo"){
-
-        return validar = true;
-       
-
-
-    }else if(estado === "inactivo"){
-
-        return validar = true;
 
     }
 
-    return validar;
 
-  }
+    //Metodo Obtener los datos al Cargar la Pagina:
+    const getRubro = async () => {
+
+        try{
+            
+            const id = props.match.params.id;  
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/RubroGeneralServlet?action=buscar&idRubro="+id);
+            const resJson = await response.json();
+            
+            setDatos(resJson);
+
+            setValue('denominacion', resJson.denominacion);
+            setValue('fechaAlta', moment(resJson.fechaAlta).subtract(1, 'M').format('YYYY-MM-DD'));
+            setValue('fechaBaja', moment(resJson.fechaBaja).subtract(1, 'M').format('YYYY-MM-DD'));
+            setValue('estado', resJson.estado);
+            
+        }catch(error){
+
+            console.log("Error: " + error);
+
+        }
+        
+    }
+
+
+    //Validar activo-inactivo en actualizacion datos input estado:
+    const validarEstado = (estado) => {
+
+        let validar = false;
+
+        if(estado === "activo"){
+
+            return validar = true;
+        
+
+
+        }else if(estado === "inactivo"){
+
+            return validar = true;
+
+        }
+
+        return validar;
+
+    }
 
 
      

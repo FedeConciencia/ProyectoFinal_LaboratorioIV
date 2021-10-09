@@ -11,25 +11,23 @@ import '../../assets/css/registrar.css';
 
 const RegistrarArtManDetalle = () => {
 
-   //Usamos el useForm para la validacion del formulario:
 
    const {register, formState: { errors }, handleSubmit} = useForm()
+ 
 
-  //Creamos nuestro Hook inicializando como objeto del Form:  
+    const [datos, setDatos] = useState({
 
-  const [datos, setDatos] = useState({
-
-        cantidad:'',
-        unidadMedida:'',
-        idArtManufacturado:'',
-        idArtInsumo:'',
-        
+            cantidad:'',
+            unidadMedida:'',
+            idArtManufacturado:'',
+            idArtInsumo:'',
+            
 
 
-  })
+    })
 
-  //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
-  const handleInputChange = (event) => {
+
+    const handleInputChange = (event) => {
 
         setDatos({
 
@@ -38,128 +36,118 @@ const RegistrarArtManDetalle = () => {
 
         })
 
-  }
+    }
 
-  //Metodo que se ejecuta en el evento onSubmit desde el formulario:
 
-  const enviarDatos = (datos, event) => {
 
-        
-        alert(JSON.stringify(datos))
+    const enviarDatos = (datos, event) => {
 
+    
         getDatos(datos)
 
-        //Limpio todos los input
         event.target.reset()
 
-        
-  }
+            
+    }
 
-  const getDatos = (datos) => {
+    const getDatos = async (datos) => {
 
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/ArtManDetalleServlet", {
-        params: {
 
-            action:'insertar',
-            cantidad: datos.cantidad,
-            unidadMedida: datos.unidadMedida,
-            idArticuloManufacturado: datos.idArtManufacturado,
-            idArticuloInsumo: datos.idArtInsumo,
-            //fechaAlta: moment().format('YYYY-MM-DD'), 
-            //fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-            //estado: "activo"
+        try{
 
-            //fechaAlta, fechaBaja, estado se crean x defecto:
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/ArtManDetalleServlet", {
+                params: {
 
+                    action:'insertar',
+                    cantidad: datos.cantidad,
+                    unidadMedida: datos.unidadMedida,
+                    idArticuloManufacturado: datos.idArtManufacturado,
+                    idArticuloInsumo: datos.idArtInsumo,
+
+
+                }
+            })
+
+            const resJson = await response.data
+
+            console.log(resJson)
+
+
+
+        }catch(error){
+
+            console.log(error)
 
         }
-      })
-    .then(response => {
-
-        console.log(JSON.stringify(response))
         
 
-    })
-    .catch(error =>{
-        console.log("Error");
-        console.log(error);
-    })
-
-
-  }
-
-  //Validacion personalizada que valida que el idPedido Ingresado exista en la BD y este Activo:
-
-  const validarArtInsumo = async (idArtInsumo) => {
-
-    try{
-
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaInsumo =   resJson;
-      let validar = false;
-
-      //alert(JSON.stringify(listaCliente))
-
-      
-      for(let i = 0; i < listaInsumo.length; i++){
-
-            //Se verifica que el idFactura ingresado exista en la BD y este activo(devuelve true) caso contrario false:
-
-            if((listaInsumo[i].idArticulo).toString() === (idArtInsumo).toString() && ((listaInsumo[i].estado).toString() === "activo")){
-
-                return validar = true;
-            }
-        
-      }
-
-      return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
 
     }
-      
-  }
 
+    //Validacion personalizada que valida que el idPedido Ingresado exista en la BD y este Activo:
+    const validarArtInsumo = async (idArtInsumo) => {
 
-   //Validacion personalizada que valida que el idArticuloManufacturado Ingresado exista en la BD y este Activo:
+        try{
 
-   const validarArtManufacturado = async (idArtManufacturado) => {
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtInsumoServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaInsumo =   resJson;
+            let validar = false;
 
-    try{
+            
+            for(let i = 0; i < listaInsumo.length; i++){
 
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtManufacturadoServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaArticulo =  resJson;
-      let validar = false;
+                   
+                if((listaInsumo[i].idArticulo).toString() === (idArtInsumo).toString() && ((listaInsumo[i].estado).toString() === "activo")){
 
-      //alert(JSON.stringify(listaArticulo))
-
-      
-      for(let i = 0; i < listaArticulo.length; i++){
-
-            //Se verifica que el idArticuloManufacturado ingresado exista en la BD y este activo(devuelve true) caso contrario false:
-
-            if((listaArticulo[i].idArticulo).toString() === (idArtManufacturado).toString() && ((listaArticulo[i].estado).toString() === "activo")){
-
-                return validar = true;
+                    return validar = true;
+                }
+                
             }
+
+            return validar;
+
+        }catch(error){
+
+            console.log("Error: " + error);
+
+        }
         
-      }
-
-      return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
     }
-      
-  }
+
+
+    //Validacion personalizada que valida que el idArticuloManufacturado Ingresado exista en la BD y este Activo:
+    const validarArtManufacturado = async (idArtManufacturado) => {
+
+        try{
+
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtManufacturadoServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaArticulo =  resJson;
+            let validar = false;
+
+            
+            for(let i = 0; i < listaArticulo.length; i++){
+
+
+                if((listaArticulo[i].idArticulo).toString() === (idArtManufacturado).toString() && ((listaArticulo[i].estado).toString() === "activo")){
+
+                    return validar = true;
+                }
+                
+            }
+
+            return validar;
+
+        }catch(error){
+
+            console.log("Error: " + error);
+
+        }
+        
+    }
 
 
 

@@ -9,15 +9,10 @@ import Button from 'react-bootstrap/Button';
 import Alert from "react-bootstrap/Alert";
 import moment from 'moment';
 
-//Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
-//Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
 
-
-//Paso el props por parametro a la funcion principal del componente para obtener los parametros const idDinosaurio = props.match.params.id
 const ActualizarArtManufacturado = (props) => {
 
-    //Usamos el useForm para la validacion del formulario y pasamos los defaultValue para pintar los input:
-    //SetValue sumamente importante para actualizar los valores obtenidos en el metodo obtenerOne y pintar los input
+   
 
    const {register, formState: { errors }, handleSubmit, setValue} = useForm({
 
@@ -25,9 +20,6 @@ const ActualizarArtManufacturado = (props) => {
 
    })
 
-   
-
-   //Creamos nuestro Hook inicializando como objeto del Form:  
  
    const [datos, setDatos] = useState({
 
@@ -45,23 +37,15 @@ const ActualizarArtManufacturado = (props) => {
    })
 
 
-   //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-    //los corchetes permite que nuestro userEffect se ejecute una sola vez
     useEffect(() => {
 
         
-        
-        //Se ejecuta el metodo obtener One al cargar la pagina
         getArtManufacturado();
-       
+    
+
+    },[])
 
 
-    }, [])
-
-
-    //METODOS:
-
-    //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
     const handleInputChange = (event) => {
 
         setDatos({
@@ -73,151 +57,137 @@ const ActualizarArtManufacturado = (props) => {
 
     }
 
-    //Metodo que se ejecuta en el evento onSubmit desde el formulario:
 
     const enviarDatos = (datos, event) => {
 
         
         getDatos(datos)
-
-        //Limpia todos los input, pero no refresca la pagina:    
+ 
         event.target.reset()
     
     }
 
     //Metodo para actualizar datos:
-    const getDatos = (datos) => {
+    const getDatos = async (datos) => {
 
         const id = props.match.params.id
 
-        axios.get("http://localhost:8080/ProyectoFinalLaboIV/ArtManufacturadoServlet", {
-            params: {
-    
-                action:'actualizar',
-                idArticulo: id,
-                tiempoEstimado: datos.tiempoEstimado,
-                denominacion: datos.denominacion,
-                precioVenta: datos.precioVenta,
-                imagen:datos.imagen,
-                idRubro: datos.idRubro,
-                fechaAlta: datos.fechaAlta,
-                fechaBaja: datos.fechaBaja,
-                estado: datos.estado
-    
-                
-            }
-          })
-        .then(response => {
-    
-            console.log(JSON.stringify(response))
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/ArtManufacturadoServlet", {
+                params: {
         
+                    action:'actualizar',
+                    idArticulo: id,
+                    tiempoEstimado: datos.tiempoEstimado,
+                    denominacion: datos.denominacion,
+                    precioVenta: datos.precioVenta,
+                    imagen:datos.imagen,
+                    idRubro: datos.idRubro,
+                    fechaAlta: datos.fechaAlta,
+                    fechaBaja: datos.fechaBaja,
+                    estado: datos.estado
+        
+                    
+                }
+            })
 
-        })
-        .catch(error =>{
-            console.log("Error");
-            console.log(error);
-        })
+            const resJson = await response.data;
+            
+            console.log(resJson)
+    
+        }catch(error){
+
+            console.log(error)
+        }
     
     
-      }
+    }
 
 
-      //Metodo Obtener los datos al Cargar la Pagina:
-      const getArtManufacturado = async () => {
+    //Metodo Obtener los datos al Cargar la Pagina:
+    const getArtManufacturado = async () => {
+
         try{
             
-          const id = props.match.params.id;  
-          const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtManufacturadoServlet?action=buscar&idArticulo="+id);
-          const resJson = await response.json();
-          
-          //Verificamos la obtencion de datos correcto:
-          alert(JSON.stringify(resJson));
-          
-
-          //por medio del setDatos paso los datos recuperados a useState datos, modifico del servlet para solo pasar un objeto.json
-
-          setDatos(resJson);
-
-          //Modificamos con setValue los input que recibimos:
-          //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).format('YYYY-MM-DD')}
-
-          setValue('tiempoEstimado', resJson.tiempoEstimado);
-          setValue('denominacion', resJson.denominacion);
-          setValue('precioVenta', resJson.precioVenta);
-          setValue('imagen', resJson.imagen);
-          setValue('idRubro', (resJson.idRubro).toString()); //parseo a String
-          setValue('fechaAlta', moment(resJson.fechaAlta).subtract(1, 'M').format('YYYY-MM-DD'));
-          setValue('fechaBaja', moment(resJson.fechaBaja).subtract(1, 'M').format('YYYY-MM-DD'));
-          setValue('estado', resJson.estado);
-          
-        }catch(error){
-    
-          console.log("Error: " + error);
-    
-        }
-          
-      }
-
-
-  //Validacion personalizada que valida que el idRubro Ingresado exista en la BD y si esta inactivo baja logica no existe:
-
-  const validarRubro = async (idRubro) => {
-
-    try{
-
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/RubroGeneralServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaRubro =   resJson;
-      let validar = false;
-
-      //alert(JSON.stringify(listaCliente))
-
-      
-      for(let i = 0; i < listaRubro.length; i++){
-
-            //Se verifica que el .Json idCliente era un numero y el input devuelve un String, si encuentra existencia devuelve true,
-            //caso contrario false y lanza el error personalizado.
-
-            if((listaRubro[i].idRubro).toString() === (idRubro).toString() && ((listaRubro[i].estado).toString() === "activo")){
-
-                return validar = true;
-            }
+            const id = props.match.params.id;  
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtManufacturadoServlet?action=buscar&idArticulo="+id);
+            const resJson = await response.json();
+            
         
-      }
+            setDatos(resJson);
 
-      return validar;
+            setValue('tiempoEstimado', resJson.tiempoEstimado);
+            setValue('denominacion', resJson.denominacion);
+            setValue('precioVenta', resJson.precioVenta);
+            setValue('imagen', resJson.imagen);
+            setValue('idRubro', (resJson.idRubro).toString()); //parseo a String
+            setValue('fechaAlta', moment(resJson.fechaAlta).subtract(1, 'M').format('YYYY-MM-DD'));
+            setValue('fechaBaja', moment(resJson.fechaBaja).subtract(1, 'M').format('YYYY-MM-DD'));
+            setValue('estado', resJson.estado);
+            
+        }catch(error){
 
-    }catch(error){
+            console.log("Error: " + error);
 
-      console.log("Error: " + error);
-
+        }
+        
     }
+
+
+    //Validacion personalizada que valida que el idRubro Ingresado exista en la BD y si esta inactivo baja logica no existe:
+    const validarRubro = async (idRubro) => {
+
+        try{
+
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/RubroGeneralServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaRubro =   resJson;
+            let validar = false;
+
+            
+            for(let i = 0; i < listaRubro.length; i++){
+
+                
+                if((listaRubro[i].idRubro).toString() === (idRubro).toString() && ((listaRubro[i].estado).toString() === "activo")){
+
+                    return validar = true;
+                }
+                
+            }
+
+            return validar;
+
+        }catch(error){
+
+            console.log("Error: " + error);
+
+        }
       
-  }
-
-
-  //Validar activo-inactivo en actualizacion datos input estado:
-
-  const validarEstado = (estado) => {
-
-    let validar = false;
-
-    if(estado === "activo"){
-
-        return validar = true;
-       
-
-
-    }else if(estado === "inactivo"){
-
-        return validar = true;
-
     }
 
-    return validar;
 
-  }
+    //Validar activo-inactivo en actualizacion datos input estado:
+    const validarEstado = (estado) => {
+
+        let validar = false;
+
+        if(estado === "activo"){
+
+            return validar = true;
+        
+
+
+        }else if(estado === "inactivo"){
+
+            return validar = true;
+
+        }
+
+        return validar;
+
+    }
 
      
     return (  

@@ -13,86 +13,81 @@ import moment from 'moment';
 
 const RegistrarFactura = () => {
 
-   //Usamos el useForm para la validacion del formulario:
+
 
    const {register, formState: { errors }, handleSubmit} = useForm()
 
-  //Creamos nuestro Hook inicializando como objeto del Form:  
+  
 
-  const [datos, setDatos] = useState({
+    const [datos, setDatos] = useState({
 
-        codigo:'',
-        montoDescuento:'',
-        formaPago:'',
-        totalVenta:'',
-        idPedido:'',
-        
-
-  })
-
-  //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
-  const handleInputChange = (event) => {
-
-        setDatos({
-
-            ...datos,
-            [event.target.name] : event.target.value
-
-        })
-
-  }
-
-  //Metodo que se ejecuta en el evento onSubmit desde el formulario:
-
-  const enviarDatos = (datos, event) => {
-
-        
-        alert(JSON.stringify(datos))
-
-        getDatos(datos)
-
-        //Limpio todos los input
-        event.target.reset()
-
-        
-  }
-
-  const getDatos = (datos) => {
-
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/FacturaServlet", {
-        params: {
-
-            action:'insertar',
-            codigo: datos.codigo,
-            montoDescuento: datos.montoDescuento,
-            formaPago: datos.formaPago,
-            totalVenta: datos.totalVenta,
-            fechaAlta: moment().format('YYYY-MM-DD'), 
-            fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-            estado: "activo",
-            idPedido: datos.idPedido,
-
-            //fechaAlta, fechaBaja, estado se crean x defecto:
-
-
-        }
-      })
-    .then(response => {
-
-        console.log(JSON.stringify(response))
-        
+            codigo:'',
+            montoDescuento:'',
+            formaPago:'',
+            totalVenta:'',
+            idPedido:'',
+            
 
     })
-    .catch(error =>{
-        console.log("Error");
-        console.log(error);
-    })
 
 
-  }
+    const handleInputChange = (event) => {
+
+            setDatos({
+
+                ...datos,
+                [event.target.name] : event.target.value
+
+            })
+
+    }
+
+  
+
+    const enviarDatos = (datos, event) => {
+
+
+            getDatos(datos)
+
+            event.target.reset()
+
+            
+    }
+
+    const getDatos = async (datos) => {
+
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/FacturaServlet", {
+                params: {
+
+                    action:'insertar',
+                    codigo: datos.codigo,
+                    montoDescuento: datos.montoDescuento,
+                    formaPago: datos.formaPago,
+                    totalVenta: datos.totalVenta,
+                    fechaAlta: moment().format('YYYY-MM-DD'), 
+                    fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
+                    estado: "activo",
+                    idPedido: datos.idPedido,
+
+                    
+
+                }
+            })
+
+            const resJson = await response.data;
+            console.log(resJson)
+
+        }catch(error){
+
+            console.log(error)
+        }    
+        
+
+    }
 
    //Validacion personalizada que valida que el idPedido Ingresado exista en la BD y este activo (Baja Logica):
-
    const validarPedido = async (idPedido) => {
 
     try{
@@ -103,12 +98,12 @@ const RegistrarFactura = () => {
       const listaPedido =   resJson;
       let validar = false;
 
-      //alert(JSON.stringify(listaCliente))
+    
 
       
       for(let i = 0; i < listaPedido.length; i++){
 
-            //Se verifica que el idPedido exista en el BD y este activo (Baja Logica):
+            
 
             if((listaPedido[i].idPedido).toString() === (idPedido).toString() && ((listaPedido[i].estado).toString() === "activo")){
 
@@ -132,7 +127,6 @@ const RegistrarFactura = () => {
   }
 
   //Validacion personalizada que valida que el codigo Ingresado no exista en la BD y este Inactivo (baja Logica):
-
   const validarCodigo = async (codigo) => {
 
     try{
@@ -143,12 +137,10 @@ const RegistrarFactura = () => {
       const listaFactura =   resJson;
       let validar = true;
 
-      //alert(JSON.stringify(listaCliente))
 
-      
       for(let i = 0; i < listaFactura.length; i++){
 
-            //Si el codigo existe y esta activo (retorna false) y no valida ya que debe ser unico:
+            
 
             if((listaFactura[i].codigo).toString() === (codigo).toString() && ((listaFactura[i].estado).toString() === "activo")){
 
@@ -215,7 +207,6 @@ const RegistrarFactura = () => {
                         onChange={handleInputChange}
                         placeholder="Ingrese el Codigo"
                         className="form-control my-2"
-                        min="1000"
                         {...register("codigo", { 
 
                             required:{

@@ -14,7 +14,7 @@ import NavHamburguer from "./Navigation/NavHamburguer";
 
 export default function Navigation() {
 
-  // Hook con el estado actual
+  
   const {usuario, setUsuario} = useContext(ContextoUsuario);
   
   const history = useHistory();
@@ -61,7 +61,6 @@ export default function Navigation() {
 
   //Metodo para desloquearte de API google:
   const logout = (response) => {
-    alert(response);
     setUsuario(null);
     localStorage.setItem('usuario', null);
     history.push("/");

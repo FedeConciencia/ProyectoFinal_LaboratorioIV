@@ -6,22 +6,17 @@ import Table from 'react-bootstrap/Table'
 import '../../assets/css/form.css';
 import moment from 'moment';
 
-//Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
-//Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
 
-
-//Se pasan los props (parametros):
 const FormCliente = (props) => {
 
 
  const [datos, setDatos] = useState([])
     
-  //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-  //los corchetes permite que nuestro userEffect se ejecute una sola vez
+  
   useEffect(() => {
 
         
-      //Se ejecuta el metodo getOne al cargar la pagina
+      
       getCliente()
     
       
@@ -29,17 +24,15 @@ const FormCliente = (props) => {
   }, [])
 
 
-  //Si se usa JavaWebAplications Tomcast ver de colocar localhost:8080
-
+  
+  //Metodo que obtiene lista de clientes =>
   const getCliente = async () => {
 
     try{
 
       const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=listar");
       const resJson = await response.json();
-      alert(JSON.stringify(resJson));
-
-      //Este metodo .setState permite asignar a la variable de estado db el .JSON
+     
       setDatos(resJson)
 
     }catch(error){
@@ -50,10 +43,7 @@ const FormCliente = (props) => {
       
   }
 
-
-
    
-  //la logica la hacemos antes de pasar la informacion a la vista:
     return (
 
       <Fragment>

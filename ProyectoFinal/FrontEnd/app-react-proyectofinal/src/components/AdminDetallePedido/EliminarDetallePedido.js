@@ -7,33 +7,24 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import { useHistory } from 'react-router-dom';
 
-//Paso el props por parametro a la funcion principal del componente para obtener los parametros const idDinosaurio = props.match.params.id
+
 const EliminarDetallePedido = (props) => {
 
-    //Redireccion de la Pagina:
+    
     let history = useHistory();
 
 
- 
-    //Se obtiene los datos del parametro y posteriormente se pasa al metodo.
-    //const {id} = useParams();
-    
 
-    //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-    //los corchetes permite que nuestro userEffect se ejecute una sola vez
     useEffect(() => {
 
         
-        //Se ejecuta el metodo eliminar al cargar la pagina
         eliminarDetallePedido()
       
-        
 
-    }, [])
+    },[])
 
     
-
-
+    //Metodo para eliminar registro fisico en tabla union=>
     const eliminarDetallePedido =  async () => {
 
         try{
@@ -42,7 +33,6 @@ const EliminarDetallePedido = (props) => {
             const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DetallePedidoServlet?action=eliminar&idDetallePedido="+id);
             const res = await response.json();
 
-            //Redireccionar a la pagina form cliente:
             history.push('/adminDetallePedido');
             
             

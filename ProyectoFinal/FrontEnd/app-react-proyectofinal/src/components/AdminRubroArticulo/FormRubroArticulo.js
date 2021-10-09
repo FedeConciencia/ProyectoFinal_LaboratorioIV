@@ -6,55 +6,41 @@ import Table from 'react-bootstrap/Table'
 import '../../assets/css/form.css';
 import moment from 'moment';
 
-//Se descarga libreria moment: npm install moment --save, para el manejo de Date y LocalDate: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
-//Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
-//Se aplica libreria moment a campo LocalTime y funciona correctamente:
 
-
-//Se pasan los props (parametros):
 const FormRubroArticulo = (props) => {
 
 
- const [datos, setDatos] = useState([])
+    const [datos, setDatos] = useState([])
+      
     
-  //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-  //los corchetes permite que nuestro userEffect se ejecute una sola vez
-  useEffect(() => {
+    useEffect(() => {
 
+          
+        getRubro()
+      
+
+    },[])
+
+
+
+    const getRubro = async () => {
+
+      try{
+
+        const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/RubroArticuloServlet?action=listar");
+        const resJson = await response.json();
+
+        setDatos(resJson)
+
+      }catch(error){
+
+        console.log("Error: " + error);
+
+      }
         
-      //Se ejecuta el metodo getOne al cargar la pagina
-      getRubro()
-    
-      
-
-  }, [])
-
-
-  //Si se usa JavaWebAplications Tomcast ver de colocar localhost:8080
-
-  const getRubro = async () => {
-
-    try{
-
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/RubroArticuloServlet?action=listar");
-      const resJson = await response.json();
-      alert(JSON.stringify(resJson));
-
-      //Este metodo .setState permite asignar a la variable de estado db el .JSON
-      setDatos(resJson)
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
     }
-      
-  }
-
-
 
    
-  //la logica la hacemos antes de pasar la informacion a la vista:
     return (
 
       <Fragment>

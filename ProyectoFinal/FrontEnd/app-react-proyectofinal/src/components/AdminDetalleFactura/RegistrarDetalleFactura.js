@@ -13,169 +13,158 @@ import moment from 'moment';
 
 const RegistrarDetalleFactura = () => {
 
-   //Usamos el useForm para la validacion del formulario:
+  
 
-   const {register, formState: { errors }, handleSubmit} = useForm()
+    const {register, formState: { errors }, handleSubmit} = useForm()
 
-  //Creamos nuestro Hook inicializando como objeto del Form:  
+  
+    const [datos, setDatos] = useState({
 
-  const [datos, setDatos] = useState({
-
-        cantidad:'',
-        subTotal:'',
-        idFactura:'',
-        idArticulo:'',
-        
+            cantidad:'',
+            subTotal:'',
+            idFactura:'',
+            idArticulo:'',
+            
 
 
-  })
+    })
 
-  //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
-  const handleInputChange = (event) => {
+  
+    const handleInputChange = (event) => {
 
-        setDatos({
+            setDatos({
 
-            ...datos,
-            [event.target.name] : event.target.value
+                ...datos,
+                [event.target.name] : event.target.value
 
-        })
+            })
 
-  }
+    }
 
-  //Metodo que se ejecuta en el evento onSubmit desde el formulario:
+  
 
-  const enviarDatos = (datos, event) => {
-
-        
-        alert(JSON.stringify(datos))
-
-        getDatos(datos)
-
-        //Limpio todos los input
-        event.target.reset()
+    const enviarDatos = (datos, event) => {
 
         
-  }
+            getDatos(datos)
 
-  const getDatos = (datos) => {
+            event.target.reset()
 
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/DetalleFacturaServlet", {
-        params: {
+            
+    }
 
-            action:'insertar',
-            cantidad: datos.cantidad,
-            subTotal: datos.subTotal,
-            idFactura: datos.idFactura,
-            idArticuloManufacturado: datos.idArticulo,
-            //fechaAlta: moment().format('YYYY-MM-DD'), 
-            //fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-            //estado: "activo"
+    //Metodo que inserta los datos =>
+    const getDatos = async (datos) => {
 
-            //fechaAlta, fechaBaja, estado se crean x defecto:
+        try{
 
+        
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/DetalleFacturaServlet", {
+                params: {
+
+                    action:'insertar',
+                    cantidad: datos.cantidad,
+                    subTotal: datos.subTotal,
+                    idFactura: datos.idFactura,
+                    idArticuloManufacturado: datos.idArticulo,
+                    //fechaAlta: moment().format('YYYY-MM-DD'), 
+                    //fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
+                    //estado: "activo"
+
+
+                }
+            })
+
+            const resJson = await response.data;
+            console.log(resJson)
+        
+        }catch(error){
+
+            console.log(error)
+
+        }    
+
+
+    }
+
+    //Validacion personalizada que valida que el idFactura Ingresado exista en la BD y este Activo:
+    const validarFactura = async (idFactura) => {
+
+        try{
+
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/FacturaServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaFactura =   resJson;
+            let validar = false;
+
+    
+            for(let i = 0; i < listaFactura.length; i++){
+
+                    
+                    if((listaFactura[i].idFactura).toString() === (idFactura).toString() && ((listaFactura[i].estado).toString() === "activo")){
+
+                        return validar = true;
+                        break;
+
+
+                    }
+                
+
+            }
+
+            return validar;
+
+        }catch(error){
+
+            console.log("Error: " + error);
 
         }
-      })
-    .then(response => {
-
-        console.log(JSON.stringify(response))
         
-
-    })
-    .catch(error =>{
-        console.log("Error");
-        console.log(error);
-    })
+    }
 
 
-  }
+    //Validacion personalizada que valida que el idArticuloManufacturado Ingresado exista en la BD y este Activo:
+    const validarArticulo = async (idArticulo) => {
 
-  //Validacion personalizada que valida que el idFactura Ingresado exista en la BD y este Activo:
+        try{
 
-  const validarFactura = async (idFactura) => {
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtManufacturadoServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaArticulo =  resJson;
+            let validar = false;
 
-    try{
+            //alert(JSON.stringify(listaArticulo))
 
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/FacturaServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaFactura =   resJson;
-      let validar = false;
+            
+            for(let i = 0; i < listaArticulo.length; i++){
 
-      //alert(JSON.stringify(listaCliente))
+                    //Se verifica que el idArticuloManufacturado ingresado exista en la BD y este activo(devuelve true) caso contrario false:
 
-      
-      for(let i = 0; i < listaFactura.length; i++){
+                    if((listaArticulo[i].idArticulo).toString() === (idArticulo).toString() && ((listaArticulo[i].estado).toString() === "activo")){
 
-            //Se verifica que el idFactura ingresado exista en la BD y este activo(devuelve true) caso contrario false:
+                        return validar = true;
+                        break;
 
-            if((listaFactura[i].idFactura).toString() === (idFactura).toString() && ((listaFactura[i].estado).toString() === "activo")){
 
-                return validar = true;
-                break;
-
+                    }
+                
 
             }
+
+            return validar;
+
+        }catch(error){
+
+            console.log("Error: " + error);
+
+        }
         
-
-      }
-
-      return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
     }
-      
-  }
 
 
-   //Validacion personalizada que valida que el idArticuloManufacturado Ingresado exista en la BD y este Activo:
-
-   const validarArticulo = async (idArticulo) => {
-
-    try{
-
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ArtManServlet?action=listar");
-      const resJson = await response.json();
-      
-      const listaArticulo =  resJson;
-      let validar = false;
-
-      //alert(JSON.stringify(listaArticulo))
-
-      
-      for(let i = 0; i < listaArticulo.length; i++){
-
-            //Se verifica que el idArticuloManufacturado ingresado exista en la BD y este activo(devuelve true) caso contrario false:
-
-            if((listaArticulo[i].idArticulo).toString() === (idArticulo).toString() && ((listaArticulo[i].estado).toString() === "activo")){
-
-                return validar = true;
-                break;
-
-
-            }
-        
-
-      }
-
-      return validar;
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
-    }
-      
-  }
-
-
-
-
-
-  return (
+    return (
   
     <Fragment>
 

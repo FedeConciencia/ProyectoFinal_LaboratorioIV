@@ -11,145 +11,125 @@ import Container from 'react-bootstrap/Container';
 import { jsPDF } from "jspdf";
 
 
-//Se descarga libreria moment: npm install moment --save, para el manejo de Date y LocalDate: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
-//Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
-//Se aplica libreria moment a campo LocalTime y funciona correctamente:
-
-
-//Se pasan los props (parametros):
 const HistorialCliente = (props) => {
 
-//Redireccion de la Pagina:
- let history = useHistory();
+
+    let history = useHistory();
 
 
- const [datos, setDatos] = useState([])
+    const [datos, setDatos] = useState([])
  
 
- 
-  //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-  //los corchetes permite que nuestro userEffect se ejecute una sola vez
-  useEffect(() => {
+    useEffect(() => {
 
+          
+        getFacturasXEmail()
+      
+
+    }, [])
+
+
+    //Metodo para obtener todas las facturas asociadas al cliente x email:
+    const getFacturasXEmail = async () => {
+
+      
+      let emails = JSON.parse(localStorage.getItem("usuario")).usuario;
+
+      console.log("EMAIL =>", emails)
+
+      try{
+
+        const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/FacturaServlet?action=listarXemail&email="+emails);
+        const resJson = await response.json();
+
+        setDatos(resJson)
+
+      }catch(error){
+
+        console.log("Error: " + error);
+
+      }
         
-      //Se ejecuta el metodo al cargar la pagina
-      getFacturasXEmail()
-    
-      
-
-  }, [])
-
-
-  //Metodo para obtener todas las facturas asociadas al cliente x email:
-
-  const getFacturasXEmail = async () => {
-
-    //Obtengo el email de cliente del localStorage:
-    let emails = JSON.parse(localStorage.getItem("usuario")).usuario;
-
-    console.log("EMAIL =>", emails)
-
-
-    try{
-
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/FacturaServlet?action=listarXemail&email="+emails);
-      const resJson = await response.json();
-      alert(JSON.stringify(resJson));
-
-      //Este metodo .setState permite asignar a la variable de estado db el .JSON
-      setDatos(resJson)
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
     }
+
+    //Metodo para generar PDF de Factura desde Aplicacion Cliente =>
+    const crearPdf = async (idFactura, e) => {
+
+        let doc = new jsPDF();
       
-  }
+        try{
+      
+      
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxFacturaPedidoServlet", {
+                  params: {
+        
+          
+                      action:'listar',
+                      idFactura: idFactura, 
 
-//Metodo para generar PDF de Factura =>
-const crearPdf = async (idFactura, e) => {
-
-    let doc = new jsPDF();
-  
-    try{
-  
-  
-      const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxFacturaPedidoServlet", {
-            params: {
-  
-    
-                action:'listar',
-                idFactura: idFactura, 
-
-    
+          
+                  }
+            })
+        
+            
+            const resJson = await response.data;
+              
+            console.log("PDF => ", resJson)
+            
+            doc.text("Fecha: " + moment().format('YYYY-MM-DD'), 150, 10);
+            doc.text("Codigo Factura: " + resJson[0].codigo , 10, 10);
+            doc.text("-------------------------------", 10, 20);
+            if(resJson[0].tipoEnvio === 1){
+        
+              doc.text("Tipo de Envio: Domicilio" , 10, 30);
+        
+            }else{
+        
+              doc.text("Tipo de Envio: Retiro Local" , 10, 30);
+        
             }
-      })
-  
-      //Axios no hace falta pasar a JSON el response =>
-      const resJson = await response.data;
         
-      console.log("PDF => ", resJson)
+            doc.text("-------------------------------", 10, 40);
+        
+            doc.text("Metodo Pago: " + resJson[0].metodoPago , 10, 50);
+        
+            doc.text("-------------------------------", 10, 60);
+        
+            let contador = 60;
+        
+            for(let i = 0; i < resJson.length; i ++){
+        
+              contador += 10;
+              doc.text("Producto: " + resJson[i].denominacion, 10, contador);
+              contador += 10;
+              doc.text("Cantidad: " + resJson[i].cantidad, 10, contador);
+              contador += 10;
+              doc.text("Precio Unitario: $" + resJson[i].precioVenta, 10, contador);
+              contador += 10;
+              doc.text("SubTotal: $" + resJson[i].subTotal, 10, contador);
+              contador += 10;
+              doc.text("-------------------------------", 10, contador);
+        
+            }
+        
+            contador += 10;
+            doc.text("Descuento: $" + resJson[0].montoDescuento, 10, contador);
+            contador += 10;
+            doc.text("Total: $" + resJson[0].total, 10, contador);
+        
+            doc.save("factura.pdf");
+
       
-      doc.text("Fecha: " + moment().format('YYYY-MM-DD'), 150, 10);
-      doc.text("Codigo Factura: " + resJson[0].codigo , 10, 10);
-      doc.text("-------------------------------", 10, 20);
-      if(resJson[0].tipoEnvio === 1){
-  
-        doc.text("Tipo de Envio: Domicilio" , 10, 30);
-  
-      }else{
-  
-        doc.text("Tipo de Envio: Retiro Local" , 10, 30);
-  
+        }catch(error){
+      
+            console.log("ERROR =>", error)
+      
+        }
+      
       }
-  
-      doc.text("-------------------------------", 10, 40);
-  
-      doc.text("Metodo Pago: " + resJson[0].metodoPago , 10, 50);
-  
-      doc.text("-------------------------------", 10, 60);
-  
-      let contador = 60;
-  
-      for(let i = 0; i < resJson.length; i ++){
-  
-        contador += 10;
-        doc.text("Producto: " + resJson[i].denominacion, 10, contador);
-        contador += 10;
-        doc.text("Cantidad: " + resJson[i].cantidad, 10, contador);
-        contador += 10;
-        doc.text("Precio Unitario: $" + resJson[i].precioVenta, 10, contador);
-        contador += 10;
-        doc.text("SubTotal: $" + resJson[i].subTotal, 10, contador);
-        contador += 10;
-        doc.text("-------------------------------", 10, contador);
-  
-      }
-  
-      contador += 10;
-      doc.text("Descuento: $" + resJson[0].montoDescuento, 10, contador);
-      contador += 10;
-      doc.text("Total: $" + resJson[0].total, 10, contador);
-  
-      doc.save("factura.pdf");
 
   
-    }catch(error){
-  
-      console.log("ERROR =>", error)
-  
-    }
-  
-  }
-
-  
-
-
-
-   
-  //la logica la hacemos antes de pasar la informacion a la vista:
-    return (
+      return (
 
       <Fragment>
 

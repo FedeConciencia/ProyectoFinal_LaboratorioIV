@@ -63,22 +63,32 @@ const AuxMercadoPago = (props) => {
 
             console.log("INGRESO A MERCADOPAGO")
 
+  
+
+            //const response = await axios.post("https://cors-anywhere.herokuapp.com/http://localhost:8080/ProyectoFinalLaboIV/AuxMercadoPagoServlet",
+            //respuestaMercado, { headers })
+
+                    
             try{
 
-                const response = await axios.post("https://cors-anywhere.herokuapp.com/http://localhost:8080/ProyectoFinalLaboIV/AuxMercadoPagoServlet",
-                 respuestaMercado, { headers })
-    
-                const resJson = await response.data;
+                const response = await fetch("localhost:8080/ProyectoFinalLaboIV/AuxMercadoPagoServlet",{
+                    method:"POST",
+                }).then(
 
-                console.log("RESPUESTA MERCADO PAGO =>", resJson)
-    
-    
+                    result => console.log("funciono", result)
+
+                )
+                .catch(error => console.log("no  funciono", error)) 
+
+                
+
             }catch(error){
-    
-                console.log(error)
-    
-            }        
 
+                console.log(error)
+
+            }    
+    
+                
             
     }
 

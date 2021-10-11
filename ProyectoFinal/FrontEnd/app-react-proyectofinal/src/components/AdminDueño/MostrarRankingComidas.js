@@ -14,15 +14,14 @@ import { useHistory } from 'react-router-dom';
 
 const MostrarRankingComidas = () => {
 
-    //Redireccion de la Pagina:
+    
     let history = useHistory();
 
     const [datos, setDatos] = useState([])
 
-
     useEffect(() => {
 
-        //Se ejecuta el metodo obtener One al cargar la pagina
+    
         getDatos();
        
 
@@ -71,8 +70,6 @@ const MostrarRankingComidas = () => {
 
             await history.push("/adminDueño")
 
-            //localStorage.setItem("fechaInicio", JSON.stringify(""))
-            //localStorage.setItem("fechaFin", JSON.stringify(""))
 
         }catch(error){
 

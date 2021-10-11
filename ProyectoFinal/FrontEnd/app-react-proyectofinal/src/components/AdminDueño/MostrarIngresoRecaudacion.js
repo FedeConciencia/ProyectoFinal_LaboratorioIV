@@ -14,15 +14,12 @@ import { useHistory } from 'react-router-dom';
 
 const MostrarIngresosRecaudacion = () => {
 
-    //Redireccion de la Pagina:
     let history = useHistory();
 
     const [datos, setDatos] = useState(0)
 
-
     useEffect(() => {
 
-        //Se ejecuta el metodo obtener One al cargar la pagina
         getDatos();
        
 
@@ -72,9 +69,7 @@ const MostrarIngresosRecaudacion = () => {
 
             await history.push("/adminDueño")
 
-            //localStorage.setItem("fechaInicio", JSON.stringify(""))
-            //localStorage.setItem("fechaFin", JSON.stringify(""))
-
+           
         }catch(error){
 
             console.log(error)

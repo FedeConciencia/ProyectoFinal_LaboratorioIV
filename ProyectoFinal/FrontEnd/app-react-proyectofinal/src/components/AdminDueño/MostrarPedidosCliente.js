@@ -14,21 +14,20 @@ import { useHistory } from 'react-router-dom';
 
 const MostrarPedidosCliente = () => {
 
-    //Redireccion de la Pagina:
+    
     let history = useHistory();
 
     const [datos, setDatos] = useState([])
 
-
     useEffect(() => {
 
-        //Se ejecuta el metodo obtener One al cargar la pagina
+        
         getDatos();
        
 
     }, [])
 
-    //Ejecuto con un Metodo Asyn-Await dentro del UseEffect =>
+    
     const getDatos = async () =>{
 
         let response = await JSON.parse(localStorage.getItem("pedidosCliente"));
@@ -42,7 +41,7 @@ const MostrarPedidosCliente = () => {
 
     const enviarExcel = async (e) => {
 
-        let fechaInicio = JSON.parse(localStorage.getItem("fechaInicio")); //Importante pasarlo como JSON.parse (si no deja las "" dentro del String)
+        let fechaInicio = JSON.parse(localStorage.getItem("fechaInicio")); 
         let fechaFin = JSON.parse(localStorage.getItem("fechaFin"));
 
         console.log("FECHA INICIO => ", fechaInicio)
@@ -57,7 +56,7 @@ const MostrarPedidosCliente = () => {
 
                     action:'pedidosMail',
                     email: "federicosabatini@gmail.com", //Ingresa el mail inventado del usuario dueño, colocar uno real para testear
-                    dateInicio: fechaInicio, //Importante no colocar el mismo nombre entre variable y valor que se pasa GENERA CONFLICTO
+                    dateInicio: fechaInicio, 
                     dateFin: fechaFin, 
                     
                     
@@ -73,8 +72,6 @@ const MostrarPedidosCliente = () => {
 
             await history.push("/adminDueño")
 
-            //localStorage.setItem("fechaInicio", JSON.stringify(""))
-            //localStorage.setItem("fechaFin", JSON.stringify(""))
 
         }catch(error){
 

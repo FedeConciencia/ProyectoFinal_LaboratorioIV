@@ -92,10 +92,19 @@ public class AuxMercadoPagoServlet extends HttpServlet{
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-                   
+            response.setContentType("application/json;charset=UTF-8");
+            response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+            response.setHeader("Access-Control-Allow-Credentials", "true");
+            response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+            response.setHeader("Access-Control-Max-Age", "3600");
+            response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
+        
+            System.out.println("DO_GET");   
+            System.out.println(request.getParameter("codigo"));
+            System.out.println(request.getParameter("precio"));
                     
            
     }
@@ -109,21 +118,20 @@ public class AuxMercadoPagoServlet extends HttpServlet{
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-                    System.out.println(request.getContentType());
+                    
+                    response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+                    response.addHeader("Access-Control-Allow-Credentials", "true");
+                    response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+                    response.addHeader("Access-Control-Max-Age", "3600");
+                    response.addHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
         
                     System.out.println("INGRESO METODO POST");
                     
-                   
-                    response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000/");
-                    response.setHeader("Access-Control-Allow-Credentials", "true");
-                    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-                    response.setHeader("Access-Control-Max-Age", "3600");
-                    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Origin, Accept, X-Requested-With, Access-Control-Request-Method, Access-Control-Request-Headers");
-                    response.setContentType("text/html");
                     
+                    /*
                     
                     
                     PrintWriter out = response.getWriter();
@@ -175,7 +183,7 @@ public class AuxMercadoPagoServlet extends HttpServlet{
                         out.close();
                     }
             
-                    
+                    */
             
     }
 

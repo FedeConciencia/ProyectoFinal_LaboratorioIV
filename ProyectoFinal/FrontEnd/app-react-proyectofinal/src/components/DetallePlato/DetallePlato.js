@@ -18,20 +18,16 @@ import ModalCarrito from "./ModalCarrito.js";
 import PlatoAux from "../Carrito/PlatoAux";
 
 
-
 const DetallePlato = (props) => {
 
     const {usuario} = useContext(ContextoUsuario);
 
     const [modalPopUp, setModalPopUp] = useState(false);
 
-    //Creo el estado de la variable modalFaltante:
     const [modalFaltante, setModalFaltante] = useState();
 
-    //Creo el estado de la variable modalHorario:
     const [modalHorario, setModalHorario] = useState();
 
-    //Creo el estado de la variable modalCarrito:
     const [modalCarrito, setModalCarrito] = useState();
 
     const [datos, setDatos] = useState([])
@@ -46,23 +42,20 @@ const DetallePlato = (props) => {
         setModalPopUp(usuario === null)
     }, [modalCarrito, modalHorario, modalFaltante, modalPopUp, usuario])
 
-    //Redireccion de la Pagina:
+  
     let history = useHistory();
 
 
-   //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-   //los corchetes permite que nuestro userEffect se ejecute una sola vez
    useEffect(() => {
 
-        //Se ejecuta el metodo obtener One al cargar la pagina
+
         getDatos();
         
         
-    }, [])
+    },[])
 
 
     //Metodo Obtener los datos al Cargar la Pagina:
-
     const getDatos = async () => {
 
 
@@ -73,20 +66,18 @@ const DetallePlato = (props) => {
             const resJson = await response.json();
             
 
-            //Function Filter() obtenemos el objeto del .Json, devuelve array de un elemento:
-            //Se pudo tambien haber pasado el id obtendido a link del servletArtManufacturado buscarOne:
             const encontrado = await resJson.filter(plato => (plato.idArticulo).toString() === (id).toString());
 
             const plato = await encontrado[0];
 
-            //Guardamos el dato encontrado array un solo elemento, en la variable de estado:
+
             setDatos(plato);
 
 
             const responseIngre = await fetch("http://localhost:8080/ProyectoFinalLaboIV/AuxIngredientesServlet?action=listar&idArticulo="+id); 
             const resJsonIngre = await responseIngre.json();
 
-            //Paso los datos obtenidos de la consulta INNER JOIN a la BD:
+            
             setIngredientes(resJsonIngre);
 
 
@@ -101,15 +92,12 @@ const DetallePlato = (props) => {
 
 
     
-     //Verificamos la Existencia de los datos obtenidos en la variable de estado:
      if(Object.keys(datos).length === 0 && Object.keys(ingredientes).length === 0){
          return ("");
      }
 
 
      
-
-     //Obtengo los ingredientes almacenados en la variable de estado:
     const ingred = ingredientes.map((ingrediente, i)=>{return (
     <li key={i}>{ ingrediente.denominacionArtInsumo } / {ingrediente.cantidad} / {ingrediente.unidadMedida}</li>
     )})
@@ -151,13 +139,13 @@ const DetallePlato = (props) => {
         //Variable que valida, si la validacion es fuera de horario devuelve true para pasar al modal y activar const show:
         let validar = true;
 
-        //Ingresos de Testeo Manual de dia y horario:
+        //Ingresos de Testeo Manual de dia y horario (Activado para Testeo):
         let diaActual = "monday";
         
         
         //Obtengo el horario actual a traves de moment() y lo paso a Date para comparar:
         let recibTime = new Date();
-        // recibTime.setHours(moment().format('hh'),moment().format('mm'),0);
+        // recibTime.setHours(moment().format('hh'),moment().format('mm'),0);  //Activar para funcionamiento correcto
         recibTime.setHours(12,0,0);
         
         //Obtenemos los horarios correctos de la semana Lunes a Viernes:
@@ -220,11 +208,9 @@ const DetallePlato = (props) => {
     const handleEvents = () => {
 
         console.log(usuario === null)
-
-        //Guardo en la variable el valor devuelto true/false por el metodo:
+        
         let validarStock = verificarStock();
 
-        //Guardo en la variable el valor devuelto true/false por el metodo:
         let validarHorario = verificarHorario();
 
         console.log("VARIABLE VALIDAR STOCK HANDLE => " + validarStock);
@@ -234,8 +220,7 @@ const DetallePlato = (props) => {
         //Condicional si el usuario logueado, validarStock es false (sin faltante), validarHorario es false (dentro de Horario):
         if(usuario !== null && validarStock === false && validarHorario === false){
 
-            //Creamos la logica para guardar los art.Manufacturados seleccionados en el LocalStorage =>
-
+            
             let array = new Array();
 
             //Si el localStorage productos no existe o esta vacio:
@@ -271,16 +256,16 @@ const DetallePlato = (props) => {
                 }
             }
 
-            // Guardamos en memoria local el array =>
+           
             localStorage.setItem("productos", JSON.stringify(array));
 
             alert(JSON.stringify(datos));
 
-            //Guardo en una constante el componente modalCarrito y paso el props:
+            
             const modalCar = () => {
                 return (
                   
-                    //Al componente ModalCarrito le asigamos propiedades que luego son accedidas por el componente para mostrar.
+                    
                   <ModalCarrito
                     compra={true}
                   ></ModalCarrito>
@@ -288,28 +273,25 @@ const DetallePlato = (props) => {
                 );
               }
 
-            //Guardo la constante en el estado:  
+
             setModalCarrito(modalCar);  
 
-            
-            
        
         //Condicional si el usuario logueado, validarStock es false (sin faltante), validarHorario es true (fuera de Horario):
         }else if(usuario !== null && validarHorario === true){
 
 
-            //Guardo en una constante el componente modalHorario y paso el props:
             const modalHor = () => {
                 return (
                   
-                    //Al componente ModalFaltante le asigamos propiedades que luego son accedidas por el componente para mostrar.
+                    
                   <ModalHorario
                     horario={validarHorario}
                   ></ModalHorario>
                 );
               }
 
-            //Guardo la constante en el estado:  
+             
             setModalHorario(modalHor);  
 
             console.log("VARIABLE VALIDAR MODAL_HORARIO => " + modalHorario);
@@ -319,18 +301,18 @@ const DetallePlato = (props) => {
         }else if(usuario !== null && validarStock === true){
 
             
-            //Guardo en una constante el componente modalFaltante y paso el props:
+            
             const modalFal = () => {
                 return (
                   
-                  //Al componente ModalFaltante le asigamos propiedades que luego son accedidas por el componente para mostrar.
+                  
                   <ModalFaltante
                     validar={validarStock}
                   ></ModalFaltante>
                 );
               }
 
-            //Guardo la constante en el estado:  
+            
             setModalFaltante(modalFal);  
 
             console.log("VARIABLE VALIDAR MODAL_FALTANTE => " + modalFaltante);

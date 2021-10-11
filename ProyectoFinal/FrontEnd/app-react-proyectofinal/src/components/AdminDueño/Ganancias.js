@@ -15,40 +15,31 @@ import { useHistory } from 'react-router-dom';
 
 const Ganancias = () => {
 
-    //Variable Global =>
 
     let ganancia = 0;
 
-    //Redireccion de la Pagina:
     let history = useHistory();
 
-   //Usamos el useForm para la validacion del formulario:
 
-   const {register, formState: { errors }, handleSubmit} = useForm()
+    const {register, formState: { errors }, handleSubmit} = useForm()
 
-  //Creamos nuestro Hook inicializando como objeto del Form:  
 
-  const [datos, setDatos] = useState({
+    const [datos, setDatos] = useState({
 
-        fechaInicio:'',
-        fechaFin:'',
-        
-  })
+            fechaInicio:'',
+            fechaFin:'',
+            
+    })
 
-  //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-    //los corchetes permite que nuestro userEffect se ejecute una sola vez
+
     useEffect(() => {
-
 
 
 
     }, [])
 
 
-   
-
-  //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
-  const handleInputChange = (event) => {
+    const handleInputChange = (event) => {
 
         setDatos({
 
@@ -57,60 +48,58 @@ const Ganancias = () => {
 
         })
 
-  }
+    }
 
-  //Metodo que se ejecuta en el evento onSubmit desde el formulario:
+  
+    const enviarDatos = async (datos, event) => {
 
-  const enviarDatos = async (datos, event) => {
+            
+            await getDatos(datos)
 
-        
-        await getDatos(datos)
+            event.target.reset()
 
-        //Limpio todos los input
-        event.target.reset()
+            localStorage.setItem("fechaInicio", JSON.stringify(datos.fechaInicio))
+            localStorage.setItem("fechaFin", JSON.stringify(datos.fechaFin))
 
-        localStorage.setItem("fechaInicio", JSON.stringify(datos.fechaInicio))
-        localStorage.setItem("fechaFin", JSON.stringify(datos.fechaFin))
+            await history.push("/mostrarGanancias")
 
-        await history.push("/mostrarGanancias")
-
-        
-  }
-
-  const getDatos = async (datos) => {
-
-    console.log("FECHA INICIO => ", datos.fechaInicio)
-    console.log("FECHA FIN => ", datos.fechaFin)
-
-    try{
-
-        const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxDuenoServlet", {
-            params: {
-
-                action:'ganancias',
-                dateInicio: datos.fechaInicio, 
-                dateFin: datos.fechaFin, 
-        
-            }
-        })
-
-        //Axios no hace falta pasar a JSON el response =>
-        const resJson = await response.data;
-        
-        console.log("GANANCIAS => ", resJson)
-
-        ganancia = resJson;
-
-        localStorage.setItem("ganancia", JSON.stringify(ganancia));
-    
-    }catch(error){
-
-        console.log("Error => " + error)
-
+            
     }
 
 
-  }
+    const getDatos = async (datos) => {
+
+        console.log("FECHA INICIO => ", datos.fechaInicio)
+        console.log("FECHA FIN => ", datos.fechaFin)
+
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxDuenoServlet", {
+                params: {
+
+                    action:'ganancias',
+                    dateInicio: datos.fechaInicio, 
+                    dateFin: datos.fechaFin, 
+            
+                }
+            })
+
+            const resJson = await response.data;
+            
+            console.log("GANANCIAS => ", resJson)
+
+            ganancia = resJson;
+
+            localStorage.setItem("ganancia", JSON.stringify(ganancia));
+        
+        }catch(error){
+
+            console.log("Error => " + error)
+
+        }
+
+
+    }
 
   
 
@@ -228,7 +217,7 @@ const Ganancias = () => {
                         <Col ClassName='boton'>
                             <br></br>
                             <br></br>
-                            <Button type="submit" className="btn btn-primary">OBTENER PEDIDOS</Button>&nbsp;&nbsp;
+                            <Button type="submit" className="btn btn-primary">OBTENER GANANCIA</Button>&nbsp;&nbsp;
                             <Button type="button" href={`/adminDueño`} className="btn btn-danger">RETURN</Button>
 
                         </Col>

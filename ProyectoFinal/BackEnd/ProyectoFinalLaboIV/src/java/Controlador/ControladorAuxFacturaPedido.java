@@ -92,8 +92,7 @@ public class ControladorAuxFacturaPedido {
 
     }
     
-    //Crear documento PDF se importa librerias INTEX=>
-    
+    //Crear documento PDF se importa librerias INTEX =>
     public String crearPDF(long id, String email){
         
         try{

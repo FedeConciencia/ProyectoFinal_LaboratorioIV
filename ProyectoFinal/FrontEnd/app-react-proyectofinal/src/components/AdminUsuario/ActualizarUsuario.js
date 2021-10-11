@@ -285,6 +285,37 @@ const ActualizarUsuario = (props) => {
 
     }
 
+    //Validar rol del usuario:
+    const validarRol = (rol) => {
+
+        let validar = false;
+
+        if(rol === "cliente"){
+
+            return validar = true;
+
+        }else if(rol === "administrador"){
+
+            return validar = true;
+
+        }else if(rol === "cocinero"){
+
+            return validar = true;
+        
+        }else if(rol === "cajero"){
+
+            return validar = true;
+        
+        }else if(rol === "dueno"){
+
+            return validar = true;  
+            
+        }    
+
+        return validar;
+
+    }
+
      
     return (  
 
@@ -435,7 +466,7 @@ const ActualizarUsuario = (props) => {
                         type="text"
                         name="rol"
                         onChange={handleInputChange}
-                        placeholder="Ingrese el Rol"
+                        placeholder="Ingrese el Rol => cliente-administrador-cajero-cocinero-dueno"
                         className="form-control"
                         {...register("rol", { 
 
@@ -443,6 +474,11 @@ const ActualizarUsuario = (props) => {
                                 value: true,
                                 message: 'Campo Obligatorio' 
                             },
+
+                            validate:{
+
+                                validate1: validarRol,
+                            }
 
                         })}      
                     >
@@ -456,6 +492,14 @@ const ActualizarUsuario = (props) => {
                         <br></br>
                         <span className="text-danger text-small d-block mb-2">
                         {errors.rol && errors.rol.message}
+                        </span>
+
+                        <span className="text-danger text-small d-block mb-2">
+                            {
+                            errors.rol && errors.rol.type === "validate1" && (
+                            <div className="error">El rol ingresado no existe</div>
+                            )
+                            }
                         </span>
 
                 </Col>

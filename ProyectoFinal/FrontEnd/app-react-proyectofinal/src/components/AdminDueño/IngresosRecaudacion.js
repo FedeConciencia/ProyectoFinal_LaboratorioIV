@@ -15,28 +15,25 @@ import { useHistory } from 'react-router-dom';
 
 const IngresosRecaudacion = () => {
 
-    //Variable Global =>
+    
 
     let recaudacion = 0;
 
-    //Redireccion de la Pagina:
+    
     let history = useHistory();
 
-   //Usamos el useForm para la validacion del formulario:
+   
+    const {register, formState: { errors }, handleSubmit} = useForm()
 
-   const {register, formState: { errors }, handleSubmit} = useForm()
 
-  //Creamos nuestro Hook inicializando como objeto del Form:  
+    const [datos, setDatos] = useState({
 
-  const [datos, setDatos] = useState({
+            fechaInicio:'',
+            fechaFin:'',
+            
+    })
 
-        fechaInicio:'',
-        fechaFin:'',
-        
-  })
 
-  //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-    //los corchetes permite que nuestro userEffect se ejecute una sola vez
     useEffect(() => {
 
 
@@ -45,10 +42,7 @@ const IngresosRecaudacion = () => {
     }, [])
 
 
-   
-
-  //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
-  const handleInputChange = (event) => {
+    const handleInputChange = (event) => {
 
         setDatos({
 
@@ -57,64 +51,63 @@ const IngresosRecaudacion = () => {
 
         })
 
-  }
+    }
 
-  //Metodo que se ejecuta en el evento onSubmit desde el formulario:
+ 
+    const enviarDatos = async (datos, event) => {
 
-  const enviarDatos = async (datos, event) => {
+            
+            await getDatos(datos)
 
+            event.target.reset()
+
+            localStorage.setItem("fechaInicio", JSON.stringify(datos.fechaInicio))
+            localStorage.setItem("fechaFin", JSON.stringify(datos.fechaFin))
+
+            await history.push("/mostrarIngresosRecaudacion")
+
+            
+    }
+
+    //Metodo para obtener la recaudacion =>
+    const getDatos = async (datos) => {
+
+        console.log("FECHA INICIO => ", datos.fechaInicio)
+        console.log("FECHA FIN => ", datos.fechaFin)
+
+        try{
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxDuenoServlet", {
+                params: {
+
+                    action:'recaudacion',
+                    dateInicio: datos.fechaInicio, 
+                    dateFin: datos.fechaFin, 
+            
+                }
+            })
+
+            
+            const resJson = await response.data;
+            
+            console.log("GET RECAUDACION => ", resJson)
+
+            recaudacion = resJson;
+
+            localStorage.setItem("recaudacion", JSON.stringify(recaudacion));
         
-        await getDatos(datos)
+        }catch(error){
 
-        //Limpio todos los input
-        event.target.reset()
+            console.log("Error => " + error)
 
-        localStorage.setItem("fechaInicio", JSON.stringify(datos.fechaInicio))
-        localStorage.setItem("fechaFin", JSON.stringify(datos.fechaFin))
+        }
 
-        await history.push("/mostrarIngresosRecaudacion")
-
-        
-  }
-
-  const getDatos = async (datos) => {
-
-    console.log("FECHA INICIO => ", datos.fechaInicio)
-    console.log("FECHA FIN => ", datos.fechaFin)
-
-    try{
-
-        const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxDuenoServlet", {
-            params: {
-
-                action:'recaudacion',
-                dateInicio: datos.fechaInicio, 
-                dateFin: datos.fechaFin, 
-        
-            }
-        })
-
-        //Axios no hace falta pasar a JSON el response =>
-        const resJson = await response.data;
-        
-        console.log("GET RECAUDACION => ", resJson)
-
-        recaudacion = resJson;
-
-        localStorage.setItem("recaudacion", JSON.stringify(recaudacion));
-    
-    }catch(error){
-
-        console.log("Error => " + error)
 
     }
 
-
-  }
-
   
 
-  return (
+    return (
   
     <Fragment>
 

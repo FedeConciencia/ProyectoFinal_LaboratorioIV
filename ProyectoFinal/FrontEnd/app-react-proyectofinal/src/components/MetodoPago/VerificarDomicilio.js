@@ -12,28 +12,21 @@ import Button from "react-bootstrap/Button";
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 
-//Actualizado con Axios con Async Await y Variables Globales =>
 const VerificarDomicilio = (props) => {
 
-    //Redireccion de la Pagina:
+   
     let history = useHistory();
 
     let idCliente = 0;
+
     let idDomicilio = 0;
 
+    const {register, formState: { errors }, handleSubmit, setValue} = useForm({
 
-    //Usamos el useForm para la validacion del formulario y pasamos los defaultValue para pintar los input:
-    //SetValue sumamente importante para actualizar los valores obtenidos en el metodo obtenerOne y pintar los input
 
-   const {register, formState: { errors }, handleSubmit, setValue} = useForm({
-
-   
 
     })
 
-
-
-    //Creamos nuestro Hook inicializando como objeto del Form:  
 
     const [datos, setDatos] = useState({
 
@@ -45,47 +38,41 @@ const VerificarDomicilio = (props) => {
         
     })
 
-    //Se aplica un metodo externo dentro del useEffect con Async-Await =>
-
+    
     useEffect( () => {
 
         ejecutarUseEffect()
 
     }, []) 
 
-    //Ejecutamos una funcion Async-Await dentro del use-effect
+  
     const ejecutarUseEffect = async () => {
 
         await getIdCliente();
 
-        
         await getDomicilio();
 
     }
    
 
-    //METODOS:
-
-    //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
     const handleInputChange = (event) => {
 
-    setDatos({
+        setDatos({
 
-        ...datos,
-        [event.target.name] : event.target.value
+            ...datos,
+            [event.target.name] : event.target.value
 
-    })
+        })
 
     }
 
-    //Metodo que se ejecuta en el evento onSubmit desde el formulario:
 
     const enviarDatos = async (datos, event) => {
 
     
         await getDatos(datos)
 
-        //Limpia todos los input, pero no refresca la pagina:    
+   
         event.target.reset()
 
     }
@@ -99,11 +86,11 @@ const VerificarDomicilio = (props) => {
                 params: {
 
                     action:'actualizar',
-                    idDomicilio: idDomicilio, //Paso los Hooks
+                    idDomicilio: idDomicilio, 
                     calle: datos.calle,
                     numero: datos.numero,
                     localidad: datos.localidad,
-                    idCliente: idCliente, //Paso los Hooks
+                    idCliente: idCliente, 
                     fechaAlta: moment().format('YYYY-MM-DD'), 
                     fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
                     estado: "activo",
@@ -116,7 +103,7 @@ const VerificarDomicilio = (props) => {
 
             console.log("GET_DATOS => ", resJson)
 
-            //Redireccionar a la pagina pero espera antes de cambiar:
+            
             await history.push('/metodoPago');  
 
         }catch(error){
@@ -134,23 +121,18 @@ const VerificarDomicilio = (props) => {
 
         try{
         
-             
             const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet?action=buscarXIdCliente&idCliente="+ idCliente);
             const resJson = await response.json();
             
-            //Verificamos la obtencion de datos correcto:
+           
             console.log(JSON.stringify(resJson));
-
-            //Modificamos con setValue los input que recibimos:
-            //Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).format('YYYY-MM-DD')}
 
             setValue('calle', resJson.calle);
             setValue('numero', resJson.numero);
             setValue('localidad', resJson.localidad);
-            
-            //por medio del setDatos paso los datos recuperados a useState datos, modifico del servlet para solo pasar un objeto.jso
-    
+        
             idDomicilio = resJson.idDomicilio;
+            
             idCliente = resJson.idCliente;
 
             console.log("ID_CLIENTE => ", idCliente)

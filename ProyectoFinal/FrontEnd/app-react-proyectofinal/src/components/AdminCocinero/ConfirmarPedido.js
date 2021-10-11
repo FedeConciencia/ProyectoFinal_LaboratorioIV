@@ -8,90 +8,75 @@ import axios from "axios";
 import { useHistory } from 'react-router-dom';
 
 
-//Se descarga libreria moment: npm install moment --save, para el manejo de Date y LocalDate: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
-//Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
-//Se aplica libreria moment a campo LocalTime y funciona correctamente:
 
-
-//Se pasan los props (parametros):
 const ConfirmarPedido = (props) => {
 
-//Redireccion de la Pagina:
- let history = useHistory();
+
+    let history = useHistory();
 
 
- const [datos, setDatos] = useState([])
+    const [datos, setDatos] = useState([])
  
 
- 
-  //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-  //los corchetes permite que nuestro userEffect se ejecute una sola vez
-  useEffect(() => {
 
-        
-      //Se ejecuta el metodo getOne al cargar la pagina
-      getPedido()
-    
+    useEffect(() => {
+
+
+        getPedido()
       
 
-  }, [])
+    }, [])
 
 
-  //Si se usa JavaWebAplications Tomcast ver de colocar localhost:8080
+    //Metodo para obtener los pedidos =>
+    const getPedido = async () => {
 
-  const getPedido = async () => {
+      try{
 
-    try{
+        const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet?action=listar");
+        const resJson = await response.json();
 
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet?action=listar");
-      const resJson = await response.json();
-      alert(JSON.stringify(resJson));
+        setDatos(resJson)
 
-      //Este metodo .setState permite asignar a la variable de estado db el .JSON
-      setDatos(resJson)
+      }catch(error){
 
-    }catch(error){
+        console.log("Error: " + error);
 
-      console.log("Error: " + error);
-
+      }
+        
     }
+
+    //Metodo evento para cambiar el estadoPedido =>
+    const cambiarEstado = async (id, e) => {
+
+      try{
+
+        const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
+            params: {
+
+                action:'actualizarEstado',
+                estado: "2",
+                idPedido: id,
+            
+
+            }
+        })
+
+        const resJson = await response.data
+
+        console.log(resJson)
+
+        history.push('/returnConfirmarPedido');
       
-  }
+      }catch(error){
 
-  const cambiarEstado = (id, e) => {
+        console.log(error)
 
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
-        params: {
-
-            action:'actualizarEstado',
-            estado: "2",
-            idPedido: id,
+      }     
         
-
-        }
-      })
-    .then(response => {
-
-        console.log(response)
-
-         //Redireccionar a la pagina form cliente:
-         history.push('/returnConfirmarPedido');
-        
-        
-
-    })
-    .catch(error =>{
-        console.log("Error");
-        console.log(error);
-    })
-
-
-  }
-
-
-
-   
-  //la logica la hacemos antes de pasar la informacion a la vista:
+    }
+    
+  
     return (
 
       <Fragment>

@@ -14,42 +14,35 @@ import {useHistory} from "react-router-dom";
 
 var crypto = require("crypto");
 
-//Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
-//Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
-
-//Paso el props por parametro a la funcion principal del componente para obtener los parametros const idDinosaurio = props.match.params.id
 
 const RegistroClienteGoogle = (props) => {
 
     const history = useHistory();
 
-    //Usamos el useForm (npm install react-hook-form) para la validacion del formulario y pasamos los defaultValue para pintar los input:
-    //SetValue sumamente importante para actualizar los valores obtenidos en el metodo obtenerOne y pintar los input
 
     const {register, formState: { errors }, handleSubmit, setValue} = useForm({
 
    
     })
 
-   //Creamos nuestro Hook inicializando como objeto del Form:  
  
-   const [datos, setDatos] = useState({
+    const [datos, setDatos] = useState({
+    
+            nombre:'',
+            apellido:'',
+            dni:'',
+            fechaNacimiento:'',
+            telefono:'',
+            email:'',
+            usuario:'',
+            contrasena:'',
+            calle:'',
+            numero:'',
+            localidad:'',
+    
+    })
  
-         nombre:'',
-         apellido:'',
-         dni:'',
-         fechaNacimiento:'',
-         telefono:'',
-         email:'',
-         usuario:'',
-         contrasena:'',
-         calle:'',
-         numero:'',
-         localidad:'',
  
-   })
- 
-   //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
    const handleInputChange = (event) => {
  
          setDatos({
@@ -61,7 +54,7 @@ const RegistroClienteGoogle = (props) => {
  
    }
 
-   //Metodo que permite crear un Password Hexadecimal de 14 bytes Hexadecimal:
+  
     const passwordGmail = () => {
 
         
@@ -73,199 +66,182 @@ const RegistroClienteGoogle = (props) => {
 
     }
  
-   //Metodo que se ejecuta en el evento onSubmit desde el formulario:
+
  
-   const enviarDatos = (datos, event) => {
- 
-         
-         alert(JSON.stringify(datos));
-
-         //Ejecuto el metodo que inserta los datos en la entidad Cliente:
- 
-         getCliente(datos);
-
-         //Ejecuto el metodo que inserta los datos en la entidad Usuario:
-
-         getUsuario(datos);
-
-         //Ejecuto el metodo que inserta los datos en la entidad Domicilio:
-
-         getDomicilio(datos);
-
-         //Notifico que el cliente fue creado con exito:
-
-         alert("CLIENTE REGISTRADO CON EXITO.");
- 
-         //Limpio todos los input
-         event.target.reset();
- 
-         
-   }
-
-
-   //Metodo que obtiene los datos e inserta el Cliente:
- 
-   const getCliente = (datos) => {
-
-     let usuario = JSON.parse(localStorage.getItem("usuario"));
- 
-     axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
-         params: {
- 
-             action:'insertar',
-             nombre: usuario.nombre,
-             apellido: usuario.apellido,
-             dni: datos.dni,
-             fechaNacimiento: datos.fechaNacimiento,
-             telefono: datos.telefono,
-             email: usuario.usuario,
-             fechaAlta: moment().format('YYYY-MM-DD'), 
-             fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-             estado: "activo"
- 
-             //fechaAlta, fechaBaja, estado se crean x defecto:
- 
- 
-         }
-       })
-     .then(response => {
- 
-         console.log(response)
-         
- 
-     })
-     .catch(error =>{
-         console.log("Error");
-         console.log(error);
-     })
- 
- 
-   }
-
-
-   //Metodo que obtiene los datos e inserta el Usuario:
-
-   const getUsuario = async (datos) => {
-
-    let usuario = JSON.parse(localStorage.getItem("usuario"));
-
-      //contraseña hexadecimal encriptada para usuarios Google.
-      let password = passwordGmail()
-      console.log("PASSWORD GMAIL => ", password)
-
-
-    //Obtengo el ultimo idCliente, con una consulta al metodo del backEnd:
-    const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=proximoId");
-    let idCliente = await response.json();
-    alert(idCliente);
-
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/UsuarioServlet", {
-        params: {
-
-            action:'insertar',
-            usuario: usuario.usuario,
-            contrasena: password,
-            rol: "cliente",
-            idCliente: idCliente,
-            fechaAlta: moment().format('YYYY-MM-DD'), 
-            fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-            estado: "activo"
-
-            //fechaAlta, fechaBaja, estado, rol se crean x defecto:
-            //idCliente se obtiene ejecutando el metodo desde el backend.
-
-
-        }
-      })
-    .then(response => {
-
-        console.log(response)
-        
-
-    })
-    .catch(error =>{
-        console.log("Error");
-        console.log(error);
-    })
-
-
-  }
-
-  //Metodo que obtiene los datos e inserta el Domicilio:
-
-  const getDomicilio = async (datos) => {
-
-    //Obtengo el ultimo idCliente, con una consulta al metodo del backEnd:
-    const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=proximoId");
-    let idCliente = await response.json();
+    const enviarDatos = async (datos, event) => {
     
-    axios.get("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet", {
-        params: {
 
-            action:'insertar',
-            calle: datos.calle,
-            numero: datos.numero,
-            localidad: datos.localidad,
-            idCliente: idCliente,
-            fechaAlta: moment().format('YYYY-MM-DD'), 
-            fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
-            estado: "activo"
+            await getCliente(datos);
 
-            //fechaAlta, fechaBaja, estado se crean x defecto:
+            await getUsuario(datos);
+
+            await getDomicilio(datos);
+
+            alert("CLIENTE REGISTRADO CON EXITO.");
+
+            event.target.reset();
+    
+            
+    }
 
 
-        }
-      })
-    .then(response => {
+    //Metodo que obtiene los datos e inserta el Cliente:
+    const getCliente = async (datos) => {
 
-        console.log(response)
+
+        try{
+
+            let usuario = JSON.parse(localStorage.getItem("usuario"));
+
+            const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet", {
+                params: {
         
-        history.push("/loguin")
-    })
-    .catch(error =>{
-        console.log("Error");
-        console.log(error);
-    })
+                    action:'insertar',
+                    nombre: usuario.nombre,
+                    apellido: usuario.apellido,
+                    dni: datos.dni,
+                    fechaNacimiento: datos.fechaNacimiento,
+                    telefono: datos.telefono,
+                    email: usuario.usuario,
+                    fechaAlta: moment().format('YYYY-MM-DD'), 
+                    fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
+                    estado: "activo"
+
+        
+        
+                }
+            })
+
+            const resJson = await response.data
+
+            console.log(resJson)
+        
+        }catch(error){
+
+            console.log(error)
+        }
+    
+    }
 
 
-  }
+    //Metodo que obtiene los datos e inserta el Usuario:
+    const getUsuario = async (datos) => {
+
+
+        try{
+
+            let usuario = JSON.parse(localStorage.getItem("usuario"));
+
+            //contraseña hexadecimal encriptada para usuarios Google.
+            let password = passwordGmail()
+            console.log("PASSWORD GMAIL => ", password)
+
+            //Obtengo el ultimo idCliente, con una consulta al metodo del backEnd:
+            const responseCliente = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=ultimoId");
+            let idCliente = await responseCliente.json();
+
+
+            const responseUsuario = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/UsuarioServlet", {
+                params: {
+
+                    action:'insertar',
+                    usuario: usuario.usuario,
+                    contrasena: password,
+                    rol: "cliente",
+                    idCliente: idCliente,
+                    fechaAlta: moment().format('YYYY-MM-DD'), 
+                    fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
+                    estado: "activo"
+
+
+                }
+            })
+        
+            const resJson = await responseUsuario.data
+
+            console.log(resJson)
+
+        
+        }catch(error){
+
+            console.log(error)
+        }
+
+
+    }
+
+    //Metodo que obtiene los datos e inserta el Domicilio:
+    const getDomicilio = async (datos) => {
+
+        try{
+
+            //Obtengo el ultimo idCliente, con una consulta al metodo del backEnd:
+            const responseCliente = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=ultimoId");
+            let idCliente = await responseCliente.json();
+            
+            const responseDomicilio = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/DomicilioServlet", {
+                params: {
+
+                    action:'insertar',
+                    calle: datos.calle,
+                    numero: datos.numero,
+                    localidad: datos.localidad,
+                    idCliente: idCliente,
+                    fechaAlta: moment().format('YYYY-MM-DD'), 
+                    fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
+                    estado: "activo"
+
+                    
+
+
+                }
+            })
+        
+            const resJson = await responseDomicilio.data
+
+            console.log(resJson)
+
+        
+        }catch(error){
+
+            console.log(error)
+        }
+
+    }
  
-   //Validacion personalizada que valida que el DNI Ingresado no exista en la BD:
- 
-   const validarDni = async (dni) => {
- 
-     try{
- 
-       const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=listar");
-       const resJson = await response.json();
-       
-       const listaCliente =   resJson;
-       let validar = true;
- 
-       //alert(JSON.stringify(listaCliente))
- 
-     
-       for(let i = 0; i < listaCliente.length; i++){
- 
-             if((listaCliente[i].dni).toString() === (dni).toString()){ 
- 
-                 return validar = false;
- 
-                 break;
- 
-             }
- 
- 
-       }
- 
- 
-     }catch(error){
- 
-       console.log("Error: " + error);
- 
-     }
-       
-   }
+    //Validacion personalizada que valida que el DNI Ingresado no exista en la BD:
+    const validarDni = async (dni) => {
+    
+        try{
+    
+            const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=listar");
+            const resJson = await response.json();
+            
+            const listaCliente =   resJson;
+            let validar = true;
+            
+            for(let i = 0; i < listaCliente.length; i++){
+        
+                    if((listaCliente[i].dni).toString() === (dni).toString()){ 
+        
+                        return validar = false;
+        
+                        break;
+        
+                    }
+        
+        
+            }
+    
+            return validar
+
+        }catch(error){
+    
+        console.log("Error: " + error);
+    
+        }
+        
+    }
 
    
 

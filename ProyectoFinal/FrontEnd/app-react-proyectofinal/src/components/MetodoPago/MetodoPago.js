@@ -16,21 +16,17 @@ import ModalPedido from "./ModalPedido.js";
 import { useHistory } from 'react-router-dom';
 
 
-//Permite crear un random de numero hex, dec, etc
 var crypto = require("crypto");
-
 
 const MetodoPago = (props) => {
 
-    //Redireccion de la Pagina:
+   
     let history = useHistory();
 
-    //Usamos el useForm para la validacion del formulario:
-
+   
     const {register, formState: { errors }, handleSubmit} = useForm();
 
     //Variables Globales =>
-
     let datoId  = "";
     let datoIdDomicilio = "";
     let cantidadCocinero = 0;
@@ -38,8 +34,6 @@ const MetodoPago = (props) => {
     let codigoPedido = "";
 
 
-
-    //Estado Hook para los componentes botones y select:
     const [datos, setDatos] = useState({
 
         boton1: false,
@@ -48,7 +42,7 @@ const MetodoPago = (props) => {
 
     })
 
-     //Creo el estado de la variable modalCarrito:
+
      const [modalPedido, setModalPedido] = useState();
 
 
@@ -56,9 +50,9 @@ const MetodoPago = (props) => {
 
         metodoUseEffect();
     
-    },[datos, modalPedido]) //Importante pasar los estados de hooks al useEffect
+    },[datos, modalPedido]) 
 
-    //Creamos un metodo async-await que se ejecuta dentro del useEffect =>
+    
 
     const metodoUseEffect = async () => {
 
@@ -73,7 +67,6 @@ const MetodoPago = (props) => {
     }
 
 
-     //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
     const handleInputChange = (event) => {
 
         setDatos({
@@ -85,7 +78,7 @@ const MetodoPago = (props) => {
 
     }
 
-    //Metodo que se ejecuta en el evento onSubmit desde el formulario:
+  
     const enviarDatos = async (event) => {
 
 
@@ -93,10 +86,10 @@ const MetodoPago = (props) => {
 
         if(datos.selectPago === "2"){
 
-            //Cargar Pedido =>
+           
             await getDatos();
 
-            //Redireccionar a la pagina form cliente:
+          
             await history.push('/auxMercadoPago');
 
             /*
@@ -129,9 +122,7 @@ const MetodoPago = (props) => {
 
         }else{
             
-            alert(JSON.stringify(datos));
-
-            //Se ejecuta Metodo para guardar el pedido
+            //Pago es en Efectivo
             await getDatos();
                 
            
@@ -224,15 +215,14 @@ const MetodoPago = (props) => {
     //Metodo para ejecutar con el evento onSubmit:
     const getDatos = async () => {
 
-        //Llamo al metodo que obtiene el tiempoFinal:
+        
         let time = await calculoFinalTiempoPedido();
 
         let tipoEnvio = 1;
 
-        //Guardo el codigo generado Random:
         codigoPedido = passwordCodigo();
 
-        //Guardo el total del carrito guardado en el localStorage:
+        
         let total = await JSON.parse(localStorage.getItem("totalCarrito"));
         
         console.log("FORMA DE PAGO FINAL =>", datos.selectPago)
@@ -266,7 +256,6 @@ const MetodoPago = (props) => {
                     fechaBaja: moment("1900-01-01").format('YYYY-MM-DD'), 
                     estado: "activo"
         
-                    //fechaAlta, fechaBaja, estado se crean x defecto:
         
                 }
             })
@@ -282,7 +271,6 @@ const MetodoPago = (props) => {
 
         await guardarDetallePedido();
 
-        //Ejecuto el modal de aviso Pedido;
         await modalPedidos(time); 
     
     }
@@ -340,7 +328,6 @@ const MetodoPago = (props) => {
 
             const resJson = response.data;
 
-            //Guardo el ultimo idPedido:
             ultimoId = resJson;
 
             console.log("VALOR ULTIMOID =>", ultimoId)
@@ -375,12 +362,12 @@ const MetodoPago = (props) => {
     //Metodo Calcular Sumatoria Articulos Carrito:
     const calcularTiempoArtCarrito = async () => {
 
-        //Obtengo todos los articulos manufacturados del localStorage:
+        
         let array = await JSON.parse(localStorage.getItem("productos"));
 
         let tiempoTotalCarrito = 0;
 
-        //Obtengo la sumatoria total de tiempo productos carrito:
+        
         for(let i = 0; i < array.length; i++){
 
             
@@ -398,7 +385,6 @@ const MetodoPago = (props) => {
 
 
     //Obtener cantidad de cocineros:
-
     const obtenerCocineros = async () => {
 
         let cocineros = 0;
@@ -436,6 +422,7 @@ const MetodoPago = (props) => {
     const artCocinaTiempo = async () => {
 
         let array = new Array();
+
         let sumatoriaTiempo = 0;
 
         try{
@@ -451,7 +438,6 @@ const MetodoPago = (props) => {
 
             const resJson = response.data;
 
-            //Guardo el array de datos:
             array = resJson;
 
             //Obtengo la sumatoria total de tiempo productos carrito:
@@ -518,7 +504,7 @@ const MetodoPago = (props) => {
     //Guardo en una constante el componente modalPedido y paso el props:
     const modalPedidos = async (time) => {
 
-        //Guardo el total del carrito guardado en el localStorage:
+        
         let totalFinal = await JSON.parse(localStorage.getItem("totalCarritoFinal"));
 
         let tipoEnvio = "Retiro en Local";
@@ -559,8 +545,6 @@ const MetodoPago = (props) => {
             );
         }    
         
-
-        //Guardo la constante en el estado:  
         setModalPedido(modal);  
 
     }
@@ -568,22 +552,21 @@ const MetodoPago = (props) => {
         
 
     //Funcion para convertir minutos en horas y minutos:
-
     function convertMinutos(mins) {
+
         let h = Math.floor(mins / 60);
         let m = mins % 60;
         h = h < 10 ? '0' + h : h;
         m = m < 10 ? '0' + m : m;
         return `${h}:${m}:00`;
-        }
+
+    }
 
 
 
     //Metodo para ejecutar el evento onclik boton1:
-
     const eventoUno = () => {
 
-        
         setDatos({...datos, boton1:true, boton2:false })
         console.log("boton1 =>", datos.boton1)
         console.log("boton2 =>", datos.boton2)
@@ -592,7 +575,6 @@ const MetodoPago = (props) => {
     }
 
     //Metodo para ejecutar el evento onclik boton2:
-
     const eventoDos = () => {
 
         setDatos({...datos, boton1:false, boton2:true })

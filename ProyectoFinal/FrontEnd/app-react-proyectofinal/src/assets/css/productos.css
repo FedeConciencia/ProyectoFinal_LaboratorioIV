@@ -18,9 +18,17 @@
 
 .titulo1{
 
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-weight: bold;
-    color: red;
+    font-size: xx-large;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: darkgreen;
 
+
+}
+
+.content{
+
+    text-align: center;
+    align-items: center;
 
 }

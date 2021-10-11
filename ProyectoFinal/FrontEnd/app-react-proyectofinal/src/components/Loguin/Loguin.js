@@ -12,24 +12,16 @@ import GoogleLogin from 'react-google-login';
 import { ContextoUsuario } from "../ContextoUsuario";
 
 
-//Se descarga libreria moment: npm install moment --save, para el manejo de Date: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
-//Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
-
-//Paso el props por parametro a la funcion principal del componente para obtener los parametros const idDinosaurio = props.match.params.id
 const Loguin = (props) => {
 
 
     const history = useHistory();
-    //Usamos el useForm (npm install react-hook-form) para la validacion del formulario y pasamos los defaultValue para pintar los input:
-    //SetValue sumamente importante para actualizar los valores obtenidos en el metodo obtenerOne y pintar los input
-
+    
     const {register, formState: { errors }, handleSubmit, setValue} = useForm({
 
    
     })
 
-
-     //Creamos nuestro Hook inicializando como objeto del Form:  
 
     const [datos, setDatos] = useState({
 
@@ -41,7 +33,6 @@ const Loguin = (props) => {
     const {usuario, setUsuario} = useContext(ContextoUsuario);
 
 
-    //Metodo que se ejecuta en los input onChange, permite detectar el ingreso de datos:
     const handleInputChange = (event) => {
 
         setDatos({
@@ -53,30 +44,26 @@ const Loguin = (props) => {
 
     }
 
-    //Metodo que se ejecuta en el evento onSubmit desde el formulario:
  
-   const enviarDatos = (datos, event) => {
+ 
+    const enviarDatos = (datos, event) => {
  
          
-    alert(JSON.stringify(datos));
-
-    //Ejecuto el metodo que valida ingreso de datos para loguin:
-
-    validarRegistro(datos.usuario, datos.contrasena);
+        validarRegistro(datos.usuario, datos.contrasena);
 
     
-    //Limpio todos los input
-    event.target.reset();
+        event.target.reset();
 
     
     }
 
     //Creamos la funcion de respuesta del loguin de google:
     const responseGoogle = async (response) => {
+
         console.log("Respuesta google: ",response);
-        //Tener en cuenta que estas variables pueden ser modificadas por google:
-        
+      
         if(response["profileObj"] !== undefined){
+
             const nombre = response["profileObj"]["givenName"]; 
             const apellido = response["profileObj"]["familyName"];
             const tokenId = response["tokenId"];
@@ -88,6 +75,7 @@ const Loguin = (props) => {
             localStorage.setItem('usuario', JSON.stringify(usuarioActual));    
             
             validarRegistroGmail(usuarioActual)
+
         }
     }
 
@@ -96,7 +84,6 @@ const Loguin = (props) => {
     const validarRegistroGmail = async(usuarioActual) => {
 
         //Verificamos con el idCliente asociado al usuario ingresado, si este esta "ACTIVO":
-
         const responseCliente = await fetch("http://localhost:8080/ProyectoFinalLaboIV/ClienteServlet?action=listar");
         const resJsonCliente = await responseCliente.json();
 
@@ -121,15 +108,12 @@ const Loguin = (props) => {
 
             history.push("/registroClienteGoogle")
             
-            
         
         }else {
 
-            
 
             actualizarEstado(usuarioActual)
             
-
 
         }
 
@@ -137,9 +121,7 @@ const Loguin = (props) => {
     }
 
 
-
     //Metodo async-await que verifica en la BD que el usuario y contraseña ingresado existan esten activo y este asociado a un cliente activo.
-
     const validarRegistro = async (usuario, contrasena) => {
 
         try{
@@ -148,8 +130,6 @@ const Loguin = (props) => {
             const resJsonUsuario = await responseUsuario.json();
 
             const listaUsuario = resJsonUsuario;
-
-            alert(JSON.stringify(listaUsuario));
 
             let validarUsuario = false;
             let validarCliente = false;
@@ -177,8 +157,6 @@ const Loguin = (props) => {
 
             }
 
-            alert(id);
-            alert(rol);
 
             //Verificamos con el idCliente asociado al usuario ingresado, si este esta "ACTIVO":
 
@@ -187,7 +165,6 @@ const Loguin = (props) => {
 
             const listaCliente = resJsonCliente;
 
-            alert(JSON.stringify(listaCliente));
 
             for(let i = 0; i < listaCliente.length; i++){
 
@@ -231,10 +208,6 @@ const Loguin = (props) => {
             }else if((validarCliente === true) && (validarUsuario === true) && ((rol).toLowerCase() === "cliente")){
 
                 //Direccionamos a la pagina cliente:
-
-                //document.getElementById("mensaje").innerHTML  = "LOGUIN CORRECTO.";
-                //document.getElementById("mensaje").style.color = "green";
-                //Despues implementar la accion de loguin valido
                 const usuarioActual = {usuario, contrasena, rol};
                 setUsuario(usuarioActual);
                 actualizarEstado(usuarioActual);

@@ -8,123 +8,109 @@ import axios from "axios";
 import { useHistory } from 'react-router-dom';
 
 
-//Se descarga libreria moment: npm install moment --save, para el manejo de Date y LocalDate: {moment(cliente.fechaNacimiento).subtract(1,'M').format('YYYY-MM-DD')}
-//Se coloca el substract(1, 'M') ya que devuelve la fecha de la BD con 1 mes adicional:
-//Se aplica libreria moment a campo LocalTime y funciona correctamente:
-
-
-//Se pasan los props (parametros):
 const TablaIngreso = (props) => {
 
- let array = new Array(); 
+    let array = new Array(); 
 
- const [datos, setDatos] = useState([])
+    const [datos, setDatos] = useState([])
 
- //Redireccion de la Pagina:
- let history = useHistory();
+    let history = useHistory();
 
- 
-  //useEffect se comporta como en clase y componentes los metodos componentDidMount,  componentWillUnmount:
-  //los corchetes permite que nuestro userEffect se ejecute una sola vez
-  useEffect(() => {
 
-        
-      //Se ejecuta el metodo getOne al cargar la pagina
-      getPedido()
-    
+    useEffect(() => {
+
+
+        getPedido()
       
-
-  }, [])
-
-
-  //Si se usa JavaWebAplications Tomcast ver de colocar localhost:8080
-
-  const getPedido = async () => {
-
-    try{
-
-      const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet?action=listar");
-      const resJson = await response.json();
-      alert(JSON.stringify(resJson));
-
-      //Este metodo .setState permite asignar a la variable de estado db el .JSON
-      setDatos(resJson)
-
-    }catch(error){
-
-      console.log("Error: " + error);
-
-    }
-      
-  }
-
-  const cambiarEstado = async (id, e) => {
-
-    try{
-
-    const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
-        params: {
-
-            action:'actualizarEstado',
-            estado: "1",
-            idPedido: id,
-        
-
-        }
-      })
-
-      let resJson = await response;
-
-      console.log(resJson)
-
-        //Actualizar Stock, se pasa el idPedido =>
-      await decrementarStock(id);
-
-      //Redireccionar a la pagina form cliente:
-      history.push('/returnTablaIngreso');
-
-    }catch(error){
-
-      console.log(error)
-
-    }  
   
 
-  }
-
- //Metodo para decrementar stock (resolucion backend)=>
- const decrementarStock = async(id) => {
+    }, [])
 
 
-    try{
+    //Metodo para listar todos los pedidos =>
+    const getPedido = async () => {
 
-      const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxActualizarStockServlet", {
-        params: {
+      try{
 
-            action:'actualizar',
-            idPedido: id,
+        const response = await fetch("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet?action=listar");
+        const resJson = await response.json()
+
+        setDatos(resJson)
+
+      }catch(error){
+
+        console.log("Error: " + error);
+
+      }
         
-
-        }
-
-      }) 
-
-      //Obtenemos el array de datos AuxActualizarStock =>
-      array = await response.data;
-      
-      console.log("DATOS INSUMOS => ", array)
-
-
-    }catch(error){
-
-      console.log(error)
     }
 
+    //Metodo evento actualizar estadoPedido =>
+    const cambiarEstado = async (id, e) => {
 
- }
+      try{
 
-   
-  //la logica la hacemos antes de pasar la informacion a la vista:
+        const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/PedidoServlet", {
+          params: {
+
+              action:'actualizarEstado',
+              estado: "1",
+              idPedido: id,
+          
+
+          }
+        })
+
+        let resJson = await response;
+
+        console.log(resJson)
+
+        //Actualizar Stock, se pasa el idPedido =>
+        await decrementarStock(id);
+
+        await history.push('/returnTablaIngreso');
+
+      }catch(error){
+
+        console.log(error)
+
+      }  
+    
+
+    }
+
+    //Metodo para decrementar stock (resolucion backend)=>
+    const decrementarStock = async(id) => {
+
+
+        try{
+
+          const response = await axios.get("http://localhost:8080/ProyectoFinalLaboIV/AuxActualizarStockServlet", {
+            params: {
+
+                action:'actualizar',
+                idPedido: id,
+            
+
+            }
+
+          }) 
+
+          //Obtenemos el array de datos AuxActualizarStock =>
+          array = await response.data;
+          
+          console.log("DATOS INSUMOS => ", array)
+
+
+        }catch(error){
+
+          console.log(error)
+        }
+
+
+    }
+
+  
     return (
 
       <Fragment>

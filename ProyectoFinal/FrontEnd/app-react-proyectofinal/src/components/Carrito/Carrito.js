@@ -10,37 +10,40 @@ const Carrito = (props) => {
 
     let ingredientes = new Array();
     let productos = new Array();
-    let sinStock = true; //Se modifica por una variable global
+    let sinStock = true; 
 
-    //Estado para guardar los productos del localStorage =>
+    
     const [datos, setDatos] = useState([])
 
     const [ingred, setIngred] = useState([])
 
-    //Estado que permite forzar una actualizacion con useEffect:
+    
     const [recargar, setRecargar] = useState(false)
 
-    // Hook modal carrito vacio
+    
     const [modalCarrito, setModalCarrito] = useState()
 
-    // Hook cantidadTotal 
+    
     const [cantidadTotal, setCantidadTotal] = useState(0)
 
 
     useEffect(() => {
         
-        //Guardamos en el estado datos los valores obtenidos del localStorage productos:
+        
         setDatos(JSON.parse(localStorage.getItem("productos")))
+
         productos = JSON.parse(localStorage.getItem("productos"))
+
         console.log("VALOR PRODUCTOS => ", productos)
-        //Guardamos todos los ingredientes de los articulos que se encuentran en el carrito.
+
         obtenerIngredientes(productos)
+
         console.log("VALOR INGREDIENTES => ", ingredientes)
-        //Mantiene actualizado cantidad_Total y monto_Total
+
         obtenerCantidadesTotales()
-        //Activa el modal si no existen productos en el carrito
+
         activarModal()
-        //Fuerza la actualizacion del componente:
+
         setRecargar(false)
 
     }, [recargar, cantidadTotal])
@@ -48,38 +51,35 @@ const Carrito = (props) => {
     
 
     //Metodo para incrementar cantidad desde el evento boton:
-
     const sumar = (indice, e) => {
 
-        //Se cambia al ingresar el incremento, se muestra actualizado =>
+        
         datos[indice].cantidad++;
 
-        //Verifico el stock de ingredientes =>
         verificarStockIngredientes(datos[indice].cantidad);
 
         if(sinStock === true){
         
             console.log(datos[indice].cantidad)
-            //Guardo la actualizacion de datos.
+            
             localStorage.setItem("productos", JSON.stringify(datos))
         }
         else {
-             //Se decrementa manteniendo igual =>
+             
             datos[indice].cantidad--;
+
             document.querySelector("#mensaje").innerHTML = "No hay suficientes ingredientes: " + datos[indice].denominacion + " !!!"
         }
-        //Fuerza la actualizacion del componente:
+
+        
         setRecargar(true)
     }
 
      //Metodo para decrementar cantidad desde el evento boton:
-
      const restar = (indice, e) => {
 
         //Libera si se bloquea el de sumar por falta de stock y disminuye:
         sinStock = true;
-
-        //No hace falta decrementar ingredientes ya que no se estan modificando ni en local, variables o BD solo como logica de eventos =>
 
         console.log(datos[indice].cantidad)
         datos[indice].cantidad--;
@@ -91,9 +91,9 @@ const Carrito = (props) => {
         }
 
         localStorage.setItem("productos", JSON.stringify(datos))
-        //Se borra mensaje:
+       
         document.querySelector("#mensaje").innerHTML = ""
-        //Fuerza la actualizacion del componente:
+        
         setRecargar(true)
     }
 
@@ -141,8 +141,7 @@ const Carrito = (props) => {
 
         for (let i = 0; i < ingred.length; i++) {
 
-            //Ahora sumaCantidad = cantidad esta actualizado todo el tiempo:
-                
+            
             cantidadAux = (cantidad * ingred[i].cantidad)
             console.log("cantidadAux", cantidadAux)
             console.log("sumaCantidad", cantidad)
@@ -163,23 +162,22 @@ const Carrito = (props) => {
 
    
     //Metodo para borrar todos los datos desde el evento boton:
-
     const borrarTodo = (event) => {
-        //Borramos todos los elementos del array datos:
+        
         datos.splice(0, datos.length)
+
         localStorage.setItem("productos", JSON.stringify(datos))
-        //Fuerza la actualizacion del componente:
+     
         setRecargar(true)
     }
 
 
-    // PRUEBA => Metodo para sumar las cantidades y los totales y mostrar en la celda totalCantidad y totalMonto:
-
+    //Metodo para sumar las cantidades y los totales y mostrar en la celda totalCantidad y totalMonto:
     const obtenerCantidadesTotales = () => {
         
         let array = new Array();
+
         array = JSON.parse(localStorage.getItem("productos"));
-        
         
         if(array) {
 
@@ -199,24 +197,17 @@ const Carrito = (props) => {
             document.querySelector("#cantidadTotal").innerHTML = sumaCantidad;
             document.querySelector("#montoTotal").innerHTML = "$ " + sumaMonto;
 
-            //Pasamos el valor del totalCarrito:
+            
             localStorage.setItem("totalCarrito", JSON.stringify(sumaMonto))
 
-            //Fuerza la actualizacion del componente:
-            //setRecargar(true)
         }
         else {
 
             array = [];
 
-           
-            //Se pasa el valor obtenido para mostrar =>
             document.querySelector("#cantidadTotal").innerHTML = 0;
             document.querySelector("#montoTotal").innerHTML = "$ " + 0;
 
-
-            //Fuerza la actualizacion del componente:
-            //setRecargar(true)
         }
 
 
@@ -231,20 +222,22 @@ const Carrito = (props) => {
     }
 
     function activarModal() {
+
         console.log("Entro a activar modal")
-        //Guardo en una constante el componente modalFaltante y paso el props:
+        
         const modalCarrito = () => {
 
             return (
                 
-                //Al componente ModalFaltante le asigamos propiedades que luego son accedidas por el componente para mostrar.
+                
                 <ModalCarritoVacio
                 validar={validarCarritoVacio}
                 ></ModalCarritoVacio>
             );
         }
+        
         console.log("Salgo de activar modal", validarCarritoVacio())
-        //Guardo la constante en el estado:  
+      
         setModalCarrito(modalCarrito)
     }
 

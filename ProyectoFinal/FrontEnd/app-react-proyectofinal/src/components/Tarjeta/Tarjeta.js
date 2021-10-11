@@ -21,11 +21,11 @@ const Tarjeta = (props) => {
 
 
                         <br></br>  
-                        <Card border="primary" style={{ width: '23rem', heigth: "15rem" }} className="container"> 
+                        <Card border="primary" style={{ width: '21rem', heigth: "13rem" }} className="container"> 
                         <div className="imagen">
                         <br></br>  
                         <br></br>  
-                        <Card.Img variant="top"  className="imagen" src={require(`../../assets/images/${props.imagen}`).default}/>
+                        <Card.Img variant="top"  className="imag" src={require(`../../assets/images/${props.imagen}`).default}/>
                         <br></br>  
                         <br></br>  
                         </div>
@@ -34,12 +34,10 @@ const Tarjeta = (props) => {
                         <br></br>    
                         <br></br>   
                         <Card.Body>
-                            <Card.Title className="titulo">{ (props.denominacion).toUpperCase() }</Card.Title>
+                            <Card.Title className="frase">{ (props.denominacion).toUpperCase() }</Card.Title>
                             <br></br>  
-                            <br></br>
-                            <Card.Title className="titulo">$ { (props.precioVenta) }</Card.Title>
+                            <Card.Title className="frase">${ props.precioVenta }</Card.Title>
                             <br></br>  
-                            <br></br> 
                             <Button href={`detallePlato/${props.idArticulo}`} variant="primary">DETALLE</Button>
                             <br></br> 
                         </Card.Body>

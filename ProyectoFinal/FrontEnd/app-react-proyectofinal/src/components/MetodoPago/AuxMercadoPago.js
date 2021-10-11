@@ -49,13 +49,17 @@ const AuxMercadoPago = (props) => {
             let precio = JSON.parse(localStorage.getItem("totalCarritoFinal"));
             let codigo = JSON.parse(localStorage.getItem("codigoPedido"));
             let respuestaMercado = {"precio":precio, "codigo":codigo}
-            const headers = {
-
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Headers": "Content-Type",
-                    "Content-Type": "multipart/form-data",
-            }
             
+            //Pruba de StarkOverflow burlar los CORS=>
+    
+            const params = new URLSearchParams({
+            precio: precio,
+            codigo: codigo,
+            }).toString();
+
+            const url =
+            "http://localhost:8080/ProyectoFinalLaboIV/AuxMercadoPagoServlet?" +
+            params;
 
             console.log("PRECIO =>", precio)
             console.log("CODIGO =>", codigo)
@@ -63,32 +67,23 @@ const AuxMercadoPago = (props) => {
 
             console.log("INGRESO A MERCADOPAGO")
 
-  
-
-            //const response = await axios.post("https://cors-anywhere.herokuapp.com/http://localhost:8080/ProyectoFinalLaboIV/AuxMercadoPagoServlet",
-            //respuestaMercado, { headers })
-
-                    
             try{
 
-                const response = await fetch("localhost:8080/ProyectoFinalLaboIV/AuxMercadoPagoServlet",{
-                    method:"POST",
-                }).then(
 
-                    result => console.log("funciono", result)
+                const response = await axios.post(url)
 
-                )
-                .catch(error => console.log("no  funciono", error)) 
+                const resJson = response.data;
 
-                
+                console.log(resJson)
+
 
             }catch(error){
 
                 console.log(error)
 
             }    
-    
-                
+
+            
             
     }
 

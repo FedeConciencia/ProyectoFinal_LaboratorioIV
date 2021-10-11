@@ -124,7 +124,7 @@ const ActualizarPedido = (props) => {
 
            
             setValue('codigo', resJson.codigo);
-            setValue('horaEstimadaFin', moment(resJson.horaEstimadaFin).add(6,'MM').format('HH:MM:SS'));
+            setValue('horaEstimadaFin', moment(resJson.horaEstimadaFin).add(7,'MM').format('HH:MM:SS'));
             setValue('estadoPedido', resJson.estadoPedido);
             setValue('tipoEnvio', resJson.tipoEnvio);
             setValue('total', resJson.total);

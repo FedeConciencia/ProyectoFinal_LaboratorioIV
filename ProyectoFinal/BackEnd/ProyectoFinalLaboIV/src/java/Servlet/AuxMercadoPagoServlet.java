@@ -102,9 +102,27 @@ public class AuxMercadoPagoServlet extends HttpServlet{
             response.setHeader("Access-Control-Max-Age", "3600");
             response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
         
-            System.out.println("DO_GET");   
-            System.out.println(request.getParameter("codigo"));
-            System.out.println(request.getParameter("precio"));
+            PrintWriter out = response.getWriter();
+            String respuestaServer = "";
+            
+            try {
+            
+                System.out.println("INGRESO METODO GET");   
+                System.out.println(request.getParameter("codigo"));
+                System.out.println(request.getParameter("precio"));
+
+                String respuesta = "Ingresado al GET";
+                Gson gsonBuilder = new GsonBuilder().create();
+                String cadenaJson = gsonBuilder.toJson(respuesta);
+                respuestaServer = cadenaJson;
+
+                out.write(respuestaServer);
+            
+            }catch(Exception ex){
+                ex.printStackTrace();
+            } finally {
+                out.close();
+            }
                     
            
     }
@@ -122,69 +140,41 @@ public class AuxMercadoPagoServlet extends HttpServlet{
             throws ServletException, IOException {
         
                     
-                    response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+                    response.addHeader("Access-Control-Allow-Origin", "http://localhost:3000/");
                     response.addHeader("Access-Control-Allow-Credentials", "true");
                     response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
                     response.addHeader("Access-Control-Max-Age", "3600");
                     response.addHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
         
-                    System.out.println("INGRESO METODO POST");
-                    
-                    
-                    /*
-                    
-                    
                     PrintWriter out = response.getWriter();
                     String respuestaServer = "";
-                    StringBuffer jb = new StringBuffer(); 
-                    String line = null;
-
-
-                    try {
             
-                        
-                        
-                        BufferedReader reader = request.getReader(); 
-                        
-                        while ((line = reader.readLine()) != null){
-                            jb.append(line);
-                        }
-                        
-                        JsonObject jsonObject = new Gson().fromJson(jb.toString(), JsonObject.class);
+                    try {
 
-                        JsonElement codeJson = jsonObject.get("codigo");
-                        JsonElement priceJson = jsonObject.get("precio");
+                        System.out.println("INGRESO METODO POST");   
+                        System.out.println(request.getParameter("codigo"));
+                        System.out.println(request.getParameter("precio"));
                         
-                        System.out.println("JSON codeJson =>" + codeJson);
-                        System.out.println("JSON priceJson =>" + priceJson);
+                        String codigo = request.getParameter("codigo");
+                        double precio = Double.parseDouble(request.getParameter("precio"));
                         
-                        String codigo = codeJson.getAsString();
-                        String precioString = priceJson.getAsString();
-                        double precio = Double.parseDouble(precioString);
-                        
-                        System.out.println("Codigo =>" + codigo);
-                        System.out.println("Precio =>" + precio);
-                        
-
                         ControladorAuxMercadoPago controlador = new ControladorAuxMercadoPago();
                         Preference preference = controlador.mercadoPago(codigo, precio);
+                        System.out.println("PREFERENCE" + preference);
                         Gson gsonBuilder = new GsonBuilder().create();
                         String mercadoJson = gsonBuilder.toJson(preference);
                         System.out.println(mercadoJson);
                         respuestaServer = mercadoJson;
-                    
 
-                
-                    
                         out.write(respuestaServer);
+
                     }catch(Exception ex){
                         ex.printStackTrace();
                     } finally {
                         out.close();
                     }
-            
-                    */
-            
+                    
+                    
     }
 
     /**

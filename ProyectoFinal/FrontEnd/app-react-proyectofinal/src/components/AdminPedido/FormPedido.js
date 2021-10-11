@@ -76,7 +76,7 @@ const FormPedido = (props) => {
 
                             <td>{pedido.idPedido}</td>
                             <td>{pedido.codigo}</td>
-                            <td>{moment(pedido.horaEstimadaFin).add(5,'M').format('HH:MM:SS')}</td>
+                            <td>{moment(pedido.horaEstimadaFin).format('LTS')}</td>
                             <td>{pedido.estadoPedido}</td>
                             <td>{pedido.tipoEnvio}</td>
                             <td>{pedido.total}</td>

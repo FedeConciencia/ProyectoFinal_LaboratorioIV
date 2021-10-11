@@ -14,7 +14,7 @@ public class ControladorAuxMercadoPago {
     
     public Preference mercadoPago(String codigo, double precio){
         
-        System.out.println("INGRESO AL METODO ");
+        System.out.println("INGRESO AL METODO PREFERENCE");
         
         // Crea un objeto de preferencia
          Preference preference = new Preference();

@@ -16,11 +16,24 @@ import ModalPedido from "./ModalPedido.js";
 import { useHistory } from 'react-router-dom';
 
 
+
 //Permite crear un random de numero hex, dec, etc
 var crypto = require("crypto");
 
+const script = document.createElement("script")
+
+script.src = "https://sdk.mercadopago.com/js/v2"
+
+script.async = true
+
+document.body.appendChild(script)
+
 
 const AuxMercadoPago = (props) => {
+
+
+
+    let preference = ""
 
     //Redireccion de la Pagina:
     let history = useHistory();
@@ -72,11 +85,31 @@ const AuxMercadoPago = (props) => {
 
                 const response = await axios.post(url)
 
-                const resJson = response.data;
+                const resJson = await response.data;
 
-                console.log(resJson)
+                preference = resJson
 
+                console.log(preference)
 
+                script.dataset.preferenceId = preference.preferenceId
+
+                console.log(preference.preferenceId)
+
+                /*
+                const mp = new Mercad('TEST-fae83f23-cc7a-49bc-bc3e-5b9f681c2a71', {
+                    locale: 'es-AR'
+                });
+
+    
+                const checkout = mp.checkout({
+                    preference: {
+                        id: preference.id
+                    },
+                    autoOpen: true, // Habilita la apertura automática del Checkout Pro
+                });
+
+                */
+              
             }catch(error){
 
                 console.log(error)
@@ -87,24 +120,28 @@ const AuxMercadoPago = (props) => {
             
     }
 
-    
+
         
     return (
 
+        
         <Fragment>
 
     
             <div>
 
             <br></br>
-            
 
+   
             <Alert variant="success" className="bodyDetalle"> 
 
+           
+
+            
             <form  onSubmit={enviarDatos}>
 
             
-
+    
 
             </form>    
 

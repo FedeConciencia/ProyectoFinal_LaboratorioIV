@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import Modelo.AuxMercadoPago;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.Preference;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -148,6 +149,7 @@ public class AuxMercadoPagoServlet extends HttpServlet{
         
                     PrintWriter out = response.getWriter();
                     String respuestaServer = "";
+                    Preference preference = null;
             
                     try {
 
@@ -159,20 +161,27 @@ public class AuxMercadoPagoServlet extends HttpServlet{
                         double precio = Double.parseDouble(request.getParameter("precio"));
                         
                         ControladorAuxMercadoPago controlador = new ControladorAuxMercadoPago();
-                        Preference preference = controlador.mercadoPago(codigo, precio);
-                        System.out.println("PREFERENCE" + preference);
+                        preference = controlador.mercadoPago(codigo, precio);
                         Gson gsonBuilder = new GsonBuilder().create();
-                        String mercadoJson = gsonBuilder.toJson(preference);
-                        System.out.println(mercadoJson);
+                        String mercadoJson = gsonBuilder.toJson(preference);         
+                        System.out.println("PREFERENCIA => " + mercadoJson);
                         respuestaServer = mercadoJson;
-
+                       
                         out.write(respuestaServer);
 
+                    
                     }catch(Exception ex){
-                        ex.printStackTrace();
-                    } finally {
+                        ex.printStackTrace();    
+                    }finally{
+                            
+                        System.out.println("PREFERENCE => " + preference);
                         out.close();
-                    }
+                        
+                    } 
+                    
+                    
+
+                    
                     
                     
     }

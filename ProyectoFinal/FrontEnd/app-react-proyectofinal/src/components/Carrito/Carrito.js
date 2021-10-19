@@ -68,7 +68,7 @@ const Carrito = (props) => {
              
             datos[indice].cantidad--;
 
-            document.querySelector("#mensaje").innerHTML = "No hay suficientes ingredientes: " + datos[indice].denominacion + " !!!"
+            document.querySelector("#mensaje").innerHTML = "No hay Suficiente Stock: " + datos[indice].denominacion + " !!!"
         }
 
         

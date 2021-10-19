@@ -147,7 +147,7 @@ const TablaIngreso = (props) => {
 
                             <td>{pedido.idPedido}</td>
                             <td>{pedido.codigo}</td>
-                            <td>{moment(pedido.horaEstimadaFin).format('LTS')}</td>
+                            <td>{moment(pedido.horaEstimadaFin).format('HH:mm:ss')}</td>
                             <td>
                               
                               {pedido.estadoPedido === 0 ?

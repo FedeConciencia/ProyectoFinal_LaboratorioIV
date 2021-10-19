@@ -44,7 +44,7 @@ const ModalPedido = (props) => {
             </Modal.Body>
 
             <Modal.Footer>
-            <Button variant="primary" onClick={handleClose} href={`/metodoPago`}>Cerrar</Button>
+            <Button variant="primary" onClick={handleClose} href={`/home`}>Cerrar</Button>
             </Modal.Footer>
         </Modal>
         </>

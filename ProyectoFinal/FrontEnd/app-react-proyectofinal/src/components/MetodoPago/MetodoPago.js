@@ -89,42 +89,16 @@ const MetodoPago = (props) => {
            
             await getDatos();
 
-          
+            //Redireccion Proceso Mercado Pago =>
             await history.push('/auxMercadoPago');
 
-            /*
-
-            //Cargar Pedido =>
-            await getDatos();
-
-            let precio = JSON.parse(localStorage.getItem("totalCarritoFinal"));
-            let codigo = JSON.parse(localStorage.getItem("codigoPedido"));
-            let respuestaMercado = {"precio":precio, "codigo":codigo}
-
-            console.log("INGRESO A MERCADOPAGO")
-
-            try{
-
-                const response = await axios.post("http://localhost:8080/ProyectoFinalLaboIV/AuxMercadoPagoServlet", respuestaMercado) 
-    
-                const resJson = await response.data;
-
-                console.log("RESPUESTA MERCADO PAGO =>", resJson)
-    
-    
-            }catch(error){
-    
-                console.log(error)
-    
-            }        
-
-            */
 
         }else{
             
             //Pago es en Efectivo
             await getDatos();
                 
+            await modalPedidos();
            
         }    
             
@@ -218,6 +192,8 @@ const MetodoPago = (props) => {
         
         let time = await calculoFinalTiempoPedido();
 
+        localStorage.setItem("tiempoEstimado", JSON.stringify(await time));
+
         let tipoEnvio = 1;
 
         codigoPedido = passwordCodigo();
@@ -235,7 +211,10 @@ const MetodoPago = (props) => {
 
         }
 
+        localStorage.setItem("tipoEnvio", JSON.stringify(await tipoEnvio));
+
         localStorage.setItem("totalCarritoFinal", JSON.stringify(total));
+        
         localStorage.setItem("codigoPedido", JSON.stringify(codigoPedido));
 
         try{
@@ -271,8 +250,6 @@ const MetodoPago = (props) => {
 
         await guardarDetallePedido();
 
-        await modalPedidos(time); 
-    
     }
 
 
@@ -502,10 +479,12 @@ const MetodoPago = (props) => {
 
     
     //Guardo en una constante el componente modalPedido y paso el props:
-    const modalPedidos = async (time) => {
+    const modalPedidos = async () => {
 
         
         let totalFinal = await JSON.parse(localStorage.getItem("totalCarritoFinal"));
+
+        let time = await JSON.parse(localStorage.getItem("tiempoEstimado"));
 
         let tipoEnvio = "Retiro en Local";
 

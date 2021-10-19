@@ -505,7 +505,7 @@ const TablaEgreso = (props) => {
        
                         {datos.map((pedido, i)=> ( 
                             
-                        pedido.estadoPedido > 1 ?
+                        pedido.estadoPedido > 1 && pedido.estadoPedido < 6 ?
 
                         
                         <tr id={pedido.idPedido} key={i}>

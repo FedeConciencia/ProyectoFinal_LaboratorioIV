@@ -132,21 +132,18 @@ const DetallePlato = (props) => {
     //Metodo que verifica que el horario Local y dia correspondan a los horarios del local:
     const verificarHorario = () => {
 
-        //Recibimos el dia Actual por moment() activar este para funcionamiento correcto:
-        //let diaActual = moment().format('dddd');
-        //let horarioActual = moment().format('hh:mm');
+        
+        //let diaActual = moment().format('dddd'); //Activar este para funcionamiento correcto del sistema:
+        let diaActual = "monday"; //Desmarcar para Testeo Manual de dia  (Activado para Testeo):
 
         //Variable que valida, si la validacion es fuera de horario devuelve true para pasar al modal y activar const show:
         let validar = true;
-
-        //Ingresos de Testeo Manual de dia y horario (Activado para Testeo):
-        let diaActual = "monday";
-        
         
         //Obtengo el horario actual a traves de moment() y lo paso a Date para comparar:
         let recibTime = new Date();
-        // recibTime.setHours(moment().format('hh'),moment().format('mm'),0);  //Activar para funcionamiento correcto
-        recibTime.setHours(12,0,0);
+        //recibTime.setHours(moment().format('hh'),moment().format('mm'),0);  //Activar para funcionamiento correcto de Horario Comercio.
+        recibTime.setHours(12,0,0); //Activar para Testo Manual de Horario  (Activado para Testeo).
+         
         
         //Obtenemos los horarios correctos de la semana Lunes a Viernes:
         let starTimeWeek = new Date();

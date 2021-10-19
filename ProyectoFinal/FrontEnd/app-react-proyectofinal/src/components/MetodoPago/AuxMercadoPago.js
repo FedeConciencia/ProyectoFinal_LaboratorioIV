@@ -14,102 +14,103 @@ import axios from "axios";
 import moment from 'moment';
 import ModalPedido from "./ModalPedido.js";
 import { useHistory } from 'react-router-dom';
+import qs from 'qs';
 
 
 
-//Permite crear un random de numero hex, dec, etc
 var crypto = require("crypto");
-
-const script = document.createElement("script")
-
-script.src = "https://sdk.mercadopago.com/js/v2"
-
-script.async = true
-
-document.body.appendChild(script)
 
 
 const AuxMercadoPago = (props) => {
 
 
+    let preferences = ""
 
-    let preference = ""
-
-    //Redireccion de la Pagina:
     let history = useHistory();
-
 
     useEffect(() => {
 
         metodoUseEffect();
     
-    },[]) //Importante pasar los estados de hooks al useEffect
+    },[]) 
 
-    //Creamos un metodo async-await que se ejecuta dentro del useEffect =>
-
+    
     const metodoUseEffect = async () => {
 
+        await ejecutarScript();
         await enviarDatos();
 
+    
     }
 
 
     
+    const ejecutarScript = () => {
 
-    //Metodo que se ejecuta en el evento onSubmit desde el formulario:
+    
+        const script = document.createElement("script")
+
+        script.src = "https://sdk.mercadopago.com/js/v2"
+
+        script.async = true
+
+        document.body.appendChild(script)
+
+    
+        
+    }    
+
+
+    
     const enviarDatos = async (event) => {
 
             let precio = JSON.parse(localStorage.getItem("totalCarritoFinal"));
             let codigo = JSON.parse(localStorage.getItem("codigoPedido"));
-            let respuestaMercado = {"precio":precio, "codigo":codigo}
-            
-            //Pruba de StarkOverflow burlar los CORS=>
-    
-            const params = new URLSearchParams({
-            precio: precio,
-            codigo: codigo,
-            }).toString();
-
-            const url =
-            "http://localhost:8080/ProyectoFinalLaboIV/AuxMercadoPagoServlet?" +
-            params;
+            let succes = "http://localhost:3000/mercadopago/success";
+            let failure = "http://localhost:3000/mercadopago/failure";
+            let pending = "http://localhost:3000/mercadopago/pending";
 
             console.log("PRECIO =>", precio)
             console.log("CODIGO =>", codigo)
-            console.log("RESPUETA MERCADO =>", respuestaMercado)
+        
 
-            console.log("INGRESO A MERCADOPAGO")
+            //PASAR PARAMETROS AL SERVIDOR X AXIOS.POST (FUNCIONANDO OK) =>
 
+            const url = "http://localhost:8080/ProyectoFinalLaboIV/AuxMercadoPagoServlet"
+
+            const data = { 'codigo': codigo, 'precio':precio, 'succes':succes, 'failure':failure, 'pending':pending };
+            
+            const options = {
+            method: 'POST',
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            data: qs.stringify(data),
+            url,
+            };
+                    
             try{
 
-
-                const response = await axios.post(url)
+                
+                const response = await axios(options)
 
                 const resJson = await response.data;
 
-                preference = resJson
+                preferences = resJson
 
-                console.log(preference)
+                console.log(preferences)
 
-                script.dataset.preferenceId = preference.preferenceId
-
-                console.log(preference.preferenceId)
-
-                /*
-                const mp = new Mercad('TEST-fae83f23-cc7a-49bc-bc3e-5b9f681c2a71', {
+                const mp = new window.MercadoPago('TEST-fae83f23-cc7a-49bc-bc3e-5b9f681c2a71', {
                     locale: 'es-AR'
                 });
 
-    
+
                 const checkout = mp.checkout({
                     preference: {
-                        id: preference.id
+                        id: preferences.id
                     },
                     autoOpen: true, // Habilita la apertura automática del Checkout Pro
                 });
 
-                */
-              
+            
             }catch(error){
 
                 console.log(error)
@@ -130,6 +131,7 @@ const AuxMercadoPago = (props) => {
     
             <div>
 
+        
             <br></br>
 
    

@@ -17,7 +17,6 @@ const Carrito = (props) => {
 
     const [ingred, setIngred] = useState([])
 
-    
     const [recargar, setRecargar] = useState(false)
 
     
@@ -56,9 +55,13 @@ const Carrito = (props) => {
         
         datos[indice].cantidad++;
 
-        verificarStockIngredientes(datos[indice].cantidad);
+        sinStock = true
+
+        verificarStockIngredientes(datos[indice].cantidad, indice);
 
         if(sinStock === true){
+
+            document.querySelector("#mensaje").innerHTML = ""
         
             console.log(datos[indice].cantidad)
             
@@ -110,13 +113,17 @@ const Carrito = (props) => {
                 const responseIngre = await fetch("http://localhost:8080/ProyectoFinalLaboIV/AuxIngredientesServlet?action=listar&idArticulo="+datos[i].idArticulo); 
                 const resJsonIngre = await responseIngre.json();
                 console.log(resJsonIngre)
+
+                let lista = new Array()
             
 
                 for (let i = 0; i < resJsonIngre.length; i++) {
 
-                    ingredientes.push(resJsonIngre[i])
+                    lista.push(resJsonIngre[i])
 
                 }    
+
+                ingredientes.push(lista)
 
             }    
 
@@ -133,22 +140,22 @@ const Carrito = (props) => {
     }
 
     //Metodo para verificar stock de ingredientes, producto seleccionado =>
-    const verificarStockIngredientes = (cantidad) => {
+    const verificarStockIngredientes = (cantidad, indice) => {
 
         console.log("INGRESO VALIDAR STOCK=>")
 
         let cantidadAux = 0
 
-        for (let i = 0; i < ingred.length; i++) {
+        for (let i = 0; i < ingred[indice].length; i++) {
 
             
-            cantidadAux = (cantidad * ingred[i].cantidad)
+            cantidadAux = (cantidad * ingred[indice][i].cantidad)
             console.log("cantidadAux", cantidadAux)
             console.log("sumaCantidad", cantidad)
-            console.log("resJsonIngre[i].cantidad", ingred[i].cantidad)
+            console.log("resJsonIngre[i].cantidad", ingred[indice][i].cantidad)
 
-            if(cantidadAux > ingred[i].stockActual){
-                console.log("Condicion ingreso => ", cantidadAux > ingred[i].stockActual)
+            if(cantidadAux > ingred[indice][i].stockActual){
+                console.log("Condicion ingreso => ", cantidadAux > ingred[indice][i].stockActual)
                 sinStock = false;
                 
             }

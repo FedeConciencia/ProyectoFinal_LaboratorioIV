@@ -88,8 +88,9 @@ public class ControladorAuxActualizarStock {
     public List<AuxActualizarStock> descontarStock(List<AuxActualizarStock> lista){
         
         double stockActualizado = 0;
-        ControladorArticuloInsumo controlador = new ControladorArticuloInsumo();
         
+        
+        ControladorArticuloInsumo controlador = new ControladorArticuloInsumo();
         
         
         for(AuxActualizarStock item: lista){

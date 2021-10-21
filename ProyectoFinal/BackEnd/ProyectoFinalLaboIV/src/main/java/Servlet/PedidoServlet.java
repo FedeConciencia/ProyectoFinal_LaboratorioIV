@@ -169,7 +169,16 @@ public class PedidoServlet extends HttpServlet {
                     String pedidoJson = gsonBuilder.toJson(baja);
                     respuestaServer = pedidoJson;
                     
-                }    
+                }else if(request.getParameter("action").equals("buscarIdXCodigo")){
+                	
+                	 ControladorPedido controladorPedido = new ControladorPedido();
+                	 String codigo = request.getParameter("codigo");
+                     long idPedido = controladorPedido.buscarPedidoXCodigo(codigo);
+                     Gson gsonBuilder = new GsonBuilder().create();
+                     String pedidoJson = gsonBuilder.toJson(idPedido);
+                     respuestaServer = pedidoJson;
+                	
+                }
             }
             out.write(respuestaServer);
         }catch(Exception ex){

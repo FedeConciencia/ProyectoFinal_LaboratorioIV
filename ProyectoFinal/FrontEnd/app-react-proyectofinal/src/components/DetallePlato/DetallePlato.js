@@ -256,8 +256,6 @@ const DetallePlato = (props) => {
            
             localStorage.setItem("productos", JSON.stringify(array));
 
-            alert(JSON.stringify(datos));
-
             
             const modalCar = () => {
                 return (
@@ -274,47 +272,47 @@ const DetallePlato = (props) => {
             setModalCarrito(modalCar);  
 
        
-        //Condicional si el usuario logueado, validarStock es false (sin faltante), validarHorario es true (fuera de Horario):
-        }else if(usuario !== null && validarHorario === true){
+            //Condicional si el usuario logueado, validarStock es false (sin faltante), validarHorario es true (fuera de Horario):
+            }else if(usuario !== null && validarHorario === true){
 
 
-            const modalHor = () => {
-                return (
-                  
+                const modalHor = () => {
+                    return (
                     
-                  <ModalHorario
-                    horario={validarHorario}
-                  ></ModalHorario>
-                );
-              }
+                        
+                    <ModalHorario
+                        horario={validarHorario}
+                    ></ModalHorario>
+                    );
+                }
 
-             
-            setModalHorario(modalHor);  
+                
+                setModalHorario(modalHor);  
 
-            console.log("VARIABLE VALIDAR MODAL_HORARIO => " + modalHorario);
+                console.log("VARIABLE VALIDAR MODAL_HORARIO => " + modalHorario);
 
 
-        //Condicional si el usuario logueado y validar es true (con faltante):
-        }else if(usuario !== null && validarStock === true){
+            //Condicional si el usuario logueado y validar es true (con faltante):
+            }else if(usuario !== null && validarStock === true){
 
-            
-            
-            const modalFal = () => {
-                return (
-                  
-                  
-                  <ModalFaltante
-                    validar={validarStock}
-                  ></ModalFaltante>
-                );
-              }
+                
+                
+                const modalFal = () => {
+                    return (
+                    
+                    
+                    <ModalFaltante
+                        validar={validarStock}
+                    ></ModalFaltante>
+                    );
+                }
 
-            
-            setModalFaltante(modalFal);  
+                
+                setModalFaltante(modalFal);  
 
-            console.log("VARIABLE VALIDAR MODAL_FALTANTE => " + modalFaltante);
-    
-        }
+                console.log("VARIABLE VALIDAR MODAL_FALTANTE => " + modalFaltante);
+        
+            }
     }
 
 

@@ -180,35 +180,35 @@ const Loguin = (props) => {
             if((validarCliente === true) && (validarUsuario === true) && ((rol).toLowerCase() === "administrador")){
                
                 //Direccionamos a la pagina admin principal:
-                const usuarioActual = {usuario, contrasena, rol};
+                const usuarioActual = {usuario, rol};
                 setUsuario(usuarioActual);
                 actualizarEstado(usuarioActual);
 
             }else if((validarCliente === true) && (validarUsuario === true) && ((rol).toLowerCase() === "cajero")){    
                 
                   //Direccionamos a la pagina admin principal cajero:
-                  const usuarioActual = {usuario, contrasena, rol};
+                  const usuarioActual = {usuario, rol};
                   setUsuario(usuarioActual);
                   actualizarEstado(usuarioActual);
 
             }else if((validarCliente === true) && (validarUsuario === true) && ((rol).toLowerCase() === "cocinero")){    
                 
                 //Direccionamos a la pagina admin principal cocinero:
-                const usuarioActual = {usuario, contrasena, rol};
+                const usuarioActual = {usuario, rol};
                 setUsuario(usuarioActual);
                 actualizarEstado(usuarioActual);
                 
             }else if((validarCliente === true) && (validarUsuario === true) && ((rol).toLowerCase() === "dueno")){    
                 
                 //Direccionamos a la pagina admin principal dueño:
-                const usuarioActual = {usuario, contrasena, rol};
+                const usuarioActual = {usuario, rol};
                 setUsuario(usuarioActual);
                 actualizarEstado(usuarioActual);    
 
             }else if((validarCliente === true) && (validarUsuario === true) && ((rol).toLowerCase() === "cliente")){
 
                 //Direccionamos a la pagina cliente:
-                const usuarioActual = {usuario, contrasena, rol};
+                const usuarioActual = {usuario, rol};
                 setUsuario(usuarioActual);
                 actualizarEstado(usuarioActual);
 
@@ -412,6 +412,7 @@ const Loguin = (props) => {
                 <Row>   
 
                     <Col className="botonera">
+                        
                         <Button type="submit" variant="success"  size="lg">LOGUIN</Button>
                         <Button type="button" href={`/registroCliente`} variant="primary"  size="lg">USER REGISTER</Button>
                         <Button type="button" href={`/home`} variant="danger"  size="lg">RETURN</Button>

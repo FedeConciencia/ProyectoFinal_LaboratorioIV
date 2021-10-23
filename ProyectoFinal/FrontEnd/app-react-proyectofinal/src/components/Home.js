@@ -8,9 +8,10 @@ import Alert from 'react-bootstrap/Alert'
 import img from '../assets/images/logo.png'
 import Button from 'react-bootstrap/Button';
 import { ContextoUsuario } from './ContextoUsuario';
+import Image from 'react-bootstrap/Image'
 
 
-export default function Home(){    
+const Home = () => {    
 
     return (
 
@@ -32,7 +33,7 @@ export default function Home(){
 
                                 <br></br>
 
-                                <img src={img} alt="" className="imagen"/>
+                                <Image src={ img } rounded />
 
                                 <br></br>
                                 <br></br>
@@ -69,4 +70,6 @@ export default function Home(){
 
     
 }
+
+export default Home;
 
